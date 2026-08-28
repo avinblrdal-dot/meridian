@@ -34,7 +34,7 @@
   <!-- Fonts: Space Grotesk (modern geometric sans for headings) + Inter (clean, readable sans for body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css" />
@@ -77,23 +77,35 @@
   <main id="main">
 
     <!-- =========================================================
-         HERO — clean dark navy hero. Deliberately restrained: no
-         procedural/generative background effects (those kept going
-         wrong at every screen size and browser). Just a simple two-
-         stop gradient, strong typography, and a real photo slot.
+         HERO — dark, techy, alive: an animated aurora-gradient mesh
+         + a static grain texture (all plain CSS/transform — nothing
+         procedurally generated per-pixel, so it can't blur or break
+         at any screen size), gradient-fill headline type, a
+         monospace "system status" tag, and an infinite marquee strip.
          ========================================================= -->
     <section class="hero" aria-labelledby="hero-title">
+      <!-- Aurora mesh: two soft blurred color fields drifting slowly.
+           Pure transform + opacity animation — cheap, GPU-composited,
+           can't go blurry or misaligned at any viewport size. -->
+      <div class="hero-aurora" aria-hidden="true">
+        <span class="aurora aurora-a"></span>
+        <span class="aurora aurora-b"></span>
+      </div>
+      <!-- Grain: a small pre-rendered noise tile, repeated — always crisp,
+           no runtime computation. Adds texture instead of flatness. -->
+      <div class="hero-grain" aria-hidden="true"></div>
+
       <div class="hero-top container reveal">
         <a class="hero-tag" href="#contact">
           <span class="hero-tag-dot" aria-hidden="true"></span>
-          Now booking AI Opportunity Audits — Frisco / DFW
+          <span class="hero-tag-mono">STATUS:</span> Now booking AI Opportunity Audits — Frisco / DFW
           <span aria-hidden="true">→</span>
         </a>
       </div>
 
       <div class="hero-inner container">
         <div class="hero-copy reveal">
-          <h1 id="hero-title">Get your <span class="neon">time&nbsp;back.</span><br />Let <span class="neon">Meridian</span> handle the rest.</h1>
+          <h1 id="hero-title">Get your <span class="grad-text">time&nbsp;back.</span><br />Let <span class="grad-text">Meridian</span> handle the rest.</h1>
           <p class="hero-sub">We help local salons, spas, and studios stop losing hours — and bookings — to no-shows, missed calls, and repetitive questions. One practical AI fix, built for your business and taught to your team.</p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-lg" href="#contact">Book a Free Intro Call</a>
@@ -103,26 +115,32 @@
         </div>
 
         <!-- HERO IMAGE SLOT: warm photo of a local business owner in their space.
-             Replace this block with: <img class="hero-visual" src="assets/hero.jpg" alt="A salon owner at work" /> -->
+             Replace the inner <img>-less block with:
+             <img src="assets/hero.jpg" alt="A salon owner at work" /> inside .hero-visual-frame -->
         <div class="hero-visual reveal" role="img" aria-label="Photo placeholder: a local salon or studio owner at work">
-          <div class="hero-visual-content">
-            <div class="slot-icon" aria-hidden="true">✦</div>
-            <p class="slot-note"><strong>Image slot</strong><br />Warm, bright photo of a real owner in their salon / spa / studio.</p>
-          </div>
-          <div class="hero-badge">
-            <strong>Full book.</strong>
-            <span>Fewer empty chairs, less time on the phone.</span>
+          <div class="hero-visual-frame">
+            <div class="hero-visual-content">
+              <div class="slot-icon" aria-hidden="true">✦</div>
+              <p class="slot-note"><strong>Image slot</strong><br />Warm, bright photo of a real owner in their salon / spa / studio.</p>
+            </div>
+            <div class="hero-badge">
+              <strong>Full book.</strong>
+              <span>Fewer empty chairs, less time on the phone.</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <ul class="hero-strip container reveal" aria-label="Who we build for">
-        <li>Salons</li>
-        <li>Barbershops</li>
-        <li>Nail &amp; Spa Studios</li>
-        <li>Fitness Studios</li>
-        <li>Yoga &amp; Dance</li>
-      </ul>
+      <!-- Marquee: seamless infinite scroll — the list is duplicated once
+           so the loop has no visible seam. Pauses for reduced-motion. -->
+      <div class="hero-strip reveal" aria-label="Who we build for">
+        <div class="hero-marquee">
+          <ul class="hero-marquee-track">
+            <li>Salons</li><li>Barbershops</li><li>Nail &amp; Spa Studios</li><li>Fitness Studios</li><li>Yoga &amp; Dance</li>
+            <li aria-hidden="true">Salons</li><li aria-hidden="true">Barbershops</li><li aria-hidden="true">Nail &amp; Spa Studios</li><li aria-hidden="true">Fitness Studios</li><li aria-hidden="true">Yoga &amp; Dance</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <!-- =========================================================
