@@ -189,32 +189,31 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
     radial-gradient(120% 90% at 60% 0%, #232B40 0%, var(--navy) 48%, #141A28 100%);
 }
 
-/* --- Fluted-glass texture: crisp horizontal bands with a real specular
-     highlight per band (bright hairline, dark shadow either side — the way
-     light actually catches a glass groove), gently bent by an SVG turbulence
+/* --- Fluted-glass texture: continuous horizontal ribs packed edge-to-edge
+     (no gaps — each rib shades dark→bright→dark across its own height, the
+     way a real glass groove catches light), gently bent by an SVG turbulence
      filter applied straight to this element. Sits furthest back of the
      hero's decorative layers — behind the sunburst and the watermark, in
      front of the base gradient. Static (no animation) to keep it cheap.
      Applying the filter directly here (rather than inside a separately
-     scaled SVG viewBox) is what keeps every band razor-sharp at any
-     screen size — no upscale blur. --- */
+     scaled SVG viewBox) is what keeps every rib razor-sharp at any screen
+     size — no upscale blur. --- */
 .hero-fluted-glass {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
   width: 100%; height: 100%;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(233, 201, 137, 0)    0px,
-    rgba(233, 201, 137, 0)    12px,
-    rgba(233, 201, 137, 0.08) 15px,
-    rgba(250, 228, 174, 0.95) 18px,
-    rgba(233, 201, 137, 0.08) 21px,
-    rgba(20, 26, 40, 0.35)    23px,
-    rgba(20, 26, 40, 0)       27px,
-    rgba(20, 26, 40, 0)       36px
+    rgba(9, 12, 21, 0.55)     0px,
+    rgba(17, 21, 34, 0.28)    5px,
+    rgba(197, 157, 84, 0.30)  9px,
+    rgba(252, 226, 168, 0.92) 11px,
+    rgba(197, 157, 84, 0.30)  13px,
+    rgba(17, 21, 34, 0.28)    17px,
+    rgba(9, 12, 21, 0.55)     22px
   );
   filter: url(#fluted-warp);
-  opacity: 0.6;
-  /* Fade the bands away from the headline/CTA column (left ~40%) so the
+  opacity: 0.5;
+  /* Fade the ribs away from the headline/CTA column (left ~40%) so the
      texture reads behind the scene rather than through the text. */
   -webkit-mask-image: radial-gradient(62% 62% at 30% 48%, transparent 0%, transparent 40%, #000 90%);
           mask-image: radial-gradient(62% 62% at 30% 48%, transparent 0%, transparent 40%, #000 90%);
