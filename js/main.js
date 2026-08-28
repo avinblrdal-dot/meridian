@@ -3,44 +3,10 @@
    - Mobile nav toggle
    - Sticky header shadow on scroll
    - Subtle scroll-in reveal (IntersectionObserver)
-   - Hero glow: subtle cursor-follow parallax (desktop, motion-safe)
    - Lead form (stubbed until a backend is wired — see index.html)
    ============================================================ */
 (function () {
   "use strict";
-
-  /* --- Hero glow parallax: the sunburst drifts gently toward the cursor.
-     Only on precise pointers (mouse/trackpad) and only when the visitor
-     hasn't asked for reduced motion. --- */
-  var heroEl = document.querySelector(".hero");
-  var glowEl = document.querySelector(".hero-glow");
-  var finePointer = window.matchMedia("(pointer: fine)").matches;
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (heroEl && glowEl && finePointer && !reduceMotion) {
-    var ticking = false;
-    var lastX = 0;
-    var lastY = 0;
-    var applyShift = function () {
-      glowEl.style.setProperty("--glow-shift-x", lastX + "px");
-      glowEl.style.setProperty("--glow-shift-y", lastY + "px");
-      ticking = false;
-    };
-    heroEl.addEventListener("mousemove", function (e) {
-      var rect = heroEl.getBoundingClientRect();
-      var nx = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5 .. 0.5
-      var ny = (e.clientY - rect.top) / rect.height - 0.5;
-      lastX = Math.round(nx * 26);
-      lastY = Math.round(ny * 22);
-      if (!ticking) {
-        window.requestAnimationFrame(applyShift);
-        ticking = true;
-      }
-    });
-    heroEl.addEventListener("mouseleave", function () {
-      lastX = 0; lastY = 0;
-      window.requestAnimationFrame(applyShift);
-    });
-  }
 
   /* --- Mobile nav toggle --- */
   var toggle = document.getElementById("navToggle");
