@@ -178,16 +178,26 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   display: flex; flex-direction: column;
   min-height: min(88vh, 780px);
   padding: clamp(28px, 4vw, 44px) 0 0;
-  background:
-    radial-gradient(120% 90% at 60% 0%, #232B40 0%, var(--navy) 48%, #141A28 100%);
   color: #fff;
+  /* Layered gradients: warm gold wash near the glow, a faint second
+     wash low-left (echoes the trust strip), a diagonal light sweep,
+     and the base navy radial underneath. First listed paints on top. */
+  background:
+    radial-gradient(46% 42% at 80% 12%, rgba(224, 179, 99, 0.22), transparent 68%),
+    radial-gradient(36% 32% at 6% 96%, rgba(184, 140, 41, 0.12), transparent 65%),
+    linear-gradient(155deg, rgba(70, 56, 24, 0.22) 0%, transparent 42%),
+    radial-gradient(120% 90% at 60% 0%, #232B40 0%, var(--navy) 48%, #141A28 100%);
 }
 
-/* --- Sunburst glow: soft gold core + faint radiating rays --- */
+/* --- Sunburst glow: the Meridian "M" glowing at the center of radiating rays.
+     Sized off both viewport width AND height (via min()) so it scales to fit
+     any screen proportion instead of overflowing on short/ultra-wide viewports. --- */
 .hero-glow {
   position: absolute; z-index: 0; pointer-events: none;
-  top: 52%; left: 60%; width: min(70vw, 920px); aspect-ratio: 1;
-  transform: translate(-50%, -50%);
+  top: 52%; left: 60%;
+  width: clamp(260px, min(58vw, 60vh), 820px); aspect-ratio: 1;
+  transform: translate(calc(-50% + var(--glow-shift-x, 0px)), calc(-50% + var(--glow-shift-y, 0px)));
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .hero-glow-rays {
   position: absolute; inset: 0; border-radius: 50%;
@@ -198,13 +208,30 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   );
   -webkit-mask-image: radial-gradient(circle, #000 0%, #000 12%, transparent 68%);
           mask-image: radial-gradient(circle, #000 0%, #000 12%, transparent 68%);
+  animation: hero-rays-spin 100s linear infinite;
 }
 .hero-glow-core {
-  position: absolute; top: 50%; left: 50%; width: 64px; height: 64px;
+  position: absolute; top: 50%; left: 50%; width: 84px; height: 84px;
   transform: translate(-50%, -50%); border-radius: 50%;
   background: radial-gradient(circle, #fff 0%, var(--gold) 45%, transparent 76%);
-  box-shadow: 0 0 120px 60px rgba(184, 140, 41, 0.35);
+  box-shadow: 0 0 140px 70px rgba(184, 140, 41, 0.32);
   filter: blur(0.5px);
+  animation: hero-glow-pulse 6s ease-in-out infinite;
+}
+/* The actual Meridian logo, lit up as if it's the light source */
+.hero-glow-mark {
+  position: absolute; top: 50%; left: 50%;
+  width: clamp(40px, 5vw, 80px); height: auto;
+  transform: translate(-50%, -50%);
+  filter:
+    drop-shadow(0 0 16px rgba(255, 255, 255, 0.6))
+    drop-shadow(0 0 42px rgba(184, 140, 41, 0.7));
+}
+
+@keyframes hero-rays-spin { to { transform: rotate(360deg); } }
+@keyframes hero-glow-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.05); }
 }
 
 /* --- Top announcement tag --- */
@@ -488,10 +515,24 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
    RESPONSIVE — tablet
    ============================================================ */
 @media (max-width: 960px) {
+  /* Nav collapses to the hamburger menu here too — below ~960px there isn't
+     room for the logo, all six links, and the CTA button on one line. */
+  .nav-links {
+    position: fixed; inset: 74px 0 auto 0;
+    flex-direction: column; align-items: flex-start; gap: 4px;
+    background: var(--offwhite); border-bottom: 1px solid var(--line);
+    padding: 12px var(--gutter) 22px; box-shadow: var(--shadow-md);
+    transform: translateY(-140%); transition: transform .3s ease; z-index: 90;
+  }
+  .nav-links.open { transform: translateY(0); }
+  .nav-links a { display: block; width: 100%; padding: 12px 0; font-size: 1.05rem; }
+  .nav-toggle { display: block; }
+  .nav-cta .btn { display: none; }        /* hide header button when collapsed; menu + hero carry the CTA */
+
   .hero-main { flex-direction: column; align-items: flex-start; text-align: left; }
   .hero-copy { max-width: 100%; }
   .hero-features { text-align: left; flex-direction: row; flex-wrap: wrap; gap: 10px 22px; }
-  .hero-glow { width: min(90vw, 640px); top: 38%; left: 72%; opacity: 0.85; }
+  .hero-glow { top: 46%; left: 84%; opacity: 0.7; }
   .hero-strip { gap: 14px 30px; }
   .steps { grid-template-columns: 1fr 1fr; }
   .step:not(:last-child)::after { display: none; }
@@ -509,17 +550,6 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
    ============================================================ */
 @media (max-width: 720px) {
   body { font-size: 16px; }
-  .nav-links {
-    position: fixed; inset: 74px 0 auto 0;
-    flex-direction: column; align-items: flex-start; gap: 4px;
-    background: var(--offwhite); border-bottom: 1px solid var(--line);
-    padding: 12px var(--gutter) 22px; box-shadow: var(--shadow-md);
-    transform: translateY(-140%); transition: transform .3s ease; z-index: 90;
-  }
-  .nav-links.open { transform: translateY(0); }
-  .nav-links a { display: block; width: 100%; padding: 12px 0; font-size: 1.05rem; }
-  .nav-toggle { display: block; }
-  .nav-cta .btn { display: none; }        /* hide header button on mobile; menu + hero carry the CTA */
   .solution-grid { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
@@ -528,5 +558,5 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   .hero-tag { font-size: 0.78rem; padding: 7px 14px; }
   .hero-strip { gap: 12px 22px; padding-top: 18px; padding-bottom: 18px; }
   .hero-strip li { font-size: 0.76rem; }
-  .hero-glow { width: 82vw; top: 34%; left: 78%; opacity: 0.6; }
+  .hero-glow { width: 220px; top: 60%; left: 92%; opacity: 0.5; }
 }
