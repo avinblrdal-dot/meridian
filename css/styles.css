@@ -26,7 +26,7 @@
   --line:        #E9E4DA;   /* hairline borders */
 
   /* Type */
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-display: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
   /* Layout */
@@ -189,13 +189,28 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
     radial-gradient(120% 90% at 60% 0%, #232B40 0%, var(--navy) 48%, #141A28 100%);
 }
 
-/* --- Sunburst glow: the Meridian "M" glowing at the center of radiating rays.
-     Sized off both viewport width AND height (via min()) so it scales to fit
-     any screen proportion instead of overflowing on short/ultra-wide viewports. --- */
+/* --- Fractal fluted-glass texture (SVG feTurbulence + feDisplacementMap).
+     Sits furthest back of the hero's decorative layers — behind the sunburst
+     and the watermark, in front of the base gradient. Static (no animation)
+     to keep this decorative layer cheap. --- */
+.hero-fractal-glass {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  width: 100%; height: 100%;
+  opacity: 0.4;
+  /* Fade the ribs away from the headline/CTA column (left ~40%) so the
+     texture reads behind the scene rather than through the text. */
+  -webkit-mask-image: radial-gradient(60% 60% at 30% 48%, transparent 0%, transparent 42%, #000 88%);
+          mask-image: radial-gradient(60% 60% at 30% 48%, transparent 0%, transparent 42%, #000 88%);
+}
+
+/* --- Sunburst glow: rays radiating from behind a huge, faint watermark of
+     the Meridian "M". Sized off both viewport width AND height (via min())
+     so it scales to fit any screen proportion instead of overflowing on
+     short/ultra-wide viewports. --- */
 .hero-glow {
   position: absolute; z-index: 0; pointer-events: none;
   top: 52%; left: 60%;
-  width: clamp(260px, min(58vw, 60vh), 820px); aspect-ratio: 1;
+  width: clamp(300px, min(64vw, 64vh), 1000px); aspect-ratio: 1;
   transform: translate(calc(-50% + var(--glow-shift-x, 0px)), calc(-50% + var(--glow-shift-y, 0px)));
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -210,28 +225,29 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
           mask-image: radial-gradient(circle, #000 0%, #000 12%, transparent 68%);
   animation: hero-rays-spin 100s linear infinite;
 }
+/* Soft ambient bloom behind the watermark — dim and diffuse, not a bright point */
 .hero-glow-core {
-  position: absolute; top: 50%; left: 50%; width: 84px; height: 84px;
+  position: absolute; top: 50%; left: 50%; width: 50%; height: 50%;
   transform: translate(-50%, -50%); border-radius: 50%;
-  background: radial-gradient(circle, #fff 0%, var(--gold) 45%, transparent 76%);
-  box-shadow: 0 0 140px 70px rgba(184, 140, 41, 0.32);
-  filter: blur(0.5px);
+  background: radial-gradient(circle, rgba(216,168,86,0.28) 0%, transparent 72%);
+  filter: blur(6px);
   animation: hero-glow-pulse 6s ease-in-out infinite;
 }
-/* The actual Meridian logo, lit up as if it's the light source */
+/* The Meridian logo itself: huge, transparent, sitting behind all text —
+   a watermark rather than a crisp icon. z-index below .hero-main (z-index:1),
+   so headline/buttons/features always render in front of it. */
 .hero-glow-mark {
   position: absolute; top: 50%; left: 50%;
-  width: clamp(40px, 5vw, 80px); height: auto;
+  width: 80%; height: auto;
   transform: translate(-50%, -50%);
-  filter:
-    drop-shadow(0 0 16px rgba(255, 255, 255, 0.6))
-    drop-shadow(0 0 42px rgba(184, 140, 41, 0.7));
+  opacity: 0.14;
+  filter: drop-shadow(0 0 30px rgba(184, 140, 41, 0.22));
 }
 
 @keyframes hero-rays-spin { to { transform: rotate(360deg); } }
 @keyframes hero-glow-pulse {
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50%      { transform: translate(-50%, -50%) scale(1.05); }
+  50%      { transform: translate(-50%, -50%) scale(1.06); }
 }
 
 /* --- Top announcement tag --- */
@@ -256,7 +272,11 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 .hero h1 {
   color: #fff; font-size: clamp(2.4rem, 5.6vw, 4.4rem); font-weight: 600; line-height: 1.08;
 }
-.hero h1 .accent { color: var(--gold); }
+/* Bright neon gold — used only on the words "time back" and "Meridian" */
+.hero h1 .neon {
+  color: #FFDE59;
+  text-shadow: 0 0 14px rgba(255, 222, 89, 0.65), 0 0 40px rgba(255, 200, 60, 0.35);
+}
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px; margin-top: 32px; }
 
 .hero-features {
@@ -339,7 +359,7 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 }
 .solution h3 { font-size: 1.2rem; margin-bottom: 6px; }
 .solution p { color: var(--ink-soft); margin: 0; font-size: 0.98rem; }
-.solutions-close { margin-top: 32px; font-size: 1.1rem; color: var(--navy); font-family: var(--font-display); font-style: italic; }
+.solutions-close { margin-top: 32px; font-size: 1.1rem; color: var(--gold-deep); font-family: var(--font-display); font-weight: 500; }
 
 /* ============================================================
    WHO IT'S FOR
