@@ -171,49 +171,86 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 /* ============================================================
-   HERO
+   HERO — full-bleed dark navy band, warm gold sunburst glow
    ============================================================ */
-.hero { position: relative; overflow: hidden; padding-top: clamp(56px, 8vw, 96px); }
-/* soft warm glow behind hero */
-.hero::before {
-  content: ""; position: absolute; inset: 0; z-index: 0;
+.hero {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  min-height: min(88vh, 780px);
+  padding: clamp(28px, 4vw, 44px) 0 0;
   background:
-    radial-gradient(60% 55% at 78% 8%, rgba(184,140,41,0.14), transparent 60%),
-    radial-gradient(50% 50% at 6% 100%, rgba(184,140,41,0.08), transparent 60%);
-  pointer-events: none;
+    radial-gradient(120% 90% at 60% 0%, #232B40 0%, var(--navy) 48%, #141A28 100%);
+  color: #fff;
 }
-.hero .container { position: relative; z-index: 1; }
-.hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
 
-.hero h1 { font-size: clamp(2.4rem, 6vw, 4.1rem); font-weight: 600; }
-.hero h1 .accent { color: var(--gold-deep); }
-.hero-sub { font-size: 1.2rem; color: var(--ink-soft); max-width: 34ch; margin-bottom: 28px; }
-.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 22px; }
-.hero-trust { margin-top: 30px; font-size: 0.92rem; color: var(--ink-soft); display: flex; align-items: center; gap: 10px; }
-.hero-trust .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none; }
+/* --- Sunburst glow: soft gold core + faint radiating rays --- */
+.hero-glow {
+  position: absolute; z-index: 0; pointer-events: none;
+  top: 52%; left: 60%; width: min(70vw, 920px); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+.hero-glow-rays {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(216, 168, 86, 0.30) 0deg 1deg,
+    transparent 1deg 8deg
+  );
+  -webkit-mask-image: radial-gradient(circle, #000 0%, #000 12%, transparent 68%);
+          mask-image: radial-gradient(circle, #000 0%, #000 12%, transparent 68%);
+}
+.hero-glow-core {
+  position: absolute; top: 50%; left: 50%; width: 64px; height: 64px;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, var(--gold) 45%, transparent 76%);
+  box-shadow: 0 0 120px 60px rgba(184, 140, 41, 0.35);
+  filter: blur(0.5px);
+}
 
-/* HERO IMAGE SLOT ------------------------------------------------
-   Suggested image: a warm, bright photo of a real local business
-   owner in their salon/spa/studio — relaxed, not staged-corporate.
-   Replace the .hero-visual block in index.html with an <img>.
------------------------------------------------------------------ */
-.hero-visual {
-  position: relative; border-radius: 22px; overflow: hidden;
-  background: linear-gradient(160deg, var(--cream), #efe7d6);
-  box-shadow: var(--shadow-md); aspect-ratio: 4 / 4.4;
-  display: grid; place-items: center; text-align: center; padding: 28px;
-  border: 1px solid var(--line);
+/* --- Top announcement tag --- */
+.hero-top { position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+  padding: 9px 18px; font-size: 0.86rem; font-weight: 500; color: #E4E7EF;
+  background: rgba(255,255,255,0.04); transition: border-color .2s ease, background .2s ease;
 }
-.hero-visual .slot-note { color: var(--ink-soft); font-size: 0.9rem; max-width: 26ch; }
-.hero-visual .slot-icon { font-size: 2rem; margin-bottom: 10px; }
-/* floating stat card on the hero image */
-.hero-badge {
-  position: absolute; left: 18px; bottom: 18px;
-  background: #fff; border-radius: 14px; padding: 14px 18px;
-  box-shadow: var(--shadow-md); text-align: left; border: 1px solid var(--line);
+.hero-tag:hover { border-color: rgba(216,168,86,0.5); background: rgba(216,168,86,0.08); }
+.hero-tag-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none; }
+
+/* --- Main row: headline + CTAs on the left, feature list far right --- */
+.hero-main {
+  position: relative; z-index: 1; flex: 1;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: clamp(24px, 5vw, 60px);
+  padding-top: clamp(28px, 5vw, 48px); padding-bottom: clamp(28px, 5vw, 48px);
 }
-.hero-badge strong { font-family: var(--font-display); font-size: 1.5rem; color: var(--navy); display: block; }
-.hero-badge span { font-size: 0.82rem; color: var(--ink-soft); }
+.hero-copy { max-width: 640px; }
+.hero h1 {
+  color: #fff; font-size: clamp(2.4rem, 5.6vw, 4.4rem); font-weight: 600; line-height: 1.08;
+}
+.hero h1 .accent { color: var(--gold); }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px; margin-top: 32px; }
+
+.hero-features {
+  list-style: none; margin: 0; padding: 0; flex: none;
+  display: grid; gap: 14px; text-align: right;
+}
+.hero-features li { color: #B9C0CE; font-size: 1.02rem; font-weight: 500; }
+
+/* --- Bottom trust strip: who we build for --- */
+.hero-strip {
+  position: relative; z-index: 1;
+  list-style: none; margin: 0; margin-top: auto;
+  padding-top: 22px; padding-bottom: 22px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex; flex-wrap: wrap; gap: clamp(20px, 4vw, 44px);
+}
+.hero-strip li { color: #8A93A6; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.03em; }
+
+/* Outline button variant for use on the dark hero */
+.btn-outline-dark { background: transparent; color: #fff; border-color: rgba(255,255,255,0.32); }
+.btn-outline-dark:hover { border-color: var(--gold); background: rgba(216,168,86,0.1); color: var(--gold); transform: translateY(-2px); }
 
 /* ============================================================
    PROBLEM
@@ -451,9 +488,11 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
    RESPONSIVE — tablet
    ============================================================ */
 @media (max-width: 960px) {
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-visual { max-width: 460px; margin-inline: auto; order: -1; aspect-ratio: 5/4; }
-  .hero-sub { max-width: 48ch; }
+  .hero-main { flex-direction: column; align-items: flex-start; text-align: left; }
+  .hero-copy { max-width: 100%; }
+  .hero-features { text-align: left; flex-direction: row; flex-wrap: wrap; gap: 10px 22px; }
+  .hero-glow { width: min(90vw, 640px); top: 38%; left: 72%; opacity: 0.85; }
+  .hero-strip { gap: 14px 30px; }
   .steps { grid-template-columns: 1fr 1fr; }
   .step:not(:last-child)::after { display: none; }
   .problem .problem-grid,
@@ -486,4 +525,8 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   .form-row { grid-template-columns: 1fr; }
   .hero-actions .btn { width: 100%; }
   .hero-actions { gap: 12px; }
+  .hero-tag { font-size: 0.78rem; padding: 7px 14px; }
+  .hero-strip { gap: 12px 22px; padding-top: 18px; padding-bottom: 18px; }
+  .hero-strip li { font-size: 0.76rem; }
+  .hero-glow { width: 82vw; top: 34%; left: 78%; opacity: 0.6; }
 }

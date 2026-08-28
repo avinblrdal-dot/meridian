@@ -77,36 +77,48 @@
   <main id="main">
 
     <!-- =========================================================
-         HERO
+         HERO — full-bleed dark navy band with a warm gold glow.
+         To swap the glow for a real photo instead, delete .hero-glow
+         and give .hero a background-image, or drop an <img> into
+         .hero-main and adjust the grid in css/styles.css.
          ========================================================= -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="container">
-        <div class="hero-grid">
-          <div class="reveal">
-            <h1 id="hero-title">Get your time back. <span class="accent">Let Meridian handle the rest.</span></h1>
-            <p class="hero-sub">We help local salons, spas, and studios stop losing hours — and bookings — to no-shows, missed calls, and repetitive questions. One practical AI fix, built for your business and taught to your team.</p>
-            <div class="hero-actions">
-              <a class="btn btn-primary btn-lg" href="#contact">Book a Free Intro Call</a>
-              <a class="text-link" href="#how">See how it works ↓</a>
-            </div>
-            <p class="hero-trust"><span class="dot" aria-hidden="true"></span> Hands-on, local, and built around businesses like yours — Frisco / Dallas–Fort Worth, TX.</p>
-          </div>
+      <div class="hero-glow" aria-hidden="true">
+        <span class="hero-glow-rays"></span>
+        <span class="hero-glow-core"></span>
+      </div>
 
-          <!-- HERO IMAGE SLOT: warm photo of a local business owner in their space.
-               To use a real photo, replace this whole .hero-visual block with:
-               <img class="hero-visual" src="assets/hero.jpg" alt="A salon owner at work" /> -->
-          <div class="hero-visual reveal" role="img" aria-label="Photo placeholder: a local salon or studio owner at work">
-            <div>
-              <div class="slot-icon" aria-hidden="true">✦</div>
-              <p class="slot-note"><strong>Image slot</strong><br />Warm, bright photo of a real owner in their salon / spa / studio.</p>
-            </div>
-            <div class="hero-badge">
-              <strong>Full book.</strong>
-              <span>Fewer empty chairs, less time on the phone.</span>
-            </div>
+      <div class="hero-top container reveal">
+        <a class="hero-tag" href="#contact">
+          <span class="hero-tag-dot" aria-hidden="true"></span>
+          Now booking AI Opportunity Audits — Frisco / DFW
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="hero-main container">
+        <div class="hero-copy reveal">
+          <h1 id="hero-title">Get your time back.<br /><span class="accent">Let Meridian handle the rest.</span></h1>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="#contact">Book a Free Intro Call</a>
+            <a class="btn btn-outline-dark btn-lg" href="#how">See how it works</a>
           </div>
         </div>
+
+        <ul class="hero-features reveal" aria-label="What working with Meridian looks like">
+          <li>For salons, spas &amp; studios</li>
+          <li>Built and installed, hands-on</li>
+          <li>Run by your own team</li>
+        </ul>
       </div>
+
+      <ul class="hero-strip container reveal" aria-label="Who we build for">
+        <li>Salons</li>
+        <li>Barbershops</li>
+        <li>Nail &amp; Spa Studios</li>
+        <li>Fitness Studios</li>
+        <li>Yoga &amp; Dance</li>
+      </ul>
     </section>
 
     <!-- =========================================================
