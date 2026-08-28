@@ -5,7 +5,8 @@
   "description": "Marketing website for Meridian — a hands-on AI consultancy for local beauty & wellness businesses.",
   "scripts": {
     "dev": "serve . --listen 3000",
-    "start": "serve . --listen 3000"
+    "start": "serve . --listen 3000",
+    "push": "bash push.sh"
   },
   "devDependencies": {
     "serve": "^14.2.1"
