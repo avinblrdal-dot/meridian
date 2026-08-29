@@ -34,7 +34,7 @@
   <!-- Fonts: Space Grotesk (modern geometric sans for headings) + Inter (clean, readable sans for body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css" />
@@ -104,6 +104,16 @@
       </div>
 
       <div class="hero-inner container">
+        <!-- The sun: a crisp, pure-CSS radiating glow (gradient core + masked
+             conic-gradient rays — no SVG filters, so it can't blur or drift
+             out of alignment at any screen size) with the Meridian mark at
+             its center, as if the brand itself is the light source. -->
+        <div class="hero-sun" aria-hidden="true">
+          <span class="hero-sun-rays"></span>
+          <span class="hero-sun-core"></span>
+          <img class="hero-sun-mark" src="assets/meridian-logo.png" alt="" />
+        </div>
+
         <div class="hero-copy reveal">
           <h1 id="hero-title">Get your <span class="grad-text">time&nbsp;back.</span><br />Let <span class="grad-text">Meridian</span> handle the rest.</h1>
           <p class="hero-sub">We help local salons, spas, and studios stop losing hours — and bookings — to no-shows, missed calls, and repetitive questions. One practical AI fix, built for your business and taught to your team.</p>
@@ -112,22 +122,6 @@
             <a class="btn btn-outline-dark btn-lg" href="#how">See how it works</a>
           </div>
           <p class="hero-trust"><span class="hero-tag-dot" aria-hidden="true"></span> Hands-on, local, and built around businesses like yours — Frisco / Dallas–Fort Worth, TX.</p>
-        </div>
-
-        <!-- HERO IMAGE SLOT: warm photo of a local business owner in their space.
-             Replace the inner <img>-less block with:
-             <img src="assets/hero.jpg" alt="A salon owner at work" /> inside .hero-visual-frame -->
-        <div class="hero-visual reveal" role="img" aria-label="Photo placeholder: a local salon or studio owner at work">
-          <div class="hero-visual-frame">
-            <div class="hero-visual-content">
-              <div class="slot-icon" aria-hidden="true">✦</div>
-              <p class="slot-note"><strong>Image slot</strong><br />Warm, bright photo of a real owner in their salon / spa / studio.</p>
-            </div>
-            <div class="hero-badge">
-              <strong>Full book.</strong>
-              <span>Fewer empty chairs, less time on the phone.</span>
-            </div>
-          </div>
         </div>
       </div>
 
