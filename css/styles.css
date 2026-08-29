@@ -310,12 +310,12 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 }
 .hero-sun-mark {
   position: absolute; top: 50%; left: 50%;
-  width: clamp(90px, 12vw, 170px); height: auto;
+  width: clamp(180px, 26vw, 400px); height: auto;
   transform: translate(-50%, -50%);
-  opacity: 0.62;
+  opacity: 0.26;
   filter:
-    drop-shadow(0 0 12px rgba(255, 255, 255, 0.5))
-    drop-shadow(0 0 30px rgba(184, 140, 41, 0.55));
+    drop-shadow(0 0 14px rgba(255, 255, 255, 0.4))
+    drop-shadow(0 0 34px rgba(184, 140, 41, 0.45));
 }
 @keyframes hero-rays-spin { to { transform: rotate(360deg); } }
 @keyframes hero-glow-pulse {
