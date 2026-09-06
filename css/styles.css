@@ -230,22 +230,31 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   mix-blend-mode: overlay;
 }
 
-/* --- Top announcement tag --- */
-.hero-top { position: relative; z-index: 1; }
-.hero-tag {
-  display: inline-flex; align-items: center; gap: 10px;
-  border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
-  padding: 9px 18px 9px 16px; font-size: 0.86rem; font-weight: 500; color: #E4E7EF;
-  background: rgba(255,255,255,0.04); transition: border-color .2s ease, background .2s ease;
+/* --- Status bar: a full-width strip at the very top of the hero, not a
+     rounded pill floating above the headline. Same visual language as the
+     bottom marquee (hairline border, edge-to-edge), so it reads as part of
+     the hero's structure instead of a badge someone bolted on afterward. --- */
+.hero-statusbar {
+  position: relative; z-index: 1;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.hero-tag:hover { border-color: rgba(216,168,86,0.5); background: rgba(216,168,86,0.08); }
+.hero-status {
+  display: flex; align-items: center; gap: 12px;
+  max-width: var(--maxw); margin: 0 auto; padding: 12px var(--gutter);
+  font-size: 0.86rem; font-weight: 500; color: #C9CEDA;
+  transition: color .2s ease;
+}
+.hero-status:hover { color: #fff; }
+.hero-status:hover .hero-status-arrow { transform: translateX(3px); }
+.hero-status-msg { flex: 1; min-width: 0; }
+.hero-status-arrow { color: var(--gold); transition: transform .2s ease; flex: none; }
 .hero-tag-dot {
   width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none;
   animation: hero-dot-pulse 2.4s ease-in-out infinite;
 }
 .hero-tag-mono {
   font-family: var(--font-mono); font-size: 0.74rem; font-weight: 500;
-  letter-spacing: 0.06em; color: var(--gold);
+  letter-spacing: 0.06em; color: var(--gold); flex: none;
 }
 @keyframes hero-dot-pulse {
   0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(184,140,41,0.5); }
@@ -265,14 +274,19 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   color: #fff; font-size: clamp(2.4rem, 5.6vw, 4.2rem); font-weight: 600; line-height: 1.12;
   font-family: var(--font-display);
 }
-/* Gradient-fill headline accent — used only on "time back" and "Meridian".
-   Sized up a touch so the accent words carry more visual weight than the
-   connecting words — a bit of editorial rhythm instead of uniform type. */
-.hero h1 .grad-text {
-  font-size: 1.14em; font-weight: 700;
-  background: linear-gradient(100deg, #FFE9A8 0%, var(--gold) 45%, #FFD65C 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  filter: drop-shadow(0 0 20px rgba(216, 168, 86, 0.35));
+/* Headline accent — used only on "time back" and "Meridian". A solid gold
+   fill with a hand-drawn-feeling underline stroke (a single wavy SVG path,
+   not a gradient clipped through the type) is the accent, so the emphasis
+   comes from a mark under the words rather than the text itself glowing. */
+.hero h1 .accent {
+  position: relative; font-size: 1.14em; font-weight: 700; color: var(--gold);
+  display: inline-block;
+}
+.hero h1 .accent::after {
+  content: ""; position: absolute; left: 2%; right: 2%; bottom: -0.12em; height: 0.14em;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M1 8.5C30 2 60 2 80 6.5S140 11 160 5.5 190 2 199 5' fill='none' stroke='%23B88C29' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-size: 100% 100%;
+  opacity: 0.85; pointer-events: none;
 }
 .hero-sub { font-size: 1.15rem; color: #C9CEDA; max-width: 46ch; margin: 22px auto 0; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 20px; margin-top: 32px; }
@@ -428,17 +442,18 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 .who-checks li { display: flex; gap: 12px; align-items: flex-start; color: var(--ink-soft); }
 .who-checks .ck { color: var(--gold-deep); flex: none; margin-top: 3px; }
 
-/* WHO-IT'S-FOR IMAGE SLOT ---------------------------------------
-   Suggested image: bright detail shot of an appointment book,
-   front desk, or hands on a phone confirming a booking.
+/* WHO-IT'S-FOR ILLUSTRATION --------------------------------------
+   A vector illustration of a full booking day (built in index.html
+   as inline SVG) standing in for a photo — always crisp, on-brand,
+   no stock image needed.
 ---------------------------------------------------------------- */
 .who-visual {
   border-radius: 20px; overflow: hidden; border: 1px solid var(--line);
   background: linear-gradient(160deg, #fff, var(--cream));
-  aspect-ratio: 5 / 4; display: grid; place-items: center; text-align: center;
-  padding: 24px; box-shadow: var(--shadow-sm);
+  aspect-ratio: 5 / 4; display: grid; place-items: center;
+  padding: clamp(16px, 3vw, 28px); box-shadow: var(--shadow-sm);
 }
-.who-visual .slot-note { color: var(--ink-soft); font-size: 0.9rem; max-width: 28ch; }
+.who-illustration { width: 100%; height: auto; max-width: 380px; }
 
 /* ============================================================
    WHY MERIDIAN
@@ -480,8 +495,13 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 .price-card .btn { width: 100%; }
 .pilot-note {
   margin-top: 30px; text-align: center; background: var(--gold-soft); border: 1px solid #E7D6AE;
-  color: #6E5312; border-radius: var(--radius-sm); padding: 16px 22px; font-size: 0.98rem; font-weight: 500;
-  max-width: 760px; margin-inline: auto;
+  color: #6E5312; border-radius: var(--radius-sm); padding: 16px 22px 16px 46px; font-size: 0.98rem; font-weight: 500;
+  max-width: 760px; margin-inline: auto; position: relative;
+}
+.pilot-note::before {
+  content: ""; position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+  width: 8px; height: 8px; border-radius: 50%; background: var(--gold-deep);
+  box-shadow: 0 0 0 4px rgba(150,112,30,0.16);
 }
 
 /* ============================================================
@@ -506,7 +526,6 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   aspect-ratio: 1 / 1; box-shadow: var(--shadow-sm);
 }
 .founder-visual img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; }
-.founder-visual .slot-note { color: var(--ink-soft); font-size: 0.9rem; max-width: 22ch; }
 .about p { font-size: 1.12rem; color: var(--ink-soft); }
 
 /* ============================================================
@@ -626,8 +645,8 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   .form-row { grid-template-columns: 1fr; }
   .hero-actions .btn { width: 100%; }
   .hero-actions { gap: 12px; }
-  .hero-tag { font-size: 0.78rem; padding: 7px 14px 7px 12px; }
-  .hero-tag-mono { display: none; }  /* keep the mobile tag short */
+  .hero-status { font-size: 0.78rem; padding: 10px var(--gutter); }
+  .hero-tag-mono { display: none; }  /* keep the mobile status bar short */
   .hero-strip { padding-top: 18px; padding-bottom: 18px; }
   .hero-marquee-track { gap: 22px; }
   .hero-marquee-track li { font-size: 0.76rem; }
