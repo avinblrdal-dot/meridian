@@ -148,6 +148,34 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 .site-header.scrolled { box-shadow: var(--shadow-sm); border-bottom-color: var(--line); }
 .nav { display: flex; align-items: center; justify-content: space-between; height: 74px; }
 
+/* Invisible strip that catches the cursor at the very top edge to reveal
+   the auto-hidden nav. Zero-height/inert on touch devices (see below). */
+#navHoverZone { position: fixed; top: 0; left: 0; right: 0; height: 14px; z-index: 99; }
+
+/* --- Auto-hide nav (mouse/trackpad devices only) ---------------
+   The header floats fixed over the hero and stays hidden above the
+   viewport until the cursor comes near the very top of the page (or
+   the header itself gets keyboard focus, or the mobile menu is open).
+   Touch devices are untouched — no cursor there, so the header just
+   stays sticky and visible as normal. See #navHoverZone in main.js. */
+@media (hover: hover) and (pointer: fine) {
+  .site-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    transform: translateY(-100%);
+    transition: transform .3s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
+  }
+  .site-header.nav-visible,
+  .site-header:focus-within {
+    transform: translateY(0);
+  }
+  /* The header no longer reserves space in normal flow (it's fixed),
+     so give the hero the same top offset itself — the dark hero
+     background fills that band instead of leaving a blank gap when
+     the nav is hidden. (Extra specificity so this beats the later
+     ".hero { padding: ... }" base rule regardless of source order.) */
+  body .hero { padding-top: calc(74px + clamp(28px, 4vw, 44px)); }
+}
+
 /* Brand lockup: logo + wordmark. Logo is a transparent PNG (assets/meridian-logo.png). */
 .brand { display: inline-flex; align-items: center; gap: 12px; }
 .logo-img { height: 38px; width: auto; display: block; }
@@ -230,24 +258,15 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   mix-blend-mode: overlay;
 }
 
-/* --- Status bar: a full-width strip at the very top of the hero, not a
-     rounded pill floating above the headline. Same visual language as the
-     bottom marquee (hairline border, edge-to-edge), so it reads as part of
-     the hero's structure instead of a badge someone bolted on afterward. --- */
-.hero-statusbar {
-  position: relative; z-index: 1;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+/* --- Top announcement tag --- */
+.hero-top { position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+  padding: 9px 18px 9px 16px; font-size: 0.86rem; font-weight: 500; color: #E4E7EF;
+  background: rgba(255,255,255,0.04); transition: border-color .2s ease, background .2s ease;
 }
-.hero-status {
-  display: flex; align-items: center; gap: 12px;
-  max-width: var(--maxw); margin: 0 auto; padding: 12px var(--gutter);
-  font-size: 0.86rem; font-weight: 500; color: #C9CEDA;
-  transition: color .2s ease;
-}
-.hero-status:hover { color: #fff; }
-.hero-status:hover .hero-status-arrow { transform: translateX(3px); }
-.hero-status-msg { flex: 1; min-width: 0; }
-.hero-status-arrow { color: var(--gold); transition: transform .2s ease; flex: none; }
+.hero-tag:hover { border-color: rgba(216,168,86,0.5); background: rgba(216,168,86,0.08); }
 .hero-tag-dot {
   width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none;
   animation: hero-dot-pulse 2.4s ease-in-out infinite;
@@ -274,19 +293,14 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   color: #fff; font-size: clamp(2.4rem, 5.6vw, 4.2rem); font-weight: 600; line-height: 1.12;
   font-family: var(--font-display);
 }
-/* Headline accent — used only on "time back" and "Meridian". A solid gold
-   fill with a hand-drawn-feeling underline stroke (a single wavy SVG path,
-   not a gradient clipped through the type) is the accent, so the emphasis
-   comes from a mark under the words rather than the text itself glowing. */
-.hero h1 .accent {
-  position: relative; font-size: 1.14em; font-weight: 700; color: var(--gold);
-  display: inline-block;
-}
-.hero h1 .accent::after {
-  content: ""; position: absolute; left: 2%; right: 2%; bottom: -0.12em; height: 0.14em;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'%3E%3Cpath d='M1 8.5C30 2 60 2 80 6.5S140 11 160 5.5 190 2 199 5' fill='none' stroke='%23B88C29' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-size: 100% 100%;
-  opacity: 0.85; pointer-events: none;
+/* Gradient-fill headline accent — used only on "time back" and "Meridian".
+   Sized up a touch so the accent words carry more visual weight than the
+   connecting words — a bit of editorial rhythm instead of uniform type. */
+.hero h1 .grad-text {
+  font-size: 1.14em; font-weight: 700;
+  background: linear-gradient(100deg, #FFE9A8 0%, var(--gold) 45%, #FFD65C 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 20px rgba(216, 168, 86, 0.35));
 }
 .hero-sub { font-size: 1.15rem; color: #C9CEDA; max-width: 46ch; margin: 22px auto 0; }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 20px; margin-top: 32px; }
@@ -645,8 +659,8 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   .form-row { grid-template-columns: 1fr; }
   .hero-actions .btn { width: 100%; }
   .hero-actions { gap: 12px; }
-  .hero-status { font-size: 0.78rem; padding: 10px var(--gutter); }
-  .hero-tag-mono { display: none; }  /* keep the mobile status bar short */
+  .hero-tag { font-size: 0.78rem; padding: 7px 14px 7px 12px; }
+  .hero-tag-mono { display: none; }  /* keep the mobile tag short */
   .hero-strip { padding-top: 18px; padding-bottom: 18px; }
   .hero-marquee-track { gap: 22px; }
   .hero-marquee-track li { font-size: 0.76rem; }

@@ -38,6 +38,28 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
+  /* --- Auto-hide nav (mouse/trackpad only — see the matching
+     "(hover: hover) and (pointer: fine)" block in styles.css) ---
+     The header stays hidden above the viewport until the cursor comes
+     near the very top edge (#navHoverZone), hovers the header itself,
+     the mobile menu is open, or a header link has keyboard focus. */
+  var hoverZone = document.getElementById("navHoverZone");
+  var hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (header && hoverZone && hoverCapable) {
+    var showNav = function () { header.classList.add("nav-visible"); };
+    var hideNav = function () {
+      if (links && links.classList.contains("open")) return;      // mobile menu open
+      if (header.contains(document.activeElement)) return;         // keyboard focus inside
+      header.classList.remove("nav-visible");
+    };
+    hoverZone.addEventListener("mouseenter", showNav);
+    header.addEventListener("mouseenter", showNav);
+    header.addEventListener("mouseleave", hideNav);
+    header.addEventListener("focusin", showNav);
+    header.addEventListener("focusout", function () { setTimeout(hideNav, 0); });
+    if (toggle) toggle.addEventListener("click", showNav);
+  }
+
   /* --- Subtle scroll-in reveal (IntersectionObserver) --- */
   var reveals = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {

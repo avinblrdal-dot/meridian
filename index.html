@@ -43,6 +43,11 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
+  <!-- Auto-hide nav trigger: a slim invisible strip at the very top of the
+       viewport. On mouse/trackpad devices the header stays hidden until the
+       cursor comes up near this edge — see #navHoverZone in js/main.js. -->
+  <div id="navHoverZone" aria-hidden="true"></div>
+
   <!-- =========================================================
        HEADER
        ========================================================= -->
@@ -95,15 +100,11 @@
            no runtime computation. Adds texture instead of flatness. -->
       <div class="hero-grain" aria-hidden="true"></div>
 
-      <!-- Status bar: a full-width strip (not a floating pill above the
-           headline) — same structural idea as the bottom marquee, so the
-           hero reads as one system rather than a badge bolted on top. -->
-      <div class="hero-statusbar">
-        <a class="hero-status" href="#contact">
+      <div class="hero-top container">
+        <a class="hero-tag" href="#contact">
           <span class="hero-tag-dot" aria-hidden="true"></span>
-          <span class="hero-tag-mono">STATUS</span>
-          <span class="hero-status-msg">Now booking AI Opportunity Audits · Frisco / DFW</span>
-          <span class="hero-status-arrow" aria-hidden="true">→</span>
+          <span class="hero-tag-mono">STATUS:</span> Now booking AI Opportunity Audits — Frisco / DFW
+          <span aria-hidden="true">→</span>
         </a>
       </div>
 
@@ -119,13 +120,13 @@
         </div>
 
         <div class="hero-copy reveal">
-          <h1 id="hero-title">Get your <span class="accent">time&nbsp;back.</span><br />Let <span class="accent">Meridian</span> handle the rest.</h1>
-          <p class="hero-sub">We help local salons, spas, and studios stop losing hours to no-shows, missed calls, and repetitive questions. One practical AI fix, built for your business and taught to your team.</p>
+          <h1 id="hero-title">Get your <span class="grad-text">time&nbsp;back.</span><br />Let <span class="grad-text">Meridian</span> handle the rest.</h1>
+          <p class="hero-sub">We help local salons, spas, and studios stop losing hours — and bookings — to no-shows, missed calls, and repetitive questions. One practical AI fix, built for your business and taught to your team.</p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-lg" href="#contact">Book a Free Intro Call</a>
             <a class="btn btn-outline-dark btn-lg" href="#how">See how it works</a>
           </div>
-          <p class="hero-trust"><span class="hero-tag-dot" aria-hidden="true"></span> Hands-on and local, built around businesses like yours in Frisco / Dallas–Fort Worth, TX.</p>
+          <p class="hero-trust"><span class="hero-tag-dot" aria-hidden="true"></span> Hands-on, local, and built around businesses like yours — Frisco / Dallas–Fort Worth, TX.</p>
         </div>
       </div>
 
