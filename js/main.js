@@ -40,24 +40,37 @@
 
   /* --- Auto-hide nav (mouse/trackpad only — see the matching
      "(hover: hover) and (pointer: fine)" block in styles.css) ---
-     The header stays hidden above the viewport until the cursor comes
-     near the very top edge (#navHoverZone), hovers the header itself,
-     the mobile menu is open, or a header link has keyboard focus. */
+     Hidden above the viewport by default. It reappears when the cursor
+     comes near the very top edge (#navHoverZone) or hovers the header
+     itself, while scrolling in either direction, or while a header link
+     has keyboard focus / the mobile menu is open — then settles back to
+     hidden a moment after scrolling stops (unless still hovered/focused). */
   var hoverZone = document.getElementById("navHoverZone");
   var hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   if (header && hoverZone && hoverCapable) {
+    var isHovering = false;
+    var scrollHideTimer = null;
     var showNav = function () { header.classList.add("nav-visible"); };
     var hideNav = function () {
+      if (isHovering) return;
       if (links && links.classList.contains("open")) return;      // mobile menu open
       if (header.contains(document.activeElement)) return;         // keyboard focus inside
       header.classList.remove("nav-visible");
     };
-    hoverZone.addEventListener("mouseenter", showNav);
-    header.addEventListener("mouseenter", showNav);
-    header.addEventListener("mouseleave", hideNav);
+    hoverZone.addEventListener("mouseenter", function () { isHovering = true; showNav(); });
+    header.addEventListener("mouseenter", function () { isHovering = true; showNav(); });
+    header.addEventListener("mouseleave", function () { isHovering = false; hideNav(); });
     header.addEventListener("focusin", showNav);
     header.addEventListener("focusout", function () { setTimeout(hideNav, 0); });
     if (toggle) toggle.addEventListener("click", showNav);
+
+    // Scrolling (either direction) reveals the nav; once scrolling settles,
+    // it hides again after a short pause (unless hovered/focused/menu open).
+    window.addEventListener("scroll", function () {
+      showNav();
+      clearTimeout(scrollHideTimer);
+      scrollHideTimer = setTimeout(hideNav, 700);
+    }, { passive: true });
   }
 
   /* --- Subtle scroll-in reveal (IntersectionObserver) --- */
