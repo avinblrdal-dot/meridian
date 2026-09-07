@@ -64,12 +64,30 @@
     header.addEventListener("focusout", function () { setTimeout(hideNav, 0); });
     if (toggle) toggle.addEventListener("click", showNav);
 
-    // Scrolling (either direction) reveals the nav; once scrolling settles,
-    // it hides again after a short pause (unless hovered/focused/menu open).
+    // Scrolling reveals the nav — unless it's a decently fast scroll down,
+    // which slides it away instead (the .3s CSS transition makes it a slide,
+    // not a snap). Velocity is measured over a short rolling window so a
+    // single noisy wheel tick can't falsely trigger it; only a sustained
+    // fast downward scroll does. Once scrolling settles, it hides again
+    // after a short pause (unless still hovered/focused/menu open).
+    var scrollSamples = [];
+    var FAST_DOWN_PX_PER_MS = 1.1; // ~1100px/sec sustained = "decently fast"
+    var WINDOW_MS = 150;
     window.addEventListener("scroll", function () {
-      showNav();
+      var now = performance.now();
+      var y = window.scrollY;
+      scrollSamples.push({ y: y, t: now });
+      while (scrollSamples.length > 1 && now - scrollSamples[0].t > WINDOW_MS) scrollSamples.shift();
+      var oldest = scrollSamples[0];
+      var velocity = (y - oldest.y) / Math.max(now - oldest.t, 1); // px/ms, +down
+
       clearTimeout(scrollHideTimer);
-      scrollHideTimer = setTimeout(hideNav, 700);
+      if (velocity > FAST_DOWN_PX_PER_MS) {
+        hideNav();
+      } else {
+        showNav();
+        scrollHideTimer = setTimeout(hideNav, 700);
+      }
     }, { passive: true });
   }
 
