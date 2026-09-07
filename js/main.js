@@ -40,16 +40,15 @@
 
   /* --- Auto-hide nav (mouse/trackpad only — see the matching
      "(hover: hover) and (pointer: fine)" block in styles.css) ---
-     Hidden above the viewport by default. It reappears when the cursor
-     comes near the very top edge (#navHoverZone) or hovers the header
-     itself, while scrolling in either direction, or while a header link
-     has keyboard focus / the mobile menu is open — then settles back to
-     hidden a moment after scrolling stops (unless still hovered/focused). */
+     Hidden above the viewport by default. Scrolling down hides it (or
+     keeps it hidden); scrolling up reveals it. The cursor can also pull
+     it into view directly — near the very top edge (#navHoverZone) or
+     hovering the header itself — and it stays visible while a header
+     link has keyboard focus or the mobile menu is open. */
   var hoverZone = document.getElementById("navHoverZone");
   var hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   if (header && hoverZone && hoverCapable) {
     var isHovering = false;
-    var scrollHideTimer = null;
     var showNav = function () { header.classList.add("nav-visible"); };
     var hideNav = function () {
       if (isHovering) return;
@@ -64,30 +63,13 @@
     header.addEventListener("focusout", function () { setTimeout(hideNav, 0); });
     if (toggle) toggle.addEventListener("click", showNav);
 
-    // Scrolling reveals the nav — unless it's a decently fast scroll down,
-    // which slides it away instead (the .3s CSS transition makes it a slide,
-    // not a snap). Velocity is measured over a short rolling window so a
-    // single noisy wheel tick can't falsely trigger it; only a sustained
-    // fast downward scroll does. Once scrolling settles, it hides again
-    // after a short pause (unless still hovered/focused/menu open).
-    var scrollSamples = [];
-    var FAST_DOWN_PX_PER_MS = 1.1; // ~1100px/sec sustained = "decently fast"
-    var WINDOW_MS = 150;
+    // Scroll direction only: down hides it, up shows it.
+    var lastY = window.scrollY;
     window.addEventListener("scroll", function () {
-      var now = performance.now();
       var y = window.scrollY;
-      scrollSamples.push({ y: y, t: now });
-      while (scrollSamples.length > 1 && now - scrollSamples[0].t > WINDOW_MS) scrollSamples.shift();
-      var oldest = scrollSamples[0];
-      var velocity = (y - oldest.y) / Math.max(now - oldest.t, 1); // px/ms, +down
-
-      clearTimeout(scrollHideTimer);
-      if (velocity > FAST_DOWN_PX_PER_MS) {
-        hideNav();
-      } else {
-        showNav();
-        scrollHideTimer = setTimeout(hideNav, 700);
-      }
+      if (y > lastY) hideNav();       // scrolling down
+      else if (y < lastY) showNav();  // scrolling up
+      lastY = y;
     }, { passive: true });
   }
 
