@@ -205,6 +205,34 @@
             <p>We measure the result: fewer no-shows, hours saved, more booked chairs.</p>
           </article>
         </div>
+
+        <!-- =====================================================
+             LIVE ANIMATION — "missed call to recovered booking"
+             -----------------------------------------------------
+             Self-contained embed. js/meridian-flow.js finds this div
+             by its data-meridian-flow attribute, renders into a shadow
+             root, and loops. Nothing in css/styles.css can reach inside
+             it and nothing inside it can leak out, so there is no
+             styling to do here beyond the spacing below.
+
+             Options (all optional, all data-* on this div):
+               data-business  name shown inside the animation
+               data-theme     "dark" if you move this into a navy section
+               data-autoplay  "false" = wait until scrolled into view
+               data-speed     playback multiplier, 1 = normal
+
+             The source of truth for this file is
+             ../meridian-missed-call/embed/meridian-flow.js
+             ===================================================== -->
+        <figure class="flow-embed">
+          <p class="flow-embed-lead">Here's one of those fixes, start to finish:</p>
+          <div
+            data-meridian-flow
+            data-business="Your Studio"
+            data-theme="light"
+            data-autoplay="false"></div>
+          <figcaption>A missed call becomes a booked appointment, without you touching your phone.</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -577,5 +605,24 @@
 
   <!-- Scripts: nav, scroll animations, form -->
   <script src="js/main.js"></script>
+
+  <!-- The missed-call animation in the "How It Works" section above.
+       Deferred: it's decorative, so it should never delay the page. -->
+  <script src="js/meridian-flow.js" defer></script>
+
+  <!-- =========================================================
+       FAQ CHAT WIDGET
+       ---------------------------------------------------------
+       This is the EXACT install a client gets - one line, pointed
+       at a config on this server. Meridian's own site runs it so
+       that if the install is broken, it's broken here first.
+
+       Its answers live in  /embed/clients/meridian.js
+       AI is off, so it cannot invent a price or a promise.
+
+       To put it on a client's site, see /install
+       To remove it from this site, delete this one line.
+       ========================================================= -->
+  <script src="/embed/chat.js" data-client="meridian" defer></script>
 </body>
 </html>

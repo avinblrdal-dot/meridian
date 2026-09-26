@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — Internal Tools</title>
+<meta name="description" content="Private index of Meridian's demo and onboarding pages.">
+<link rel="icon" type="image/png" href="/embed/meridian-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     INTERNAL HUB — not linked from the public site, noindex.
+     Everything Meridian ships, in one place, so you never have to
+     remember a URL in front of a prospect.
+     ============================================================ */
+  :root {
+    --gold: #B88C29;
+    --gold-deep: #96701E;
+    --gold-soft: #F3E9D2;
+    --navy: #1B2233;
+    --navy-soft: #2C3448;
+    --offwhite: #FBFAF7;
+    --cream: #F6F2EA;
+    --ink-soft: #4A5163;
+    --line: #E9E4DA;
+    --font-display: "Bricolage Grotesque", Georgia, serif;
+    --font-body: "Inter", -apple-system, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--offwhite);
+    color: var(--navy);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 80px; }
+
+  /* ---- Header ---- */
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 34px 16px 30px;
+    margin-bottom: 40px;
+  }
+  .header-inner { max-width: 880px; margin: 0 auto; }
+  .brandline { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
+  .brandline img { display: block; }
+  .brandline span {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.28rem; letter-spacing: 0.01em;
+  }
+  .pill {
+    display: inline-block;
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--gold); border: 1px solid rgba(184, 140, 41, 0.45);
+    border-radius: 100px; padding: 3px 11px; margin-left: 4px;
+  }
+  header h1 {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(1.7rem, 4.4vw, 2.3rem); line-height: 1.15;
+    letter-spacing: -0.015em; margin-bottom: 10px;
+  }
+  header p { color: rgba(255,255,255,0.72); font-size: 1rem; max-width: 56ch; }
+
+  /* ---- Sections ---- */
+  h2 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.16rem; letter-spacing: -0.005em;
+    margin: 40px 0 4px; padding-bottom: 9px;
+    border-bottom: 1px solid var(--line);
+  }
+  h2:first-of-type { margin-top: 0; }
+  .sub { color: var(--ink-soft); font-size: 0.9rem; margin: 10px 0 18px; }
+
+  /* ---- Cards ---- */
+  .grid { display: grid; gap: 12px; }
+  @media (min-width: 620px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+
+  a.card {
+    display: block; text-decoration: none; color: inherit;
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    padding: 17px 19px;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease, transform 0.16s ease;
+  }
+  a.card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 5px 18px rgba(27, 34, 51, 0.08);
+    transform: translateY(-1px);
+  }
+  a.card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .card h3 {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.02rem; margin-bottom: 5px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .card p { color: var(--ink-soft); font-size: 0.88rem; line-height: 1.55; }
+  .card code {
+    font-family: var(--font-mono); font-size: 0.78rem;
+    background: var(--cream); border: 1px solid var(--line);
+    border-radius: 5px; padding: 1px 6px; color: var(--navy-soft);
+  }
+
+  .tag {
+    font-family: var(--font-mono); font-size: 0.62rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    border-radius: 100px; padding: 2px 8px; white-space: nowrap;
+  }
+  .tag.public { background: var(--gold-soft); color: var(--gold-deep); }
+  .tag.private { background: #EDEFF3; color: var(--ink-soft); }
+  .tag.sim { background: #FBEAEA; color: #98413F; }
+
+  /* ---- Snippet ---- */
+  .snippet {
+    background: var(--navy); border-radius: 12px;
+    padding: 18px 19px; margin-top: 14px;
+  }
+  .snippet-label {
+    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--gold); margin-bottom: 9px;
+  }
+  .snippet code {
+    font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.7;
+    color: #E8EAEF; word-break: break-all; display: block;
+  }
+
+  /* ---- Note ---- */
+  .note {
+    background: var(--cream); border-left: 3px solid var(--gold);
+    border-radius: 0 9px 9px 0; padding: 14px 17px;
+    font-size: 0.88rem; color: var(--ink-soft); margin-top: 16px;
+  }
+  .note strong { color: var(--navy); font-weight: 600; }
+
+  footer {
+    margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line);
+    color: var(--ink-soft); font-size: 0.83rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brandline">
+      <img src="/embed/meridian-logo.png" alt="" width="20" height="22">
+      <span>Meridian</span>
+      <span class="pill">Internal</span>
+    </div>
+    <h1>Everything, in one place</h1>
+    <p>
+      Every demo and onboarding page Meridian ships. Bookmark this on your phone
+      — it is the only URL you need to remember before a pitch.
+    </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h2>Show a prospect</h2>
+  <p class="sub">What you open in front of a business owner.</p>
+
+  <div class="grid two">
+    <a class="card" href="/salon-demo">
+      <h3>Salon site with the widget <span class="tag private">Private</span></h3>
+      <p>
+        A realistic salon website — not Meridian-branded — with the chat widget
+        installed. The strongest demo you have: it reads as "this could be on
+        your site tomorrow." Ask it about walk-ins, then ask it something it
+        can't know.
+      </p>
+    </a>
+
+    <a class="card" href="/demo">
+      <h3>Missed-call phone demo <span class="tag sim">Simulated</span></h3>
+      <p>
+        A call rings out and the caller gets a text back seconds later. Works
+        offline once loaded, so it runs in a shop with no signal.
+        <strong>Sends nothing real.</strong>
+      </p>
+    </a>
+
+    <a class="card" href="/#how">
+      <h3>The animation on the live site <span class="tag public">Public</span></h3>
+      <p>
+        The missed-call flow as an animation inside How It Works. Good for
+        sending a link rather than showing a screen.
+      </p>
+    </a>
+
+    <a class="card" href="/preview?client=ivy-lane">
+      <h3>Widget preview <span class="tag private">Private</span></h3>
+      <p>
+        The widget on a neutral page, with a banner naming the business.
+        Swap the slug to preview any client: <code>?client=meridian</code>.
+      </p>
+    </a>
+  </div>
+
+  <h2>Onboard a client</h2>
+  <p class="sub">The five-step workflow, in order.</p>
+
+  <div class="grid">
+    <a class="card" href="/embed/clients/_TEMPLATE.js">
+      <h3>1 &middot; The config template <span class="tag private">Private</span></h3>
+      <p>
+        Copy to <code>embed/clients/&lt;slug&gt;.js</code> and fill in every
+        <code>ASK THEM</code>. About 20 minutes once you have their answers.
+        Never put a key or password in here — it is served to browsers.
+      </p>
+    </a>
+
+    <a class="card" href="/preview?client=ivy-lane">
+      <h3>2 &middot; Preview and try to break it <span class="tag private">Private</span></h3>
+      <p>
+        Ask it things badly and misspelled, the way a distracted person on a
+        phone types. This is where you find the keyword gaps.
+      </p>
+    </a>
+
+    <a class="card" href="/install?client=ivy-lane">
+      <h3>3 &middot; Send them the install page <span class="tag private">Private</span></h3>
+      <p>
+        One line to paste, with step-by-step for Squarespace, Wix, WordPress,
+        Shopify, GoDaddy/Weebly/Square and raw HTML. Plus a verification
+        checklist.
+      </p>
+    </a>
+  </div>
+
+  <div class="snippet">
+    <div class="snippet-label">What the client pastes</div>
+    <code>&lt;script src="https://<span id="host">YOUR-DOMAIN</span>/embed/chat.js" data-client="&lt;slug&gt;" defer&gt;&lt;/script&gt;</code>
+  </div>
+
+  <div class="note">
+    <strong>When their prices change</strong>, you edit their config file here
+    and redeploy. Their website is never touched again. That is the retainer,
+    and it is why they can't take the code and leave.
+  </div>
+
+  <h2>The source</h2>
+  <p class="sub">For when you need to read or copy something.</p>
+
+  <div class="grid two">
+    <a class="card" href="/embed/chat.js">
+      <h3>chat.js <span class="tag public">Public</span></h3>
+      <p>The widget. Finds its own script tag, loads the client config, renders
+      in a shadow root. Fails closed — a bad config means no bubble, never a
+      broken site.</p>
+    </a>
+
+    <a class="card" href="/embed/clients/meridian.js">
+      <h3>meridian.js <span class="tag public">Public</span></h3>
+      <p>Meridian's own answers — 13 entries, all drawn from copy already on
+      the site. The config running on the homepage right now.</p>
+    </a>
+
+    <a class="card" href="/embed/clients/ivy-lane.js">
+      <h3>ivy-lane.js <span class="tag public">Public</span></h3>
+      <p>The worked sample: a finished config for a salon that doesn't exist.
+      12 entries. Read this to see what "done" looks like.</p>
+    </a>
+
+    <a class="card" href="/js/meridian-flow.js">
+      <h3>meridian-flow.js <span class="tag public">Public</span></h3>
+      <p>The missed-call animation embed. One file, no dependencies, shadow
+      root. Two lines to put on any client's site as social proof.</p>
+    </a>
+  </div>
+
+  <div class="note">
+    <strong>Not deployed here:</strong> the missed-call server. It is a Node app
+    with a database, so it cannot run on this static site — and it currently
+    simulates the text rather than sending one. The phone demo above is the
+    version that travels.
+  </div>
+
+  <footer>
+    Private index &middot; <code>noindex</code> &middot; not linked from the
+    public site. Anyone with the URL can open it, so treat it as unlisted
+    rather than secret.
+  </footer>
+
+</div>
+
+<script>
+  /* Show the real host in the snippet, so this page is honest about which
+     domain the client would actually be pasting. */
+  (function () {
+    var el = document.getElementById('host');
+    if (el && location.host) el.textContent = location.host;
+  })();
+</script>
+
+</body>
+</html>

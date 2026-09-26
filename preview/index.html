@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat assistant preview</title>
+
+<!-- Never let a preview page turn up in a search result. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/assets/meridian-logo.png">
+
+<!-- ============================================================
+     PER-CLIENT PREVIEW
+
+     Send a prospect a link and they can try their own assistant
+     before they've agreed to anything:
+
+         /preview?client=ivy-lane
+
+     The page reads ?client= and loads that config from
+     /embed/clients/<slug>.js through the real embed script - so
+     what they try here is exactly what would go on their site,
+     not a mock-up of it.
+
+     The surrounding page is a deliberately plain stand-in for
+     their website. It is neutral on purpose: the eye should go to
+     the chat bubble, not to a fake salon site competing with it.
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #B88C29;
+    --navy: #1B2233;
+    --ink-soft: #5A6172;
+    --line: #E4E1DA;
+    --paper: #FBFAF7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    background: var(--paper); color: var(--navy); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- The Meridian banner. This is a sales tool, so it says who
+          made it - but it sits above the "site" rather than inside
+          it, so the preview underneath still reads as theirs. ---- */
+  .bar {
+    background: var(--navy); color: #fff;
+    padding: 13px clamp(16px, 4vw, 30px);
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .bar img { display: block; width: 26px; height: 29px; }
+  .bar .name {
+    font-weight: 700; letter-spacing: 0.02em; font-size: 15px;
+  }
+  .bar .msg {
+    font-size: 13.5px; color: #AEB6C6; margin-left: 4px;
+  }
+  .bar .msg b { color: #E8C874; font-weight: 600; }
+  .bar a {
+    margin-left: auto; color: var(--navy); background: #E8C874;
+    text-decoration: none; font-size: 13px; font-weight: 600;
+    padding: 7px 15px; border-radius: 7px; white-space: nowrap;
+  }
+  .bar a:hover { background: #fff; }
+
+  /* ---- The stand-in site ---- */
+  .site { max-width: 720px; margin: 0 auto; padding: clamp(40px, 8vw, 80px) 24px 120px; }
+  h1 {
+    font-size: clamp(28px, 5.5vw, 42px); line-height: 1.15;
+    letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .sub { color: var(--ink-soft); font-size: 17px; max-width: 46ch; }
+
+  .hint {
+    margin: 40px 0 0; padding: 22px 24px;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  }
+  .hint h2 { font-size: 15px; margin-bottom: 12px; letter-spacing: 0.01em; }
+  .hint ul { list-style: none; display: grid; gap: 9px; }
+  .hint li {
+    color: var(--ink-soft); font-size: 15px;
+    display: flex; gap: 10px; align-items: baseline;
+  }
+  .hint li::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold); flex: none; transform: translateY(-3px);
+  }
+  .hint .foot {
+    margin-top: 16px; padding-top: 15px; border-top: 1px solid var(--line);
+    font-size: 14px; color: var(--ink-soft);
+  }
+
+  .arrow {
+    margin-top: 34px; text-align: right; color: var(--ink-soft);
+    font-size: 14.5px; padding-right: 8px;
+  }
+
+  /* ---- Shown when ?client= is missing or wrong ---- */
+  .oops {
+    max-width: 560px; margin: 70px auto; padding: 30px;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+  }
+  .oops h2 { font-size: 19px; margin-bottom: 10px; }
+  .oops p { color: var(--ink-soft); margin-bottom: 14px; }
+  .oops code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13.5px;
+    background: var(--paper); border: 1px solid var(--line);
+    padding: 2px 6px; border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <img src="/assets/meridian-logo.png" alt="Meridian">
+  <span class="name">Meridian</span>
+  <span class="msg">Preview for <b id="who">your business</b></span>
+  <a href="/">What is this?</a>
+</div>
+
+<main class="site" id="site" hidden>
+  <h1 id="title">Your assistant, ready to try.</h1>
+  <p class="sub">
+    This is a stand-in for your website. The part that matters is the chat
+    bubble in the corner - that's exactly what your visitors would get.
+  </p>
+
+  <div class="hint">
+    <h2>Try to catch it out</h2>
+    <ul>
+      <li>Ask about your hours, your prices, parking, cancellations.</li>
+      <li>Type it badly on purpose. Misspell things. It's built for that.</li>
+      <li>Ask it something it can't possibly know.</li>
+    </ul>
+    <p class="foot">
+      That last one is the important test. It says <em>"I'm not sure - give us
+      a call"</em> rather than guessing. It can only ever tell your customers
+      things you've told it, which means it can't quote a wrong price.
+    </p>
+  </div>
+
+  <p class="arrow">Start down there &#8600;</p>
+</main>
+
+<div class="oops" id="oops" hidden>
+  <h2>No preview loaded</h2>
+  <p>
+    This page needs to know which assistant to show. Add a client to the
+    address, like <code>?client=ivy-lane</code>.
+  </p>
+  <p style="margin:0">
+    Sample: <a href="?client=ivy-lane" style="color:var(--gold);font-weight:600">
+    preview the Ivy Lane demo &rarr;</a>
+  </p>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   Read ?client=, then inject the real embed script with that slug.
+   We build the tag here rather than hardcoding it so one page can
+   preview every client.
+   ------------------------------------------------------------------ */
+(function () {
+  var slug = new URLSearchParams(location.search).get('client') || '';
+  slug = slug.trim().toLowerCase();
+
+  // Same slug rule the embed enforces. This value becomes part of a URL,
+  // so it stays boring by design.
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(slug)) {
+    document.getElementById('oops').hidden = false;
+    return;
+  }
+
+  document.getElementById('site').hidden = false;
+
+  var tag = document.createElement('script');
+  tag.src = '/embed/chat.js';
+  tag.setAttribute('data-client', slug);
+  tag.defer = true;
+
+  // Once the widget is up, take the business's real name out of the config
+  // and put it in the banner and the page title, so the preview is theirs
+  // rather than generically "your business".
+  tag.onload = function () {
+    setTimeout(function () {
+      var cfg = window.MERIDIAN_CHAT_CONFIG;
+      if (!cfg || !cfg.business || !cfg.business.name) return;
+      var name = cfg.business.name;
+      document.getElementById('who').textContent = name;
+      document.getElementById('title').textContent = name + "'s assistant, ready to try.";
+      document.title = name + ' - chat assistant preview';
+    }, 400);
+  };
+
+  document.head.appendChild(tag);
+})();
+</script>
+
+</body>
+</html>

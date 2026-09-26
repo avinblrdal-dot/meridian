@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ivy Lane Hair Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     A stand-in salon website.
+     ------------------------------------------------------------
+     Deliberately NOT Meridian-branded — it's meant to look like a
+     real small business's own site, so when you demo the widget it
+     reads as "this could be on your site tomorrow" rather than
+     "here is a tech company's product page".
+
+     Note the typeface and colours are nothing like Meridian's.
+     That's the point: the widget still looks at home, because it
+     renders in a shadow root and carries its own styling.
+     ============================================================ */
+
+  :root {
+    --ink: #2B2620;
+    --ink-soft: #6B6257;
+    --sand: #F7F3ED;
+    --line: #E4DCD0;
+    --accent: #7A6A55;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    color: var(--ink); background: #fff; line-height: 1.65;
+  }
+  .serif { font-family: "Cormorant Garamond", Georgia, serif; }
+
+  header {
+    padding: 22px 28px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 26px;
+    position: sticky; top: 0; background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(8px); z-index: 10;
+  }
+  .brand { font-family: "Cormorant Garamond", Georgia, serif;
+           font-size: 23px; letter-spacing: 0.03em; }
+  nav { margin-left: auto; display: flex; gap: 24px; font-size: 14.5px; color: var(--ink-soft); }
+  nav a { color: inherit; text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+
+  .hero {
+    background: var(--sand);
+    padding: 90px 28px 96px; text-align: center;
+  }
+  .hero h1 { font-family: "Cormorant Garamond", Georgia, serif;
+             font-size: clamp(36px, 7vw, 62px); font-weight: 500; line-height: 1.1;
+             letter-spacing: -0.01em; }
+  .hero p { color: var(--ink-soft); margin: 18px auto 30px; max-width: 46ch; font-size: 17px; }
+  .btn {
+    display: inline-block; background: var(--ink); color: #fff;
+    padding: 14px 32px; border-radius: 2px; text-decoration: none;
+    font-size: 14px; letter-spacing: 0.09em; text-transform: uppercase;
+  }
+
+  .wrap { max-width: 940px; margin: 0 auto; padding: 76px 28px; }
+  h2 { font-family: "Cormorant Garamond", Georgia, serif; font-size: 34px;
+       font-weight: 500; margin-bottom: 10px; }
+  .sub { color: var(--ink-soft); margin-bottom: 38px; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--line); padding: 26px; }
+  .card h3 { font-family: "Cormorant Garamond", Georgia, serif; font-size: 22px;
+             font-weight: 600; margin-bottom: 7px; }
+  .card p { color: var(--ink-soft); font-size: 14.5px; }
+  .card .price { margin-top: 14px; font-size: 14px; letter-spacing: 0.05em; color: var(--accent); }
+
+  .split { background: var(--sand); }
+  .split .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+  @media (max-width: 760px) { .split .wrap { grid-template-columns: 1fr; } }
+  .hours-row { display: flex; justify-content: space-between; padding: 9px 0;
+               border-bottom: 1px solid var(--line); font-size: 15px; }
+  .hours-row span:last-child { color: var(--ink-soft); }
+
+  footer { border-top: 1px solid var(--line); padding: 40px 28px; text-align: center;
+           color: var(--ink-soft); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="brand" id="site-brand">Ivy Lane</span>
+  <nav>
+    <a href="#services">Services</a>
+    <a href="#visit">Visit</a>
+    <a href="#book">Book</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1 class="serif">Hair, done properly.</h1>
+  <p>A small studio on South Congress. Two chairs, no rush, and a cup of
+     something while you wait.</p>
+  <a class="btn" href="#book">Book an appointment</a>
+</section>
+
+<section class="wrap" id="services">
+  <h2 class="serif">Services</h2>
+  <p class="sub">Consultation is free, and always comes first.</p>
+  <div class="grid">
+    <div class="card">
+      <h3>Cut &amp; Finish</h3>
+      <p>A proper consultation, a precision cut, and a finish you can do again at home.</p>
+      <div class="price">FROM $55</div>
+    </div>
+    <div class="card">
+      <h3>Colour</h3>
+      <p>Full colour, root touch-ups and gloss treatments, matched in daylight.</p>
+      <div class="price">FROM $120</div>
+    </div>
+    <div class="card">
+      <h3>Balayage</h3>
+      <p>Hand-painted, lived-in colour that grows out softly instead of banding.</p>
+      <div class="price">FROM $180</div>
+    </div>
+  </div>
+</section>
+
+<section class="split" id="visit">
+  <div class="wrap">
+    <div>
+      <h2 class="serif">Come and see us</h2>
+      <p class="sub" style="margin-bottom:20px">
+        218 Ivy Lane, Austin, TX 78704 — just off South Congress, next to the
+        coffee shop. Free parking in the lot round the back.
+      </p>
+      <a class="btn" href="#book">Book now</a>
+    </div>
+    <div>
+      <div class="hours-row"><span>Tuesday – Friday</span><span>9am – 7pm</span></div>
+      <div class="hours-row"><span>Saturday</span><span>9am – 5pm</span></div>
+      <div class="hours-row"><span>Sunday – Monday</span><span>Closed</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="book" style="text-align:center">
+  <h2 class="serif">Ready when you are</h2>
+  <p class="sub">Book online, or call us on (512) 555-0142.</p>
+  <a class="btn" href="#">Book an appointment</a>
+</section>
+
+<footer>
+  <p>Ivy Lane Hair Studio &middot; 218 Ivy Lane, Austin TX &middot; (512) 555-0142</p>
+  <p style="margin-top:6px;font-size:12.5px;opacity:0.7">
+    Sample website. Not a real business.
+  </p>
+</footer>
+
+<!-- ============================================================
+     THE EMBED — this is the entire install.
+     ------------------------------------------------------------
+     One line. Exactly what a client pastes into Squarespace,
+     Wix, WordPress or Shopify. The config for "ivy-lane" lives
+     on Meridian's server, so answers are updated without ever
+     touching this page again.
+     ============================================================ -->
+<script src="/embed/chat.js" data-client="ivy-lane" defer></script>
+
+</body>
+</html>

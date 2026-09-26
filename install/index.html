@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install your Meridian assistant</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/assets/meridian-logo.png">
+
+<!-- ============================================================
+     INSTALL INSTRUCTIONS — the page you send the client
+
+     Link it with their slug so the snippet is already filled in
+     and there is nothing for them to edit:
+
+         /install?client=ivy-lane
+
+     Written for the client's web person, or for the owner doing it
+     themselves. It assumes no technical knowledge and it names the
+     actual menu items in each platform, because "add it to your
+     site's custom code" is the step where these installs die.
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #B88C29; --gold-deep: #96701E; --gold-soft: #F3E9D2;
+    --navy: #1B2233; --ink-soft: #5A6172;
+    --line: #E4E1DA; --paper: #FBFAF7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Inter", -apple-system, system-ui, sans-serif;
+    background: var(--paper); color: var(--navy); line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px 100px; }
+
+  header {
+    background: var(--navy); color: #fff;
+    padding: 30px clamp(16px, 4vw, 30px) 34px; margin-bottom: 44px;
+  }
+  header .inner { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .brand { display: flex; align-items: center; gap: 11px; margin-bottom: 20px; }
+  .brand img { display: block; width: 30px; height: 33px; }
+  .brand span { font-weight: 700; letter-spacing: 0.02em; }
+  header h1 { font-size: clamp(25px, 4.6vw, 34px); line-height: 1.2; letter-spacing: -0.015em; }
+  header p { color: #AEB6C6; margin-top: 11px; max-width: 52ch; }
+
+  h2 {
+    font-size: 19px; margin: 40px 0 12px; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 11px;
+  }
+  h2 .n {
+    width: 27px; height: 27px; border-radius: 8px; flex: none;
+    background: var(--gold-soft); color: var(--gold-deep);
+    display: grid; place-items: center; font-size: 14px; font-weight: 700;
+  }
+  h3 { font-size: 15.5px; margin: 22px 0 7px; }
+  p { color: var(--ink-soft); }
+  p + p { margin-top: 10px; }
+  a { color: var(--gold-deep); }
+
+  /* ---- The snippet ---- */
+  .snippet { margin: 16px 0 8px; position: relative; }
+  .snippet pre {
+    background: var(--navy); color: #E8EBF2;
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: 13px; line-height: 1.7;
+    padding: 20px 20px 20px 22px; border-radius: 12px;
+    overflow-x: auto; white-space: pre; -webkit-overflow-scrolling: touch;
+  }
+  .snippet .tag { color: #E8C874; }
+  .snippet .attr { color: #9DD2B0; }
+  .copy {
+    position: absolute; top: 11px; right: 11px;
+    background: rgba(255,255,255,0.1); color: #fff;
+    border: 1px solid rgba(255,255,255,0.16); border-radius: 8px;
+    font: inherit; font-size: 12.5px; font-weight: 600;
+    padding: 6px 13px; cursor: pointer;
+  }
+  .copy:hover { background: rgba(255,255,255,0.2); }
+  .copy[data-done="true"] { background: #1F7A4D; border-color: #1F7A4D; }
+
+  /* ---- Platform accordion ---- */
+  details {
+    border: 1px solid var(--line); border-radius: 11px;
+    background: #fff; margin-bottom: 9px; overflow: hidden;
+  }
+  details[open] { border-color: #D3CCBD; }
+  summary {
+    cursor: pointer; padding: 14px 18px; font-weight: 600; font-size: 15px;
+    list-style: none; display: flex; align-items: center; gap: 9px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '+'; margin-left: auto; color: var(--ink-soft);
+    font-size: 19px; line-height: 1; font-weight: 400;
+  }
+  details[open] summary::after { content: '\2013'; }
+  details .body { padding: 0 18px 18px; }
+  details ol { margin: 0; padding-left: 20px; color: var(--ink-soft); font-size: 15px; }
+  details li { margin-bottom: 7px; }
+  details li:last-child { margin-bottom: 0; }
+
+  .note {
+    background: var(--gold-soft); border-left: 3px solid var(--gold);
+    padding: 15px 18px; border-radius: 0 10px 10px 0; margin: 22px 0;
+    font-size: 14.5px; color: #6B5518;
+  }
+  .note strong { color: #4E3E11; }
+
+  .check { list-style: none; margin: 14px 0 0; display: grid; gap: 10px; }
+  .check li { display: flex; gap: 11px; color: var(--ink-soft); font-size: 15px; }
+  .check li::before {
+    content: '\2713'; color: var(--gold-deep); font-weight: 700; flex: none;
+  }
+
+  footer {
+    margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line);
+    color: var(--ink-soft); font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="inner">
+    <div class="brand">
+      <img src="/assets/meridian-logo.png" alt="Meridian">
+      <span>Meridian</span>
+    </div>
+    <h1>Adding the assistant to <span id="biz">your website</span></h1>
+    <p>
+      One line of code, pasted once. It takes about two minutes, and you'll
+      never need to touch it again &mdash; we update the answers from our end.
+    </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <h2><span class="n">1</span> Copy this line</h2>
+  <p>This is the whole thing. Don't retype it &mdash; use the copy button, because
+     one wrong character stops it working.</p>
+
+  <div class="snippet">
+    <button class="copy" id="copy" type="button">Copy</button>
+    <pre id="code"></pre>
+  </div>
+
+  <div class="note">
+    <strong>Nothing here is secret.</strong> This line is safe to email, paste
+    into a support ticket, or hand to whoever looks after the website. It
+    contains no password and no key.
+  </div>
+
+  <h2><span class="n">2</span> Paste it into your website</h2>
+  <p>Find your platform below. You're looking for the box called
+     &ldquo;custom code&rdquo;, &ldquo;code injection&rdquo;, or
+     &ldquo;footer scripts&rdquo; &mdash; every platform has one, they all
+     just call it something different.</p>
+
+  <details>
+    <summary>Squarespace</summary>
+    <div class="body">
+      <ol>
+        <li>Log in and open <b>Settings</b>.</li>
+        <li>Go to <b>Advanced</b> &rarr; <b>Code Injection</b>.</li>
+        <li>Paste the line into the <b>Footer</b> box (not Header).</li>
+        <li><b>Save</b>, then open your site in a new tab to check.</li>
+      </ol>
+      <p style="margin-top:11px;font-size:14px">Code Injection needs a
+         Business plan or higher. If you don't see it, that's why.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Wix</summary>
+    <div class="body">
+      <ol>
+        <li>In your dashboard, go to <b>Settings</b> &rarr; <b>Custom Code</b>.</li>
+        <li>Click <b>+ Add Custom Code</b>.</li>
+        <li>Paste the line into the code box.</li>
+        <li>Under &ldquo;Add Code to Pages&rdquo; choose <b>All pages</b>.</li>
+        <li>Under &ldquo;Place Code in&rdquo; choose <b>Body - end</b>.</li>
+        <li><b>Apply</b>, then publish your site.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>WordPress</summary>
+    <div class="body">
+      <ol>
+        <li>Install the free plugin <b>WPCode</b> (or
+            <b>Insert Headers and Footers</b>).</li>
+        <li>Open <b>Code Snippets</b> &rarr; <b>Header &amp; Footer</b>.</li>
+        <li>Paste the line into the <b>Footer</b> box.</li>
+        <li><b>Save Changes</b>.</li>
+      </ol>
+      <p style="margin-top:11px;font-size:14px">If your theme has its own
+         &ldquo;custom scripts&rdquo; setting, that works too &mdash; no plugin
+         needed.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Shopify</summary>
+    <div class="body">
+      <ol>
+        <li>Go to <b>Online Store</b> &rarr; <b>Themes</b>.</li>
+        <li>On your live theme, click <b>&hellip;</b> &rarr; <b>Edit code</b>.</li>
+        <li>Open <b>theme.liquid</b> under Layout.</li>
+        <li>Paste the line just above the closing
+            <code>&lt;/body&gt;</code> tag near the bottom.</li>
+        <li><b>Save</b>.</li>
+      </ol>
+    </div>
+  </details>
+
+  <details>
+    <summary>GoDaddy, Weebly, Square Online</summary>
+    <div class="body">
+      <ol>
+        <li>Look in Settings for <b>Custom Code</b>, <b>Embed Code</b>, or
+            <b>Advanced</b>.</li>
+        <li>Choose the option that adds code to <b>every page</b>, at the
+            <b>end of the body</b> or in the <b>footer</b>.</li>
+        <li>Paste and save, then publish.</li>
+      </ol>
+      <p style="margin-top:11px;font-size:14px">Can't find it? Send us a
+         screenshot of your settings menu and we'll point at the right one.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>A hand-built site (raw HTML)</summary>
+    <div class="body">
+      <ol>
+        <li>Open your page template &mdash; whichever file every page shares.</li>
+        <li>Paste the line immediately before <code>&lt;/body&gt;</code>.</li>
+        <li>Upload and you're done.</li>
+      </ol>
+    </div>
+  </details>
+
+  <h2><span class="n">3</span> Check it worked</h2>
+  <p>Open your website in a new browser tab and look at the bottom-right corner.</p>
+  <ul class="check">
+    <li>A round gold chat button is there.</li>
+    <li>Clicking it opens the chat, with your business name at the top.</li>
+    <li>Asking about your hours gives your real hours back.</li>
+  </ul>
+
+  <div class="note" style="margin-top:26px">
+    <strong>Don't see it?</strong> Nine times out of ten the page is cached.
+    Do a hard refresh &mdash; <b>Ctrl+Shift+R</b> on Windows,
+    <b>Cmd+Shift+R</b> on a Mac &mdash; or open your site in a private window.
+    If it's still missing, check the code went in the <em>footer</em> or
+    <em>end of body</em> box, and that you published the site afterwards.
+    Then tell us and we'll sort it.
+  </div>
+
+  <h2><span class="n">4</span> Changing the answers later</h2>
+  <p>
+    You don't. Email us what changed &mdash; new prices, new hours, a policy
+    you've updated &mdash; and we'll change it from our end. It goes live for
+    everyone within a few minutes, and nobody has to touch your website again.
+  </p>
+
+  <footer>
+    Meridian &middot; Frisco / Dallas&ndash;Fort Worth, TX &middot;
+    <a href="/">meridian</a>
+  </footer>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   Fill the snippet in from ?client=<slug>, so the client is never
+   asked to edit anything. Without a slug we show an obvious
+   placeholder rather than a broken line they might paste anyway.
+   ------------------------------------------------------------------ */
+(function () {
+  var slug = (new URLSearchParams(location.search).get('client') || '').trim().toLowerCase();
+  var valid = /^[a-z0-9][a-z0-9-]*$/.test(slug);
+  if (!valid) slug = 'YOUR-CLIENT-SLUG';
+
+  // The absolute URL matters: the snippet goes on somebody else's domain,
+  // so a relative path would look for the file on their server.
+  var src = location.origin + '/embed/chat.js';
+  var line = '<script src="' + src + '" data-client="' + slug + '" defer><\/script>';
+
+  // Coloured for readability only. The copy button copies the plain text.
+  document.getElementById('code').innerHTML =
+    '<span class="tag">&lt;script</span> ' +
+    '<span class="attr">src</span>="' + src + '" ' +
+    '<span class="attr">data-client</span>="' + slug + '" ' +
+    '<span class="attr">defer</span><span class="tag">&gt;&lt;/script&gt;</span>';
+
+  var btn = document.getElementById('copy');
+  btn.addEventListener('click', function () {
+    function done() {
+      btn.textContent = 'Copied';
+      btn.dataset.done = 'true';
+      setTimeout(function () {
+        btn.textContent = 'Copy';
+        btn.dataset.done = 'false';
+      }, 2000);
+    }
+    // navigator.clipboard needs https (or localhost). The textarea trick is
+    // the fallback for anything else, so the button always does something.
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(line).then(done, fallback);
+    } else {
+      fallback();
+    }
+    function fallback() {
+      var t = document.createElement('textarea');
+      t.value = line;
+      t.style.position = 'fixed';
+      t.style.opacity = '0';
+      document.body.appendChild(t);
+      t.select();
+      try { document.execCommand('copy'); done(); } catch (e) {
+        btn.textContent = 'Select it manually';
+      }
+      document.body.removeChild(t);
+    }
+  });
+
+  // Put the business's name in the heading, pulled from their own config.
+  if (valid) {
+    var probe = document.createElement('script');
+    probe.src = '/embed/clients/' + slug + '.js';
+    probe.onload = function () {
+      var cfg = window.MERIDIAN_CHAT_CONFIG;
+      if (cfg && cfg.business && cfg.business.name) {
+        document.getElementById('biz').textContent = cfg.business.name;
+        document.title = 'Install the assistant on ' + cfg.business.name;
+      }
+    };
+    document.head.appendChild(probe);
+  }
+})();
+</script>
+
+</body>
+</html>

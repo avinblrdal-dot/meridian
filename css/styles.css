@@ -423,6 +423,25 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
   background: repeating-linear-gradient(90deg, var(--gold) 0 5px, transparent 5px 10px);
 }
 
+/* ------------------------------------------------------------
+   Missed-call animation embed (#how)
+   ------------------------------------------------------------
+   Spacing and caption only. The animation itself lives in a
+   shadow root (js/meridian-flow.js) and carries its own styling,
+   so nothing here can reach inside it - and nothing inside it can
+   affect the rest of this file. That isolation is the whole point:
+   restyling the site can't break the embed.
+   ------------------------------------------------------------ */
+.flow-embed { margin: clamp(40px, 6vw, 64px) 0 0; padding: 0; }
+.flow-embed-lead {
+  text-align: center; color: var(--ink-soft);
+  font-size: 1.02rem; margin: 0 0 20px;
+}
+.flow-embed figcaption {
+  text-align: center; color: var(--ink-soft);
+  font-size: 0.9rem; margin-top: 16px;
+}
+
 /* ============================================================
    SOLUTIONS
    ============================================================ */
