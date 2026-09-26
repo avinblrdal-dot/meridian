@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — animation preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* This page is ONLY a preview harness. None of this CSS ships with the
+     embed — the embed carries its own styles inside a shadow root. The
+     deliberately clashing styles below prove that: a host page with an
+     aggressive `.wrap` and `.title` rule cannot leak into the animation. */
+  body {
+    margin: 0;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #FBFAF7;
+    color: #1B2233;
+    line-height: 1.6;
+  }
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 24px 90px; }
+  h1 {
+    font-family: "Bricolage Grotesque", Inter, sans-serif;
+    font-size: 30px; letter-spacing: -0.02em; margin: 0 0 8px;
+  }
+  .lede { color: #4A5163; margin: 0 0 40px; max-width: 60ch; }
+  h2 {
+    font-family: "Bricolage Grotesque", Inter, sans-serif;
+    font-size: 18px; margin: 48px 0 14px; letter-spacing: -0.01em;
+  }
+  .note { font-size: 14px; color: #4A5163; margin: 0 0 18px; max-width: 62ch; }
+  pre {
+    background: #1B2233; color: #F6F2EA;
+    padding: 18px 20px; border-radius: 12px;
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-size: 13px; overflow-x: auto; line-height: 1.6;
+  }
+  .sizes { display: grid; gap: 32px; grid-template-columns: 1fr 380px; align-items: start; }
+  @media (max-width: 820px) { .sizes { grid-template-columns: 1fr; } }
+  .frame-label {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #8A90A0; margin-bottom: 10px;
+  }
+
+  /* Hostile host-page rules, on purpose — the shadow root must ignore them. */
+  .wrap  { background: red !important; border: 6px dashed lime !important; }
+  .title { font-size: 60px !important; color: magenta !important; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Meridian — missed call flow</h1>
+  <p class="lede">
+    Preview harness for the embeddable animation. This page carries deliberately
+    hostile CSS (a red <code>.wrap</code>, a magenta 60px <code>.title</code>) to
+    prove the embed is fully isolated inside a shadow root.
+  </p>
+
+  <h2>Default</h2>
+  <div data-meridian-flow data-business="Ivy Lane Studio"></div>
+
+  <h2>Re-skinned, side by side with a narrow column</h2>
+  <p class="note">
+    Same component, different <code>data-business</code>, and a 380px column to
+    check the responsive layout. The embed uses container queries, so it adapts
+    to the space it's given rather than to the browser width.
+  </p>
+  <div class="sizes">
+    <div>
+      <div class="frame-label">Wide column</div>
+      <div data-meridian-flow data-business="Coastline Barbers" data-speed="1.15"></div>
+    </div>
+    <div>
+      <div class="frame-label">Narrow column · 380px</div>
+      <div data-meridian-flow data-business="Studio Nine Nails"></div>
+    </div>
+  </div>
+
+  <h2>Dark variant, for the navy sections of the site</h2>
+  <p class="note">
+    The Meridian site alternates cream and navy sections. Add
+    <code>data-theme="dark"</code> and the embed sits on navy without a
+    seam. The phone mockups stay light in both, because a phone screen is a
+    phone screen.
+  </p>
+  <div style="background:#1B2233;padding:32px;border-radius:20px">
+    <div data-meridian-flow data-theme="dark" data-business="Meridian Spa &amp; Wellness"></div>
+  </div>
+
+  <h2>How to embed it</h2>
+  <p class="note">
+    Two lines. Drop them anywhere in the page — Squarespace, Wix, WordPress, a
+    hand-written HTML file, a page builder's "custom code" block.
+  </p>
+<pre>&lt;div data-meridian-flow data-business="Ivy Lane Studio"&gt;&lt;/div&gt;
+&lt;script src="https://YOUR-DOMAIN/js/meridian-flow.js"&gt;&lt;/script&gt;</pre>
+
+  <p class="note">Options, all optional, all set as data attributes:</p>
+<pre>data-business="Ivy Lane Studio"   name shown in the animation
+data-theme="dark"                for navy sections (default is light)
+data-speed="1.25"                playback multiplier (1 = normal)
+data-autoplay="false"            wait for the user to scroll to it
+data-pause-on-hover="false"      keep playing when hovered
+data-loop="false"                play once, stop on the final frame</pre>
+
+  <h2>Export frames for the email GIF</h2>
+  <p class="note">
+    The GIF exporter drives this same component through
+    <code>window.MeridianFlow.instances[0]</code>. See
+    <code>export/export-gif.js</code>.
+  </p>
+
+</div>
+
+<script src="/js/meridian-flow.js"></script>
+</body>
+</html>
