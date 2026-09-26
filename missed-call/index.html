@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Demo · Meridian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fonts are a progressive enhancement. If there's no wifi in the salon,
+     the system-font fallback in styles.css takes over and nothing breaks. -->
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/missed-call/assets/meridian-logo.png">
+<link rel="stylesheet" href="/missed-call/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/missed-call"><img class="brand-mark" src="/missed-call/assets/meridian-logo.png" alt="">Meridian</a>
+    <nav class="nav">
+      <a href="/missed-call">Live Demo</a>
+      <a href="/missed-call/dashboard">Dashboard</a>
+      <a href="/missed-call/settings">Settings</a>
+      <a href="/#how">Animation</a>
+    </nav>
+  </div>
+</header>
+<div class="modebar" id="modebar" data-mode="dry">Checking mode&hellip;</div>
+
+<main>
+  <div class="page-head">
+    <h1>Never lose another booking to a missed call</h1>
+    <p>
+      When <strong id="head-business">this business</strong> can't get to the phone,
+      the caller gets a text back within seconds &mdash; before they scroll down to
+      the next business on the list. Press the button and watch it happen.
+    </p>
+  </div>
+
+  <div class="demo-stage">
+    <!-- ============ LEFT: the trigger ============ -->
+    <div>
+      <button class="big-button" id="simulate-btn" type="button">
+        Simulate a Missed Call
+        <span class="sub" id="btn-sub">No real phone needed</span>
+      </button>
+
+      <ol class="steps" id="steps">
+        <li data-step="ring"  data-state="idle"><span class="dot">1</span> A customer calls&hellip;</li>
+        <li data-step="miss"  data-state="idle"><span class="dot">2</span> Nobody can pick up &mdash; call missed</li>
+        <li data-step="send"  data-state="idle"><span class="dot">3</span> Meridian texts them back automatically</li>
+        <li data-step="book"  data-state="idle"><span class="dot">4</span> They tap the link and book</li>
+      </ol>
+
+      <div class="card" style="margin-top:24px">
+        <h3>Demo controls</h3>
+
+        <div class="field">
+          <label for="caller">Caller's number</label>
+          <input type="tel" id="caller" value="+1 555 867 5309"
+                 autocomplete="off" inputmode="tel">
+          <p class="hint">
+            Put a real phone in here (and tick the box below) to have the text land
+            in the owner's own hand. That moment sells the product better than
+            anything on this screen.
+          </p>
+        </div>
+
+        <label class="checkbox" style="margin-bottom:14px">
+          <input type="checkbox" id="send-real">
+          <span>
+            <strong>Send this one for real</strong>
+            <span class="hint" id="real-hint" style="display:block">
+              Leave unticked to simulate. Nothing leaves the building.
+            </span>
+          </span>
+        </label>
+
+        <button class="btn btn-ghost btn-sm" type="button" id="reset-demo">
+          Clear the screen
+        </button>
+      </div>
+    </div>
+
+    <!-- ============ RIGHT: the customer's phone ============ -->
+    <div class="phone" aria-live="polite">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="phone-header">
+          <div class="avatar" id="ph-initials">SB</div>
+          <div class="who" id="ph-name">Sample Business</div>
+          <div class="num" id="ph-num">Text message</div>
+        </div>
+        <div class="phone-thread" id="thread">
+          <p class="phone-empty" id="thread-empty">
+            This is the customer's phone.<br>Press the gold button to see what
+            lands on it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toasts"></div>
+
+<!-- Stands in for the Express back end: answers every /api/* call from
+     localStorage. Must load BEFORE app.js, which patches nothing itself. -->
+<script src="/missed-call/api-shim.js"></script>
+<script src="/missed-call/app.js"></script>
+<script>
+/* ============================================================
+   LIVE DEMO SCREEN
+   ------------------------------------------------------------
+   The whole point of this page: one button, and it cannot fail
+   in front of a business owner.
+
+   Reliability decisions baked in here:
+     - Defaults to simulation. No dependency on Twilio, on a
+       carrier, or on cell signal in someone's basement.
+     - The button is disabled while a run is in flight, so an
+       impatient double-tap can't produce two texts.
+     - Every step of the flow is shown as it happens, so if
+       something DOES go wrong you can see exactly where.
+     - The screen also reacts to real calls arriving via Twilio,
+       so you can hand the owner your phone, have them ring the
+       number, and this page lights up on its own.
+   ============================================================ */
+
+let status = null;
+let running = false;
+
+/* ---- Step tracker ---------------------------------------- */
+
+function setStep(step, state) {
+  const el = document.querySelector(`#steps li[data-step="${step}"]`);
+  if (el) el.dataset.state = state;
+}
+
+function resetSteps() {
+  for (const li of $$('#steps li')) li.dataset.state = 'idle';
+}
+
+/* ---- The customer's phone -------------------------------- */
+
+function clearThread() {
+  const thread = $('#thread');
+  thread.innerHTML =
+    '<p class="phone-empty">This is the customer\'s phone.<br>' +
+    'Press the gold button to see what lands on it.</p>';
+}
+
+function showTyping() {
+  const thread = $('#thread');
+  $('.phone-empty', thread)?.remove();
+  const el = document.createElement('div');
+  el.className = 'typing';
+  el.id = 'typing';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  thread.appendChild(el);
+}
+
+function hideTyping() { $('#typing')?.remove(); }
+
+/**
+ * Drop the received text onto the phone mockup.
+ * `record` is the row returned by the API.
+ */
+function showMessage(record) {
+  hideTyping();
+  const thread = $('#thread');
+  $('.phone-empty', thread)?.remove();
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+
+  const badge =
+    record.status === 'sent'      ? '<span class="badge badge-sent">Delivered</span>'
+  : record.status === 'simulated' ? '<span class="badge badge-simulated">Simulated</span>'
+  :                                 '<span class="badge badge-failed">Failed</span>';
+
+  bubble.innerHTML =
+    escWithLinks(record.message_body) +
+    `<div class="meta">${badge} &nbsp; ${esc(formatTime(record.created_at))}` +
+    (record.latency_ms ? ` &nbsp;·&nbsp; replied in ${(record.latency_ms / 1000).toFixed(1)}s` : '') +
+    '</div>';
+
+  thread.appendChild(bubble);
+
+  if (record.status === 'failed' && record.error) {
+    toast(record.error, 'err');
+  }
+}
+
+/* ---- The button ------------------------------------------ */
+
+async function simulate() {
+  if (running) return;              // guard against double-clicks
+  running = true;
+
+  const btn = $('#simulate-btn');
+  btn.disabled = true;
+  btn.classList.add('is-ringing');
+  clearThread();
+  resetSteps();
+
+  // Step 1: ringing. A deliberate 1.2s pause — the pause IS the pitch.
+  // This is the moment the owner recognises: "that's my phone, going unanswered."
+  setStep('ring', 'active');
+  $('#btn-sub').textContent = 'Ringing…';
+  await wait(1200);
+
+  // Step 2: missed.
+  btn.classList.remove('is-ringing');
+  setStep('ring', 'done');
+  setStep('miss', 'active');
+  $('#btn-sub').textContent = 'Nobody picked up';
+  await wait(700);
+
+  // Step 3: send. This is the real call to the real backend.
+  setStep('miss', 'done');
+  setStep('send', 'active');
+  $('#btn-sub').textContent = 'Texting them back…';
+  showTyping();
+
+  const result = await api('/api/demo/simulate-missed-call', {
+    method: 'POST',
+    body: {
+      caller_number: $('#caller').value.trim(),
+      dry_run: !$('#send-real').checked,
+    },
+  });
+
+  hideTyping();
+
+  if (!result.ok) {
+    setStep('send', 'failed');
+    toast(result.error, 'err');
+    $('#btn-sub').textContent = 'Something went wrong';
+    btn.disabled = false;
+    running = false;
+    return;
+  }
+
+  const record = result.record;
+  showMessage(record);
+  setStep('send', record.status === 'failed' ? 'failed' : 'done');
+
+  // Step 4: booked. Presentational — this is the outcome we're selling,
+  // and it is honestly labelled as the expected result, not a fake booking.
+  if (record.status !== 'failed') {
+    await wait(900);
+    setStep('book', 'done');
+  }
+
+  $('#btn-sub').textContent =
+    record.status === 'sent'      ? 'Text delivered'
+  : record.status === 'simulated' ? 'Simulated - no real text sent'
+  :                                 'Send failed - see the message';
+
+  btn.disabled = false;
+  running = false;
+}
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* ---- Wiring ---------------------------------------------- */
+
+$('#simulate-btn').addEventListener('click', simulate);
+
+$('#reset-demo').addEventListener('click', () => {
+  clearThread();
+  resetSteps();
+  $('#btn-sub').textContent = 'No real phone needed';
+});
+
+// Warn clearly when the operator arms a real send.
+$('#send-real').addEventListener('change', (e) => {
+  const hint = $('#real-hint');
+  if (e.target.checked) {
+    if (!status?.smsLive) {
+      hint.innerHTML =
+        '<strong style="color:var(--red)">Twilio is not configured</strong> &mdash; ' +
+        'this will still simulate. Add credentials in .env to send for real.';
+    } else {
+      hint.innerHTML =
+        '<strong style="color:var(--amber)">Armed.</strong> A real SMS will be sent ' +
+        'to the number above, and it will cost you a fraction of a cent.';
+    }
+  } else {
+    hint.textContent = 'Leave unticked to simulate. Nothing leaves the building.';
+  }
+});
+
+/* ---- React to REAL calls arriving from Twilio ------------- */
+/* So you can hand the owner your phone, have them dial the number, and this
+   screen updates on its own. Much stronger than clicking your own button. */
+
+liveEvents.on('missed-call:incoming', (payload) => {
+  if (payload.source === 'demo') return;   // our own button already animates
+  clearThread();
+  resetSteps();
+  setStep('ring', 'done');
+  setStep('miss', 'active');
+  showTyping();
+  toast(`Incoming missed call from ${formatNumber(payload.callerNumber)}`);
+});
+
+liveEvents.on('missed-call:handled', (record) => {
+  if (record.source === 'demo') return;
+  setStep('miss', 'done');
+  setStep('send', record.status === 'failed' ? 'failed' : 'done');
+  showMessage(record);
+  if (record.status !== 'failed') setTimeout(() => setStep('book', 'done'), 800);
+});
+
+/* ---- Boot ------------------------------------------------ */
+
+(async function init() {
+  status = await paintModeBar();
+
+  if (status?.activeBusiness) {
+    const b = status.activeBusiness;
+    $('#head-business').textContent = b.name;
+    $('#ph-name').textContent = b.name;
+    $('#ph-initials').textContent = initials(b.name);
+    $('#ph-num').textContent = status.twilioNumber
+      ? formatNumber(status.twilioNumber)
+      : 'Text message';
+    document.title = `Live Demo · ${b.name} · Meridian`;
+  }
+})();
+</script>
+</body>
+</html>

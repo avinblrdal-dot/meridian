@@ -187,6 +187,16 @@
       </p>
     </a>
 
+    <a class="card" href="/missed-call">
+      <h3>The full missed-call app <span class="tag sim">Simulated</span></h3>
+      <p>
+        The whole product, not just the phone: fire a missed call, watch the
+        text render, then open the Dashboard to see the log a client would be
+        paying for. Settings re-skins it to their business in about ten seconds
+        — do that before you walk in.
+      </p>
+    </a>
+
     <a class="card" href="/#how">
       <h3>The animation on the live site <span class="tag public">Public</span></h3>
       <p>
@@ -277,10 +287,14 @@
   </div>
 
   <div class="note">
-    <strong>Not deployed here:</strong> the missed-call server. It is a Node app
-    with a database, so it cannot run on this static site — and it currently
-    simulates the text rather than sending one. The phone demo above is the
-    version that travels.
+    <strong>About the missed-call app:</strong> the original is a Node server
+    with a SQLite database. The copy here is a static port — same templates,
+    same segment maths, same log — with the back end replaced by
+    <code>/missed-call/api-shim.js</code>, which keeps everything in your
+    browser's local storage. Nothing was lost in the move, because the server
+    was already simulating the text. It cannot send a real one, by
+    construction. Change a template rule in the server and you have to change
+    it in the shim too, or the demo stops matching the product.
   </div>
 
   <footer>

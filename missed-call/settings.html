@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · Meridian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/missed-call/assets/meridian-logo.png">
+<link rel="stylesheet" href="/missed-call/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/missed-call"><img class="brand-mark" src="/missed-call/assets/meridian-logo.png" alt="">Meridian</a>
+    <nav class="nav">
+      <a href="/missed-call">Live Demo</a>
+      <a href="/missed-call/dashboard">Dashboard</a>
+      <a href="/missed-call/settings">Settings</a>
+      <a href="/#how">Animation</a>
+    </nav>
+  </div>
+</header>
+<div class="modebar" id="modebar" data-mode="dry">Checking mode&hellip;</div>
+
+<main>
+  <div class="page-head">
+    <h1>Business profiles</h1>
+    <p>
+      Each profile is one client. Switch the active profile and the whole demo
+      re-skins instantly &mdash; name, message, booking link and hours. Add the
+      business you're pitching to before you walk in, and the demo speaks their
+      language from the first click.
+    </p>
+  </div>
+
+  <!-- ============ Profiles ============ -->
+  <div class="card">
+    <h2>Profiles</h2>
+    <div class="profile-list" id="profiles"></div>
+
+    <details>
+      <summary style="cursor:pointer;font-weight:600;color:var(--gold-deep);padding:6px 0">
+        + Add a new business
+      </summary>
+      <div style="padding-top:16px;border-top:1px solid var(--line);margin-top:12px">
+        <div class="grid-2" style="gap:0 20px">
+          <div class="field">
+            <label for="new-name">Business name</label>
+            <input type="text" id="new-name" placeholder="e.g. Ivy Lane Hair Studio">
+          </div>
+          <div class="field">
+            <label for="new-link">Booking link</label>
+            <input type="url" id="new-link" placeholder="https://...">
+            <p class="hint">Their existing Vagaro / Fresha / Square / Calendly page is fine.</p>
+          </div>
+          <div class="field">
+            <label for="new-hours">Opening hours</label>
+            <input type="text" id="new-hours" placeholder="Tue-Sat, 9am-6pm">
+          </div>
+          <div class="field">
+            <label for="new-phone">Their phone number</label>
+            <input type="tel" id="new-phone" placeholder="+1 555 000 1111">
+          </div>
+        </div>
+        <button class="btn btn-gold" id="add-business">Add business</button>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============ Template editor ============ -->
+  <div class="card">
+    <h2>The auto-text</h2>
+    <p class="muted small" style="margin-bottom:20px">
+      Editing the profile currently active: <strong id="editing-name">&mdash;</strong>
+    </p>
+
+    <div class="grid-2">
+      <div>
+        <div class="field">
+          <label for="tpl">Message template</label>
+          <textarea id="tpl" rows="7" spellcheck="true"></textarea>
+          <div class="var-chips" id="chips"></div>
+          <p class="hint">Click a variable to insert it at the cursor.</p>
+        </div>
+
+        <div class="segment-meter" id="meter">
+          <span id="meter-text">&mdash;</span>
+        </div>
+
+        <div class="grid-2" style="gap:0 20px;margin-top:20px">
+          <div class="field">
+            <label for="edit-name">Business name</label>
+            <input type="text" id="edit-name">
+          </div>
+          <div class="field">
+            <label for="edit-link">Booking link</label>
+            <input type="url" id="edit-link">
+          </div>
+          <div class="field">
+            <label for="edit-hours">Opening hours</label>
+            <input type="text" id="edit-hours">
+          </div>
+          <div class="field">
+            <label for="edit-phone">Their phone number</label>
+            <input type="tel" id="edit-phone">
+          </div>
+        </div>
+
+        <button class="btn btn-gold" id="save-tpl">Save changes</button>
+        <button class="btn btn-ghost" id="revert-tpl">Revert</button>
+      </div>
+
+      <!-- Live preview on a phone, so the owner sees exactly what lands -->
+      <div>
+        <label>What the customer receives</label>
+        <div class="phone" style="position:static;max-width:320px">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" style="min-height:340px">
+            <div class="phone-header">
+              <div class="avatar" id="pv-initials">SB</div>
+              <div class="who" id="pv-name">Sample Business</div>
+              <div class="num">Text message</div>
+            </div>
+            <div class="phone-thread">
+              <div class="bubble" id="pv-bubble" style="animation:none">&mdash;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Integration reference ============ -->
+  <div class="card">
+    <h2>Wiring this into a real business</h2>
+    <p class="muted small">
+      Full instructions are in <span class="mono">INTEGRATION.md</span>. The short
+      version, for when someone asks in the room:
+    </p>
+    <div class="grid-2">
+      <div>
+        <h3>Their phone system</h3>
+        <p class="small muted">
+          Any system that can fire an HTTP request on an unanswered call can drive
+          this. Point it at:
+        </p>
+        <p class="mono small" style="background:var(--cream);padding:10px 12px;border-radius:8px;word-break:break-all">
+          POST <span id="webhook-url">/api/webhook/missed-call</span>
+        </p>
+        <p class="small muted">
+          Body: <span class="mono">{"caller_number": "+14155550123"}</span>.
+          Visiting that URL on a running server prints the full contract &mdash;
+          handy when you are on the phone with someone else's IT provider.
+        </p>
+        <p class="small muted">
+          <strong>Not on this page.</strong> This is the static build, so there
+          is no server listening. Run the full app to accept real webhooks.
+        </p>
+      </div>
+      <div>
+        <h3>Their booking platform</h3>
+        <p class="small muted">
+          Adapters are scaffolded for Square Appointments, Vagaro, Fresha, Acuity
+          and Calendly in <span class="mono">src/integrations/booking-platform.js</span>.
+        </p>
+        <p class="small muted">Currently connected: <strong id="platform-name">none</strong></p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toasts"></div>
+
+<!-- Stands in for the Express back end: answers every /api/* call from
+     localStorage. Must load BEFORE app.js, which patches nothing itself. -->
+<script src="/missed-call/api-shim.js"></script>
+<script src="/missed-call/app.js"></script>
+<script>
+/* ============================================================
+   SETTINGS
+   ------------------------------------------------------------
+   Two jobs:
+     1. Switch which business the demo is wearing (fast, live).
+     2. Edit that business's auto-text, with a live preview and
+        an SMS segment count so nobody accidentally writes a
+        message that costs 3x to send.
+   ============================================================ */
+
+let state = { businesses: [], active: null, variables: [] };
+let previewTimer = null;
+
+/* ---- Profile list ---------------------------------------- */
+
+function renderProfiles() {
+  $('#profiles').innerHTML = state.businesses.map((b) => `
+    <div class="profile ${b.is_active ? 'is-active' : ''}">
+      <div>
+        <div class="name">${esc(b.name)}
+          ${b.is_active ? '<span class="badge badge-simulated" style="margin-left:8px">Active</span>' : ''}
+        </div>
+        <div class="meta">${esc(b.booking_link || 'no booking link')} &nbsp;·&nbsp; ${esc(b.hours || 'no hours set')}</div>
+      </div>
+      <div class="actions">
+        ${b.is_active ? '' : `<button class="btn btn-ghost btn-sm" data-activate="${b.id}">Use this one</button>`}
+        ${b.is_active || state.businesses.length < 2 ? '' : `<button class="btn btn-danger btn-sm" data-delete="${b.id}">Delete</button>`}
+      </div>
+    </div>`).join('');
+}
+
+/* ---- Editor ---------------------------------------------- */
+
+function loadEditor() {
+  const b = state.active;
+  if (!b) return;
+  $('#editing-name').textContent = b.name;
+  $('#tpl').value        = b.template;
+  $('#edit-name').value  = b.name;
+  $('#edit-link').value  = b.booking_link || '';
+  $('#edit-hours').value = b.hours || '';
+  $('#edit-phone').value = b.phone || '';
+  $('#pv-name').textContent = b.name;
+  $('#pv-initials').textContent = initials(b.name);
+  refreshPreview();
+}
+
+function renderChips() {
+  $('#chips').innerHTML = state.variables
+    .map((v) => `<button type="button" class="chip" data-var="${v.key}" title="${esc(v.label)}">{${v.key}}</button>`)
+    .join('');
+}
+
+/**
+ * Ask the server to render the template exactly as it would for a real send.
+ * Debounced so typing doesn't hammer the endpoint.
+ *
+ * Rendering server-side (rather than duplicating the logic in the browser)
+ * means the preview can never drift from what actually gets sent.
+ */
+function refreshPreview() {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(async () => {
+    const res = await api('/api/preview', {
+      method: 'POST',
+      body: { template: $('#tpl').value },
+    });
+    if (!res.ok) return;
+
+    $('#pv-bubble').innerHTML = escWithLinks(res.body) || '<span class="muted">(empty)</span>';
+
+    // Segment meter. The warning here is the point: an em dash or an emoji
+    // silently doubles or triples the cost of every text, forever.
+    const a = res.analysis;
+    const meter = $('#meter');
+    const costly = a.segments > 1 || a.encoding === 'UCS-2';
+    meter.classList.toggle('warn', costly);
+
+    let text = `${a.characters} characters · ${a.encoding} · ${a.segments} SMS segment${a.segments === 1 ? '' : 's'}`;
+    if (a.encoding === 'UCS-2') {
+      text += ' — a special character (curly quote, em dash, emoji) dropped this ' +
+              'to a 70-character limit. Swap it for a plain one to halve the cost.';
+    } else if (a.segments > 1) {
+      text += ` — over 160 characters, so it bills as ${a.segments}. ` +
+              `${a.remainingInSegment} characters until the next one.`;
+    } else {
+      text += ` — fits in one message. ${a.remainingInSegment} characters spare.`;
+    }
+    $('#meter-text').textContent = text;
+  }, 220);
+}
+
+/* ---- Events ---------------------------------------------- */
+
+$('#tpl').addEventListener('input', refreshPreview);
+
+// Insert a {variable} at the cursor.
+$('#chips').addEventListener('click', (e) => {
+  const key = e.target.dataset.var;
+  if (!key) return;
+  const ta = $('#tpl');
+  const token = `{${key}}`;
+  const start = ta.selectionStart ?? ta.value.length;
+  const end = ta.selectionEnd ?? start;
+  ta.value = ta.value.slice(0, start) + token + ta.value.slice(end);
+  ta.focus();
+  ta.setSelectionRange(start + token.length, start + token.length);
+  refreshPreview();
+});
+
+$('#profiles').addEventListener('click', async (e) => {
+  const activateId = e.target.dataset.activate;
+  const deleteId = e.target.dataset.delete;
+
+  if (activateId) {
+    const res = await api(`/api/businesses/${activateId}/activate`, { method: 'POST' });
+    if (res.ok) { toast(`Now showing as ${res.business.name}.`, 'ok'); await load(); }
+    else toast(res.error, 'err');
+  }
+
+  if (deleteId) {
+    const target = state.businesses.find((b) => String(b.id) === deleteId);
+    if (!confirm(`Delete "${target?.name}"? This cannot be undone.`)) return;
+    const res = await api(`/api/businesses/${deleteId}`, { method: 'DELETE' });
+    if (res.ok) { toast('Deleted.', 'ok'); await load(); }
+    else toast(res.error, 'err');
+  }
+});
+
+$('#add-business').addEventListener('click', async () => {
+  const name = $('#new-name').value.trim();
+  if (!name) { toast('Give the business a name first.', 'err'); return; }
+
+  const res = await api('/api/businesses', {
+    method: 'POST',
+    body: {
+      name,
+      booking_link: $('#new-link').value.trim(),
+      hours: $('#new-hours').value.trim(),
+      phone: $('#new-phone').value.trim(),
+    },
+  });
+
+  if (!res.ok) { toast(res.error, 'err'); return; }
+
+  // Adding a business almost always means "I'm about to pitch them", so make
+  // it active immediately rather than making you click twice.
+  await api(`/api/businesses/${res.business.id}/activate`, { method: 'POST' });
+  for (const id of ['new-name', 'new-link', 'new-hours', 'new-phone']) $(`#${id}`).value = '';
+  toast(`Added ${res.business.name} and switched to it.`, 'ok');
+  await load();
+});
+
+$('#save-tpl').addEventListener('click', async () => {
+  const res = await api(`/api/businesses/${state.active.id}`, {
+    method: 'PATCH',
+    body: {
+      template: $('#tpl').value,
+      name: $('#edit-name').value.trim(),
+      booking_link: $('#edit-link').value.trim(),
+      hours: $('#edit-hours').value.trim(),
+      phone: $('#edit-phone').value.trim(),
+    },
+  });
+  if (res.ok) { toast('Saved.', 'ok'); await load(); }
+  else toast(res.error, 'err');
+});
+
+$('#revert-tpl').addEventListener('click', loadEditor);
+
+/* ---- Boot ------------------------------------------------ */
+
+async function load() {
+  const status = await paintModeBar();
+  state.variables = status?.templateVariables ?? [];
+  $('#platform-name').textContent = status?.bookingPlatform ?? 'none';
+  // On the static build there is no server, so showing this page's own origin
+  // would advertise an endpoint that returns 404. Show the shape instead.
+  $('#webhook-url').textContent = status?.staticBuild
+    ? 'https://your-server.com/api/webhook/missed-call'
+    : (status?.publicBaseUrl ?? location.origin) + '/api/webhook/missed-call';
+
+  const data = await api('/api/businesses');
+  if (!data.ok) { toast(data.error, 'err'); return; }
+  state.businesses = data.businesses;
+  state.active = data.active;
+
+  renderProfiles();
+  renderChips();
+  loadEditor();
+}
+
+load();
+</script>
+</body>
+</html>
