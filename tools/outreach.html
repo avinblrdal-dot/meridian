@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — Outreach Kit</title>
+<meta name="description" content="Walk-in script, research questions, visit log and printable QR cards for in-person outreach.">
+<link rel="icon" type="image/png" href="/embed/meridian-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     OUTREACH KIT — internal, noindex. Served at /tools/outreach.
+     Read the script on your phone in the car; print the cards
+     at home. Same look as /tools.
+     ============================================================ */
+  :root {
+    --gold: #B88C29;
+    --gold-deep: #96701E;
+    --gold-soft: #F3E9D2;
+    --navy: #1B2233;
+    --navy-soft: #2C3448;
+    --offwhite: #FBFAF7;
+    --cream: #F6F2EA;
+    --ink-soft: #4A5163;
+    --line: #E9E4DA;
+    --font-display: "Bricolage Grotesque", Georgia, serif;
+    --font-body: "Inter", -apple-system, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); background: var(--offwhite); color: var(--navy);
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 80px; }
+
+  header { background: var(--navy); color: #fff; padding: 34px 16px 30px; margin-bottom: 40px; }
+  .header-inner { max-width: 880px; margin: 0 auto; }
+  .brandline { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
+  .brandline a { display: flex; align-items: center; gap: 11px; color: #fff; text-decoration: none; }
+  .brandline span.name { font-family: var(--font-display); font-weight: 600; font-size: 1.28rem; letter-spacing: 0.01em; }
+  .pill {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold);
+    border: 1px solid rgba(184, 140, 41, 0.45); border-radius: 100px; padding: 3px 11px; margin-left: 4px;
+  }
+  header h1 {
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(1.7rem, 4.4vw, 2.3rem);
+    line-height: 1.15; letter-spacing: -0.015em; margin-bottom: 10px;
+  }
+  header p { color: rgba(255,255,255,0.72); font-size: 1rem; max-width: 60ch; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .jump a {
+    font-size: 0.82rem; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 100px; padding: 5px 13px;
+  }
+  .jump a:hover { border-color: var(--gold); color: var(--gold); }
+
+  h2 {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.16rem; letter-spacing: -0.005em;
+    margin: 44px 0 4px; padding-bottom: 9px; border-bottom: 1px solid var(--line); scroll-margin-top: 20px;
+  }
+  h2:first-of-type { margin-top: 0; }
+  .sub { color: var(--ink-soft); font-size: 0.9rem; margin: 10px 0 18px; }
+
+  .grid { display: grid; gap: 12px; }
+  @media (min-width: 620px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+  .box { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 17px 19px; }
+  .box h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; margin-bottom: 6px; }
+  .box p, .box li { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.55; }
+  .box ul { padding-left: 18px; display: grid; gap: 4px; }
+
+  /* ---- Script ---- */
+  .script { display: grid; gap: 12px; }
+  .beat { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 17px 19px; display: grid; grid-template-columns: 76px 1fr; gap: 14px; }
+  .beat .when { font-family: var(--font-mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold-deep); padding-top: 3px; }
+  .beat .when b { display: block; font-family: var(--font-display); font-size: 0.98rem; letter-spacing: 0; text-transform: none; color: var(--navy); margin-bottom: 2px; }
+  .say { font-size: 1rem; line-height: 1.6; }
+  .say + .say { margin-top: 8px; }
+  .say q { quotes: "“" "”"; }
+  .aside { color: var(--ink-soft); font-size: 0.86rem; margin-top: 8px; }
+  @media (max-width: 560px) { .beat { grid-template-columns: 1fr; gap: 6px; } }
+
+  ol.qs { padding-left: 22px; display: grid; gap: 12px; }
+  ol.qs li { padding-left: 4px; }
+  ol.qs .why { display: block; color: var(--ink-soft); font-size: 0.86rem; margin-top: 2px; }
+
+  .note {
+    background: var(--cream); border-left: 3px solid var(--gold); border-radius: 0 9px 9px 0;
+    padding: 14px 17px; font-size: 0.88rem; color: var(--ink-soft); margin-top: 16px;
+  }
+  .note strong { color: var(--navy); font-weight: 600; }
+  .warn { background: #FBEAEA; border-left-color: #98413F; }
+  .warn strong { color: #7A2F2D; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; font: 600 0.95rem var(--font-body);
+    background: var(--gold); color: var(--navy); border: 0; border-radius: 100px; padding: 12px 22px;
+    cursor: pointer; text-decoration: none;
+  }
+  .btn:hover { background: var(--gold-deep); color: #fff; }
+  .btn.ghost { background: transparent; border: 1.5px solid rgba(27,34,51,0.22); }
+  .btn.ghost:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+  /* ---- Card settings ---- */
+  .settings { display: grid; gap: 12px; margin-bottom: 18px; }
+  @media (min-width: 620px) { .settings { grid-template-columns: 1fr 1fr 1fr; } }
+  .settings label { display: block; font-weight: 600; font-size: 0.82rem; margin-bottom: 5px; }
+  .settings input {
+    width: 100%; font: 0.95rem var(--font-body); color: var(--navy); padding: 10px 12px;
+    border: 1.5px solid var(--line); border-radius: 9px; background: #fff;
+  }
+  .settings input:focus { outline: none; border-color: var(--gold); }
+  .url-line { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-soft); margin: 4px 0 18px; word-break: break-all; }
+  .url-line b { color: var(--navy); font-weight: 500; }
+  .preview-row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+  .preview-card { box-shadow: 0 8px 28px rgba(27,34,51,0.14); }
+
+  /* ---- The card itself: 3.5in x 2in, standard US business card ---- */
+  .bc {
+    width: 3.5in; height: 2in; background: #fff; color: var(--navy); position: relative; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1.18in; gap: 0.14in; padding: 0.2in 0.2in 0.18in 0.22in;
+    border-radius: 6px;
+  }
+  .bc::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 0.07in; background: var(--gold); }
+  .bc .l { display: flex; flex-direction: column; min-width: 0; }
+  .bc .mark { display: flex; align-items: center; gap: 0.06in; }
+  .bc .mark img { width: 0.2in; height: auto; }
+  .bc .mark span { font-family: var(--font-display); font-weight: 600; font-size: 10.5pt; letter-spacing: 0.01em; }
+  .bc .head { font-family: var(--font-display); font-weight: 700; font-size: 12.5pt; line-height: 1.08; letter-spacing: -0.01em; margin-top: 0.1in; }
+  .bc .head em { font-style: normal; color: var(--gold-deep); }
+  .bc .sub2 { font-size: 6.6pt; line-height: 1.35; color: var(--ink-soft); margin-top: 0.05in; }
+  .bc .who { margin-top: auto; font-size: 6.4pt; line-height: 1.4; color: var(--navy-soft); }
+  .bc .who b { font-weight: 600; color: var(--navy); }
+  .bc .r { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .bc .qr svg { width: 1.08in; height: 1.08in; display: block; }
+  .bc .scan { font-family: var(--font-mono); font-size: 5.4pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-deep); margin-top: 0.05in; }
+
+  code {
+    font-family: var(--font-mono); font-size: 0.8em; background: var(--cream); border: 1px solid var(--line);
+    border-radius: 5px; padding: 1px 6px; color: var(--navy-soft);
+  }
+  footer a { color: var(--gold-deep); }
+
+  .sheet { display: none; }
+
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.83rem; }
+
+  /* ---- Print: only the 10-card sheet ---- */
+  @page { size: letter portrait; margin: 0.45in 0.75in; }
+  @media print {
+    body { background: #fff; }
+    header, .wrap > *:not(.sheet) { display: none !important; }
+    .wrap { max-width: none; padding: 0; }
+    .sheet {
+      display: grid; grid-template-columns: repeat(2, 3.5in); grid-auto-rows: 2in;
+      justify-content: center;
+    }
+    /* Hairline cut guides. Light enough to vanish after trimming. */
+    .sheet .bc { border-radius: 0; outline: 0.5px dashed #C9C2B3; outline-offset: -0.25px; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brandline">
+      <a href="/tools"><img src="/embed/meridian-logo.png" alt="" width="20" height="22"><span class="name">Meridian</span></a>
+      <span class="pill">Internal</span>
+    </div>
+    <h1>Outreach kit</h1>
+    <p>
+      Everything for walking into a salon: when to go, what to say, what to
+      ask, what to write down after, and cards to leave behind. Read the
+      script in the car before you go in.
+    </p>
+    <nav class="jump" aria-label="On this page">
+      <a href="#before">Before you go</a>
+      <a href="#script">The script</a>
+      <a href="#questions">If they have 5 minutes</a>
+      <a href="#log">After the visit</a>
+      <a href="#cards">Print cards</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===================================================== BEFORE -->
+  <h2 id="before">Before you go</h2>
+  <p class="sub">Timing matters more than wording. A busy owner can't talk to you even if they want to.</p>
+
+  <div class="grid two">
+    <div class="box">
+      <h3>When to walk in</h3>
+      <ul>
+        <li><b>Tuesday to Thursday, 10am to 2pm</b> is the quiet stretch at most salons.</li>
+        <li>Skip Mondays (many salons are closed), Friday afternoons and Saturdays.</li>
+        <li>If every chair is full, don't start. Leave a card and come back.</li>
+        <li>Pick 3 to 5 businesses in one shopping center so one trip covers several.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>What to bring</h3>
+      <ul>
+        <li>About 10 printed cards (section below).</li>
+        <li>Your phone with <code>/diagnostic</code> and <code>/demo</code> open in two tabs.</li>
+        <li>The visit log open, so you can fill it in from the car right after.</li>
+        <li>Nothing to sell. Today is for learning, not closing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===================================================== SCRIPT -->
+  <h2 id="script">The 60-second script</h2>
+  <p class="sub">Say it in your own words. The order matters more than the exact lines.</p>
+
+  <div class="script">
+    <div class="beat">
+      <div class="when"><b>Open</b>10 sec</div>
+      <div>
+        <p class="say"><q>Hi! Is the owner or manager around?</q></p>
+        <p class="aside">If they're with a client, ask when's a quieter time and come back then. That alone shows respect.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="when"><b>Who you are</b>15 sec</div>
+      <div>
+        <p class="say"><q>Hi, I'm Avin. I'm a student here in Frisco and I'm starting a small business that helps salons with the phone and booking side of things. I'm not selling anything today. I'm trying to learn what actually eats up owners' time. Could I ask you three quick questions? Two minutes, tops.</q></p>
+        <p class="aside">Being upfront about being a student usually makes owners <em>more</em> willing to help, not less. "Not selling anything today" has to be true, so don't pitch in this visit.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="when"><b>Ask</b>60 sec</div>
+      <div>
+        <p class="say">1. <q>What's the most annoying part of running the front desk week to week?</q></p>
+        <p class="say">2. <q>Think about the last time you missed a call because you were with a client. What happened? Did they call back?</q></p>
+        <p class="say">3. <q>What do you use for booking and reminders right now? Roughly what does it cost you?</q></p>
+        <p class="aside">Then stop talking and listen. Short answers are fine. Don't explain Meridian unless they ask.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="when"><b>Close</b>15 sec</div>
+      <div>
+        <p class="say"><q>That's really helpful, thank you. I built a two-minute quiz that shows which fix would save a business like yours the most time. Here's a card if you want to try it later. And if you'd ever like a free Audit, where I look at how your bookings work and tell you honestly whether anything's worth fixing, the card has that too.</q></p>
+        <p class="aside">If they're curious right now, hand them your phone with <code>/diagnostic</code> open, or show <code>/demo</code> if missed calls came up.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="when"><b>If it's a no</b></div>
+      <div>
+        <p class="say"><q>No problem at all, thanks for your time. Can I leave a card?</q></p>
+        <p class="aside">Then leave. A polite no still goes in the log. How many places you visited, and how many said yes, is research data too.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================== QUESTIONS -->
+  <h2 id="questions">If they have 5 more minutes</h2>
+  <p class="sub">Ask about what <em>has happened</em>, not what they <em>would</em> do. "Would you use this?" gets a polite yes that means nothing. "What did you do last time?" gets the truth.</p>
+
+  <div class="box">
+    <ol class="qs">
+      <li>How do most clients book with you: phone, an app, Instagram, walk-ins?
+        <span class="why">Tells you which service even applies.</span></li>
+      <li>Roughly how many calls a week go unanswered? How do you know?
+        <span class="why">If they've never counted, that's a finding too.</span></li>
+      <li>How many no-shows or late cancellations in a normal week? What do you do about them now?</li>
+      <li>What questions do you answer over and over, by phone or DM?</li>
+      <li>Have you tried any tool or person to fix this before? What happened, and why did you stop?
+        <span class="why">Past spending is the strongest sign someone will pay again.</span></li>
+      <li>What do you pay each month for your booking software and anything else like it?
+        <span class="why">This is your price anchor. Write the actual number down.</span></li>
+      <li>If one of these problems just disappeared, which one would you pick, and what would that be worth to you a month?
+        <span class="why">Write their exact words and number. That's your willingness-to-pay evidence.</span></li>
+    </ol>
+  </div>
+
+  <div class="note">
+    <strong>Never</strong> argue with an answer, correct them, or pitch halfway
+    through. If they ask what you'd charge, say: <q>I'm still working that out
+    with businesses like yours. What would feel fair?</q> Then write down
+    what they say.
+  </div>
+
+  <!-- ===================================================== LOG -->
+  <h2 id="log">After every visit (do it in the car)</h2>
+  <p class="sub">Five minutes, right away, before you forget. This log is your Capstone evidence: outreach attempts, customer needs and willingness to pay.</p>
+
+  <div class="grid two">
+    <div class="box">
+      <h3>Write down</h3>
+      <ul>
+        <li>Business, type, date, who you talked to</li>
+        <li>Outcome: talked / left a card / come back later / not interested</li>
+        <li>Their biggest pain, in <b>their exact words</b></li>
+        <li>What they use and pay now</li>
+        <li>Anything they said about price or value</li>
+        <li>Next step and date</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>The visit log</h3>
+      <p id="logLinkWrap">Meridian Outreach &amp; Research Log, a Google Sheet with one row per visit and a summary tab that adds itself up. Private to your Google account, so only you can open it.</p>
+      <p style="margin-top:12px"><a class="btn" id="logLink" href="#" target="_blank" rel="noopener">Open the visit log</a></p>
+    </div>
+  </div>
+
+  <!-- ===================================================== CARDS -->
+  <h2 id="cards">Print leave-behind cards</h2>
+  <p class="sub">Standard business-card size, 10 to a letter sheet. The QR code always points at whatever site you open this page on.</p>
+
+  <div class="note warn" id="hostWarn" hidden>
+    <strong>Wrong address for printing.</strong> <span id="hostWarnText"></span>
+  </div>
+
+  <div class="settings">
+    <div>
+      <label for="setEmail">Email on the card (optional)</label>
+      <input id="setEmail" type="email" placeholder="hello@yourdomain.com" autocomplete="off">
+    </div>
+    <div>
+      <label for="setPhone">Phone on the card (optional)</label>
+      <input id="setPhone" type="tel" placeholder="(469) 555-0123" autocomplete="off">
+    </div>
+    <div>
+      <label for="setSrc">Tag for these cards</label>
+      <input id="setSrc" type="text" value="visit" autocomplete="off">
+    </div>
+  </div>
+  <p class="url-line">QR code opens: <b id="qrUrl"></b></p>
+
+  <div class="preview-row">
+    <div class="bc preview-card" id="previewCard"></div>
+    <div>
+      <button class="btn" type="button" onclick="window.print()">Print 10 cards</button>
+      <p class="aside" style="max-width:34ch;margin-top:10px">
+        Print at <b>100% / actual size</b> (not "fit to page") on card stock.
+        Cut along the faint dashed lines. Scan one with your phone before
+        printing a batch.
+      </p>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheet" aria-hidden="true"></div>
+
+  <footer>
+    Internal &middot; <code>noindex</code> &middot; linked only from
+    <a href="/tools">/tools</a>. QR codes by qrcode-generator (MIT, Kazuhiko Arase).
+  </footer>
+
+</div>
+
+<script src="/js/vendor/qrcode-generator.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  /* Paste the visit log's Google Sheets link here once it exists. */
+  var LOG_URL = "https://docs.google.com/spreadsheets/d/1jl6opdCCRftkGnPt4_L72r1DyvG-zAAqtqxpta7zvRE/edit";
+
+  var $ = function (id) { return document.getElementById(id); };
+  var KEY = "meridian.outreach.card.v1";
+
+  /* ---- Visit log link ---- */
+  if (LOG_URL) $("logLink").href = LOG_URL;
+  else { $("logLink").removeAttribute("href"); $("logLink").textContent = "Link not added yet"; $("logLink").classList.add("ghost"); }
+
+  /* ---- Remember the card fields on this device ---- */
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  function save(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) { /* private window: fine */ } }
+  var saved = load();
+  if (saved.email) $("setEmail").value = saved.email;
+  if (saved.phone) $("setPhone").value = saved.phone;
+  if (saved.src) $("setSrc").value = saved.src;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  /** QR as a crisp SVG path: scales to any print size without blurring. */
+  function qrSvg(text) {
+    var qr = qrcode(0, "M");
+    qr.addData(text);
+    qr.make();
+    var n = qr.getModuleCount(), d = "";
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += "M" + c + " " + r + "h1v1h-1z";
+    return '<svg viewBox="-2 -2 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR code">' +
+      '<rect x="-2" y="-2" width="' + (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path d="' + d + '" fill="#1B2233"/></svg>';
+  }
+
+  function cardHtml(url, email, phone) {
+    var contact = [email, phone].filter(Boolean).map(esc).join(" &middot; ");
+    var host = esc(location.host + "/diagnostic");
+    return (
+      '<div class="l">' +
+        '<div class="mark"><img src="/assets/meridian-logo.png" alt=""><span>Meridian</span></div>' +
+        '<div class="head">Find your biggest <em>time-waster.</em></div>' +
+        '<div class="sub2">A 2-minute quiz for salons, spas &amp; studios. Plus a free AI Opportunity Audit, no strings.</div>' +
+        '<div class="who"><b>Avin</b>, Founder &middot; Frisco, TX<br>' + (contact || host) + "</div>" +
+      "</div>" +
+      '<div class="r"><div class="qr">' + qrSvg(url) + '</div><div class="scan">Scan to start</div></div>'
+    );
+  }
+
+  function render() {
+    var email = $("setEmail").value.trim();
+    var phone = $("setPhone").value.trim();
+    var src = $("setSrc").value.trim().toLowerCase().replace(/[^a-z0-9-]/g, "") || "visit";
+    save({ email: email, phone: phone, src: src });
+
+    var url = location.origin + "/diagnostic?src=" + src;
+    $("qrUrl").textContent = url;
+
+    var html = cardHtml(url, email, phone);
+    $("previewCard").innerHTML = html;
+    var sheet = "";
+    for (var i = 0; i < 10; i++) sheet += '<div class="bc">' + html + "</div>";
+    $("sheet").innerHTML = sheet;
+  }
+
+  /* A card that points at localhost or a login-protected preview is
+     useless the moment it leaves the house. Say so before printing. */
+  var h = location.hostname;
+  if (h === "localhost" || h === "127.0.0.1" || /\.local$/.test(h)) {
+    $("hostWarn").hidden = false;
+    $("hostWarnText").textContent = "You're on " + location.host + ", which only works on this computer. Open this page on the live site before printing.";
+  } else if (/-[a-z0-9]{9}-[a-z0-9-]+\.vercel\.app$/.test(h)) {
+    $("hostWarn").hidden = false;
+    $("hostWarnText").textContent = "This looks like a one-off Vercel preview address, which can ask for a login. Open this page on the main site address (or your own domain) before printing.";
+  }
+
+  ["setEmail", "setPhone", "setSrc"].forEach(function (id) { $(id).addEventListener("input", render); });
+  render();
+})();
+</script>
+
+</body>
+</html>
