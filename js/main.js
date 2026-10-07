@@ -3,7 +3,7 @@
    - Mobile nav toggle
    - Sticky header shadow on scroll
    - Subtle scroll-in reveal (IntersectionObserver)
-   - Lead form (stubbed until a backend is wired — see index.html)
+   - Lead form (sends via js/forms.js)
    ============================================================ */
 (function () {
   "use strict";
@@ -90,25 +90,51 @@
     reveals.forEach(function (el) { el.classList.add("in"); });
   }
 
-  /* --- Lead form (stubbed) ---
-     Validates required fields, then swaps in the thank-you message.
-     To make it live, see the "CONTACT FORM" note in index.html and
-     replace the block below with a real submit (fetch to your endpoint). */
+  /* --- Lead form ---
+     Validates required fields, sends through /js/forms.js (Web3Forms),
+     then swaps in the thank-you message. If sending fails, the form
+     stays put with an error, so a lead is never told "we've got it"
+     when we haven't. Until forms.js has a key, it falls back to the
+     old placeholder behaviour (see the note at the top of forms.js). */
   var form = document.getElementById("leadForm");
   var success = document.getElementById("formSuccess");
+  var formError = document.getElementById("formError");
   if (form) {
+    var submitBtn = form.querySelector('button[type="submit"]');
+    var submitLabel = submitBtn ? submitBtn.textContent : "";
+
+    var showSuccess = function () {
+      form.style.display = "none";
+      if (success) {
+        success.classList.add("show");
+        success.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    };
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
-      // TODO: send `new FormData(form)` to your endpoint here.
-      form.style.display = "none";
-      if (success) {
-        success.classList.add("show");
-        success.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
+      if (formError) formError.hidden = true;
+
+      var forms = window.MeridianForms;
+      if (!forms || !forms.configured) { showSuccess(); return; }
+
+      var data = new FormData(form);
+      var fields = {};
+      data.forEach(function (v, k) { fields[k] = v; });
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending…";
+      forms.send("New intro call request: " + (fields.business || fields.name), fields)
+        .then(function (ok) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = submitLabel;
+          if (ok) showSuccess();
+          else if (formError) formError.hidden = false;
+        });
     });
   }
 })();

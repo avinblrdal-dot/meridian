@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ============================================================
+       MERIDIAN — 2-minute diagnostic   (served at /diagnostic)
+       ------------------------------------------------------------
+       Seven taps, then a recommendation: the Meridian service that
+       fits best, two alternatives, and why. Built to work on a phone
+       or an iPad handed across a salon counter.
+
+       Questions, services and scoring all live in diagnostic.js.
+       Answers are sent through /js/forms.js (same as the contact
+       form), so nothing is sent until that has a key.
+
+       Add ?src=visit (or any word) to the link to tag where a
+       response came from, e.g. a QR code on a leave-behind card.
+       ============================================================ -->
+
+  <title>Meridian — Find your biggest time-waster</title>
+  <meta name="description" content="Seven quick questions. Find out which practical AI fix would save your salon, spa or studio the most time — and where to start." />
+
+  <link rel="icon" type="image/png" href="/assets/meridian-logo.png" />
+  <link rel="apple-touch-icon" href="/assets/meridian-logo.png" />
+
+  <meta property="og:title" content="Meridian — Find your biggest time-waster" />
+  <meta property="og:description" content="Seven quick questions for salons, spas and studios. Get a recommendation in two minutes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/assets/meridian-logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/styles.css" />
+
+  <style>
+    body { background: var(--cream); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ---- Top bar ---- */
+    .dx-top { background: var(--navy); color: #fff; }
+    .dx-top .container { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .dx-top .brand { display: flex; align-items: center; gap: 10px; color: #fff; }
+    .dx-top .brand .brand-name { color: #fff; font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; letter-spacing: .01em; }
+    .dx-top .logo-img { width: 30px; height: auto; }
+    .dx-top .back-home { font-size: .9rem; color: rgba(255,255,255,.72); }
+    .dx-top .back-home:hover { color: var(--gold); }
+
+    /* ---- Stage ---- */
+    .dx-main { flex: 1; padding: clamp(28px, 6vw, 64px) 0 72px; }
+    .dx-wrap { max-width: 720px; margin: 0 auto; padding: 0 var(--gutter); }
+    .dx-card {
+      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow-md); padding: clamp(24px, 5vw, 44px);
+    }
+
+    /* ---- Intro ---- */
+    .dx-intro h1 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: .35em; }
+    .dx-intro .lead { margin-bottom: 1.4em; }
+    .dx-points { list-style: none; padding: 0; margin: 0 0 30px; display: grid; gap: 10px; }
+    .dx-points li { display: flex; gap: 12px; align-items: baseline; color: var(--ink-soft); }
+    .dx-points li::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); transform: translateY(-2px); }
+
+    /* ---- Progress ---- */
+    .dx-progress { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; }
+    .dx-bar { flex: 1; height: 6px; background: var(--gold-soft); border-radius: 99px; overflow: hidden; }
+    .dx-bar span { display: block; height: 100%; width: 0; background: var(--gold); border-radius: 99px; transition: width .35s ease; }
+    .dx-count { font-family: var(--font-mono); font-size: .78rem; color: var(--ink-soft); white-space: nowrap; }
+
+    /* ---- Question ---- */
+    .dx-q h2 { font-size: clamp(1.45rem, 3.6vw, 1.95rem); margin-bottom: .3em; }
+    .dx-hint { color: var(--ink-soft); font-size: .95rem; margin-bottom: 22px; }
+    .dx-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .dx-opt {
+      font: inherit; text-align: left; cursor: pointer; color: var(--ink);
+      background: var(--offwhite); border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+      padding: 16px 18px; min-height: 60px; display: flex; align-items: center; gap: 12px;
+      transition: border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+    .dx-opt:hover { border-color: var(--gold); background: #fff; }
+    .dx-opt[aria-pressed="true"] { border-color: var(--gold); background: var(--gold-soft); }
+    .dx-opt .tick {
+      flex: none; width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid rgba(27,34,51,.25);
+      display: grid; place-items: center; color: transparent; transition: all .15s ease;
+    }
+    .dx-opt.single .tick { border-radius: 50%; }
+    .dx-opt[aria-pressed="true"] .tick { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+    .dx-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; gap: 12px; }
+    .dx-back { font: inherit; background: none; border: 0; color: var(--ink-soft); cursor: pointer; padding: 8px 0; }
+    .dx-back:hover { color: var(--navy); }
+    .dx-back[hidden] { display: inline-block; visibility: hidden; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ---- Results ---- */
+    .dx-result-head { margin-bottom: 24px; }
+    .dx-result-head h1 { font-size: clamp(1.8rem, 4.5vw, 2.5rem); margin-bottom: .3em; }
+    .dx-best {
+      background: var(--navy); color: #fff; border-radius: var(--radius); padding: clamp(22px, 4vw, 34px);
+      margin-bottom: 18px; position: relative; overflow: hidden;
+    }
+    .dx-best::after {
+      content: ""; position: absolute; right: -80px; top: -80px; width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(184,140,41,.35), transparent 70%); pointer-events: none;
+    }
+    .dx-best .tag { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+    .dx-best h2 { color: #fff; font-size: clamp(1.5rem, 3.6vw, 2rem); margin: 8px 0 10px; }
+    .dx-best p { color: rgba(255,255,255,.82); }
+    .dx-why { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+    .dx-why li { display: flex; gap: 10px; color: rgba(255,255,255,.9); font-size: .96rem; }
+    .dx-why li::before { content: "→"; color: var(--gold); flex: none; }
+    .dx-best .btn { margin-top: 22px; position: relative; z-index: 1; }
+
+    .dx-alts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 30px; }
+    .dx-alt { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 18px 20px; background: var(--offwhite); }
+    .dx-alt .tag { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--gold-deep); }
+    .dx-alt h3 { font-size: 1.15rem; margin: 6px 0 6px; }
+    .dx-alt p { font-size: .93rem; color: var(--ink-soft); margin: 0; }
+    .dx-alt a { display: inline-block; margin-top: 10px; font-size: .9rem; font-weight: 600; color: var(--gold-deep); }
+
+    .dx-caveat { font-size: .9rem; color: var(--ink-soft); border-left: 3px solid var(--gold); padding: 2px 0 2px 14px; margin: 0 0 30px; }
+
+    .dx-capture h2 { font-size: clamp(1.35rem, 3vw, 1.7rem); }
+    .dx-capture .lead-form { box-shadow: none; padding: 0; border: 0; }
+    .dx-restart { display: block; margin: 22px auto 0; font: inherit; background: none; border: 0; color: var(--ink-soft); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+    .dx-fade { animation: dxIn .35s ease both; }
+    @keyframes dxIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .dx-fade { animation: none; } .dx-bar span { transition: none; } }
+
+    @media (max-width: 620px) {
+      .dx-options, .dx-alts { grid-template-columns: 1fr; }
+      .dx-top .back-home { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="dx-top">
+    <div class="container">
+      <a class="brand" href="/" aria-label="Meridian — home">
+        <img class="logo-img" src="/assets/meridian-logo.png" alt="" width="30" height="33" />
+        <span class="brand-name">Meridian</span>
+      </a>
+      <a class="back-home" href="/">← Back to the site</a>
+    </div>
+  </header>
+
+  <main class="dx-main">
+    <div class="dx-wrap">
+      <div class="dx-card" id="dx" aria-live="polite">
+        <!-- Filled by diagnostic.js. This fallback shows if JavaScript is off. -->
+        <noscript>
+          <p>This diagnostic needs JavaScript. You can still <a href="/#contact">book a free intro call</a>.</p>
+        </noscript>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/forms.js"></script>
+  <script src="/diagnostic/diagnostic.js"></script>
+</body>
+</html>

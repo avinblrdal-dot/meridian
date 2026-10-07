@@ -15,7 +15,7 @@
        HOW TO EDIT
          - Copy lives in this file, section by section.
          - Colors/fonts/spacing: css/styles.css → ":root" tokens.
-         - Contact form is stubbed — see "CONTACT FORM" note below.
+         - Contact form sends via js/forms.js (paste the Web3Forms key there).
        ============================================================ -->
 
   <title>Meridian — Get your time back. Let Meridian handle the rest.</title>
@@ -103,7 +103,7 @@
       <div class="hero-top container">
         <a class="hero-tag" href="#contact">
           <span class="hero-tag-dot" aria-hidden="true"></span>
-          <span class="hero-tag-mono">STATUS:</span> Now booking AI Opportunity Audits — Frisco / DFW
+          <span class="hero-tag-mono">STATUS:</span> Now booking free AI Opportunity Audits — Frisco / DFW
           <span aria-hidden="true">→</span>
         </a>
       </div>
@@ -124,7 +124,7 @@
           <p class="hero-sub">We help local salons, spas, and studios stop losing hours — and bookings — to no-shows, missed calls, and repetitive questions. One practical AI fix, built for your business and taught to your team.</p>
           <div class="hero-actions">
             <a class="btn btn-primary btn-lg" href="#contact">Book a Free Intro Call</a>
-            <a class="btn btn-outline-dark btn-lg" href="#how">See how it works</a>
+            <a class="btn btn-outline-dark btn-lg" href="/diagnostic">Take the 2-minute diagnostic</a>
           </div>
           <p class="hero-trust"><span class="hero-tag-dot" aria-hidden="true"></span> Hands-on, local, and built around businesses like yours — Frisco / Dallas–Fort Worth, TX.</p>
         </div>
@@ -289,7 +289,7 @@
           </article>
         </div>
 
-        <p class="solutions-close">These are starting points, not a menu. Your Audit tells us what you actually need.</p>
+        <p class="solutions-close">These are starting points, not a menu. Your Audit tells us what you actually need. Not sure which fits? <a href="/diagnostic">Take the 2-minute diagnostic →</a></p>
       </div>
     </section>
 
@@ -408,13 +408,14 @@
         </div>
 
         <div class="price-grid">
-          <!-- NOTE: no dollar amounts on purpose — "Contact for pricing" until real pilots are priced. -->
+          <!-- NOTE: the Audit is free (agreed with mentor, Oct 2026). Build and Support
+               stay "Contact for pricing" until real pilots are priced. -->
           <article class="price-card">
             <div class="tier-kind">Step 1</div>
             <div class="tier">AI Opportunity Audit</div>
-            <p class="tier-desc">A focused session to find your biggest opportunity. A low-cost, low-risk way to start.</p>
-            <div class="price-tag">Contact for pricing <small>Low-cost entry point</small></div>
-            <a class="btn btn-ghost" href="#contact">Book a Free Intro Call</a>
+            <p class="tier-desc">A focused session to find your biggest opportunity. No cost, and no obligation to go further.</p>
+            <div class="price-tag">Free <small>No cost, no obligation</small></div>
+            <a class="btn btn-ghost" href="#contact">Book your free Audit</a>
           </article>
 
           <article class="price-card featured">
@@ -474,7 +475,10 @@
       <div class="container">
         <h2 id="final-title">Ready to get your time back?</h2>
         <p>Book a free intro call and let's find out what's costing you the most.</p>
-        <a class="btn btn-on-dark btn-lg" href="#contact">Book a Free Intro Call</a>
+        <div class="final-actions">
+          <a class="btn btn-on-dark btn-lg" href="#contact">Book a Free Intro Call</a>
+          <a class="btn btn-outline-dark btn-lg" href="/diagnostic">Take the 2-minute diagnostic</a>
+        </div>
       </div>
     </section>
 
@@ -504,16 +508,10 @@
             </ul>
           </div>
 
-          <!-- ===============================================================
-               CONTACT FORM (stubbed — no backend wired yet)
-               ---------------------------------------------------------------
-               To make it live, pick ONE:
-               • Formspree: set  action="https://formspree.io/f/XXXX"  method="post"
-                 on the <form>, then remove the submit handler in js/main.js.
-               • Netlify Forms: add  netlify  to the <form> tag (auto-detected on deploy).
-               • Your own endpoint: point action= at it (and POST via fetch in main.js).
-               Right now it validates, then shows a thank-you message client-side.
-          =============================================================== -->
+          <!-- CONTACT FORM — sent by js/main.js through js/forms.js
+               (Web3Forms). Turn it on by pasting the access key into
+               js/forms.js; until then it shows the thank-you but sends
+               nothing. -->
           <div>
             <form class="lead-form" id="leadForm" novalidate>
               <div class="form-row">
@@ -540,8 +538,11 @@
                 <label for="pain">What's your biggest time-waster?</label>
                 <textarea id="pain" name="pain" placeholder="No-shows? Missed calls? The same questions all day? Tell us what's eating your week." required></textarea>
               </div>
+              <!-- Honeypot: hidden from people, filled in by spam bots. Web3Forms drops any submission that ticks it. -->
+              <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
               <p class="form-note">No spam, no pressure. Just a real conversation about your business.</p>
               <button type="submit" class="btn btn-primary btn-lg">Book a Free Intro Call</button>
+              <p class="form-error" id="formError" role="alert" hidden>That didn't send. Please try again in a moment.</p>
             </form>
 
             <!-- Success state (revealed by js/main.js after a valid submit) -->
@@ -603,7 +604,8 @@
     </div>
   </footer>
 
-  <!-- Scripts: nav, scroll animations, form -->
+  <!-- Scripts: form delivery, then nav, scroll animations, form -->
+  <script src="js/forms.js"></script>
   <script src="js/main.js"></script>
 
   <!-- The missed-call animation in the "How It Works" section above.

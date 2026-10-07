@@ -597,6 +597,11 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 .field textarea { resize: vertical; min-height: 120px; }
 .form-note { font-size: 0.85rem; color: var(--ink-soft); margin: 4px 0 18px; }
 .lead-form .btn { width: 100%; }
+.lead-form .btn:disabled { opacity: .7; cursor: wait; transform: none; }
+.form-error { margin: 14px 0 0; font-size: 0.92rem; color: #A3361F; text-align: center; }
+.solutions-close a { color: var(--gold-deep); font-weight: 600; border-bottom: 1px solid currentColor; }
+.final-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 /* success message shown after (stubbed) submit */
 .form-success { display: none; text-align: center; padding: 20px 0; }
 .form-success.show { display: block; }

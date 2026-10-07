@@ -79,7 +79,7 @@ window.MERIDIAN_CHAT_CONFIG = {
                  'rate', 'rates', 'fee', 'quote', 'budget', 'afford', 'payment',
                  'pay', 'charge', 'charges', 'do you charge', 'invoice'],
       answer:
-        "There are three steps: a low-cost Audit to find the opportunity, a " +
+        "There are three steps: a free Audit to find the opportunity, a " +
         "one-time Build & Setup priced to scope, and an optional monthly plan " +
         "if you want ongoing support. We price each to the business rather " +
         "than publishing a number, so the intro call is free and there's no " +
