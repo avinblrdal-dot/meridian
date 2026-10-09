@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — Missed-Call Setup</title>
+<meta name="description" content="Path B: which tools a salon already has can text back missed callers, auto-reply, or send reminders, and how to turn each one on.">
+<link rel="icon" type="image/png" href="/embed/meridian-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     MISSED-CALL SETUP (PATH B) — internal, noindex.
+     Served at /tools/missed-call-setup. Same look as /tools and
+     /tools/outreach. No scripts on this page.
+     ============================================================ */
+  :root {
+    --gold: #B88C29;
+    --gold-deep: #96701E;
+    --gold-soft: #F3E9D2;
+    --navy: #1B2233;
+    --navy-soft: #2C3448;
+    --offwhite: #FBFAF7;
+    --cream: #F6F2EA;
+    --ink-soft: #4A5163;
+    --line: #E9E4DA;
+    --ok: #2F6B4F;
+    --ok-soft: #E3EFE8;
+    --no: #7A2F2D;
+    --no-soft: #FBEAEA;
+    --font-display: "Bricolage Grotesque", Georgia, serif;
+    --font-body: "Inter", -apple-system, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); background: var(--offwhite); color: var(--navy);
+    line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-wrap: break-word;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 80px; }
+
+  header { background: var(--navy); color: #fff; padding: 34px 16px 30px; margin-bottom: 40px; }
+  .header-inner { max-width: 880px; margin: 0 auto; }
+  .brandline { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
+  .brandline a { display: flex; align-items: center; gap: 11px; color: #fff; text-decoration: none; }
+  .brandline span.name { font-family: var(--font-display); font-weight: 600; font-size: 1.28rem; letter-spacing: 0.01em; }
+  .pill {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold);
+    border: 1px solid rgba(184, 140, 41, 0.45); border-radius: 100px; padding: 3px 11px; margin-left: 4px;
+  }
+  header h1 {
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(1.7rem, 4.4vw, 2.3rem);
+    line-height: 1.15; letter-spacing: -0.015em; margin-bottom: 10px;
+  }
+  header p { color: rgba(255,255,255,0.72); font-size: 1rem; max-width: 60ch; }
+  header p + p { margin-top: 8px; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .jump a {
+    font-size: 0.82rem; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 100px; padding: 5px 13px;
+  }
+  .jump a:hover { border-color: var(--gold); color: var(--gold); }
+
+  h2 {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.16rem; letter-spacing: -0.005em;
+    margin: 44px 0 4px; padding-bottom: 9px; border-bottom: 1px solid var(--line); scroll-margin-top: 20px;
+  }
+  h2:first-of-type { margin-top: 0; }
+  .sub { color: var(--ink-soft); font-size: 0.9rem; margin: 10px 0 18px; }
+  .group { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold-deep); margin: 26px 0 10px; }
+
+  .grid { display: grid; gap: 12px; }
+  @media (min-width: 620px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+  .stack { display: grid; gap: 12px; }
+  .box { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 17px 19px; scroll-margin-top: 20px; }
+  .box h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; margin-bottom: 6px; }
+  .box h4 { font-weight: 600; font-size: 0.9rem; color: var(--navy); margin: 14px 0 4px; }
+  .box p, .box li { color: var(--ink-soft); font-size: 0.9rem; line-height: 1.55; }
+  .box p + p, .box ol + p, .box ul + p { margin-top: 8px; }
+  .box ul { padding-left: 18px; display: grid; gap: 4px; }
+  .box ol { padding-left: 20px; display: grid; gap: 4px; }
+  .box b, .box strong { color: var(--navy); font-weight: 600; }
+  .aside { color: var(--ink-soft); font-size: 0.86rem; margin-top: 8px; }
+  .src { font-size: 0.8rem !important; margin-top: 12px !important; padding-top: 10px; border-top: 1px dashed var(--line); }
+  .src a, .box a, .note a, td a { color: var(--gold-deep); }
+
+  ol.qs { padding-left: 22px; display: grid; gap: 12px; }
+  ol.qs li { padding-left: 4px; }
+  ol.qs .why { display: block; color: var(--ink-soft); font-size: 0.86rem; margin-top: 2px; }
+
+  .note {
+    background: var(--cream); border-left: 3px solid var(--gold); border-radius: 0 9px 9px 0;
+    padding: 14px 17px; font-size: 0.88rem; color: var(--ink-soft); margin-top: 16px;
+  }
+  .note strong, .note b { color: var(--navy); font-weight: 600; }
+  .note ul { padding-left: 18px; display: grid; gap: 4px; margin-top: 6px; }
+  .warn { background: #FBEAEA; border-left-color: #98413F; }
+  .warn strong, .warn b { color: #7A2F2D; }
+
+  /* ---- Status chips ---- */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 10px; }
+  .chip, .conf {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; line-height: 1.4;
+    letter-spacing: 0.02em; border-radius: 100px; padding: 2px 9px; border: 1px solid var(--line);
+    color: var(--navy-soft); background: var(--cream); white-space: nowrap;
+  }
+  .conf.ok { background: var(--ok-soft); border-color: #C3DCCD; color: var(--ok); }
+  .conf.third { background: var(--gold-soft); border-color: #E6D3A6; color: var(--gold-deep); }
+  .conf.no { background: var(--no-soft); border-color: #EBCACA; color: var(--no); }
+
+  /* ---- Comparison table: scrolls sideways inside its box, never the page ---- */
+  .table-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch; background: #fff;
+    border: 1px solid var(--line); border-radius: 12px; max-width: 100%;
+  }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 900px; font-size: 0.84rem; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); line-height: 1.45; }
+  thead th {
+    font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--gold-deep); background: var(--cream); white-space: nowrap;
+  }
+  tbody th { font-weight: 600; color: var(--navy); }
+  tbody th a { color: var(--navy); text-decoration-color: var(--gold); text-underline-offset: 3px; }
+  td { color: var(--ink-soft); }
+  /* Platform column stays visible while scrolling on a phone */
+  th:first-child, td:first-child { position: sticky; left: 0; z-index: 1; background: #fff; min-width: 128px; max-width: 150px; box-shadow: 1px 0 0 var(--line); }
+  thead th:first-child { background: var(--cream); z-index: 2; }
+  tr.grp th {
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--navy); background: var(--gold-soft);
+  }
+  tr.grp th:first-child { background: var(--gold-soft); position: static; max-width: none; box-shadow: none; }
+  tr.grp th span { position: sticky; left: 12px; }
+  td .conf { white-space: normal; margin: 0 2px 3px 0; border-radius: 8px; }
+  td:nth-child(6) { min-width: 158px; }
+  td:nth-child(2), td:nth-child(3) { min-width: 170px; }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  td.yes { color: var(--ok); font-weight: 500; }
+  td.nope { color: var(--ink-soft); }
+  .scroll-hint { font-size: 0.8rem; color: var(--ink-soft); margin-top: 8px; }
+  @media (min-width: 940px) { .scroll-hint { display: none; } }
+
+  .msg {
+    background: var(--cream); border: 1px solid var(--line); border-radius: 9px; padding: 11px 13px;
+    font-size: 0.9rem; color: var(--navy); margin-top: 6px;
+  }
+
+  ul.sources { list-style: none; display: grid; gap: 7px; padding-left: 0; }
+  ul.sources li { font-size: 0.86rem; color: var(--ink-soft); }
+  ul.sources a { color: var(--gold-deep); overflow-wrap: anywhere; }
+  ul.sources .who { font-weight: 600; color: var(--navy); }
+
+  code {
+    font-family: var(--font-mono); font-size: 0.8em; background: var(--cream); border: 1px solid var(--line);
+    border-radius: 5px; padding: 1px 6px; color: var(--navy-soft);
+  }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.83rem; }
+  footer a { color: var(--gold-deep); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brandline">
+      <a href="/tools"><img src="/embed/meridian-logo.png" alt="" width="20" height="22"><span class="name">Meridian</span></a>
+      <span class="pill">Internal</span>
+    </div>
+    <h1>Missed-call setup (Path B)</h1>
+    <p>
+      Path B means Meridian turns on the missed-call texts, auto-replies and
+      reminders that a salon's existing booking app or phone service already
+      includes, instead of building a new texting system. It costs $0 extra
+      because nothing new is bought: no Twilio number, no new subscription,
+      and no carrier registration on Meridian's side. The catch is that a true
+      automatic text after a missed call is built into only a few tools, so for
+      most salons Path B closes most of the gap, not all of it.
+    </p>
+    <nav class="jump" aria-label="On this page">
+      <a href="#start">Start here</a>
+      <a href="#compare">Comparison</a>
+      <a href="#booking">Booking tools</a>
+      <a href="#phones">Phones &amp; messaging</a>
+      <a href="#visit">Setup visit</a>
+      <a href="#consent">Consent basics</a>
+      <a href="#limits">When it isn't enough</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ===================================================== START HERE -->
+  <h2 id="start">Start here: ask the owner which tools they use</h2>
+  <p class="sub">The answers tell you which sections of this page apply. Ask before the setup visit, by phone or on a quick drop-in.</p>
+
+  <div class="box">
+    <ol class="qs">
+      <li>What do clients book through, and which plan are you on?
+        <span class="why">If they don't know the plan, open the billing or subscription page in the app together. Plan decides what's included.</span></li>
+      <li>What number do clients call? Your own cell (iPhone or Android), a landline, or a business phone app like Grasshopper, Quo (OpenPhone), RingCentral, Dialpad or Google Voice? Which carrier?
+        <span class="why">A business phone app is the most likely place a real missed-call text already exists.</span></li>
+      <li>When you're with a client and the phone rings, what happens now? Voicemail, rings out, someone else picks up?</li>
+      <li>Can clients already text that number? Does anyone read and answer those texts?</li>
+      <li>Do you have Instagram and Facebook business pages, and can you log in to them here?</li>
+      <li>Do you manage your Google Business Profile (the listing on Google Maps)?</li>
+      <li>Do you send promotions or specials by text today? How did clients agree to get them?
+        <span class="why">Path B covers replies and reminders only. Marketing texts need written consent (see <a href="#consent">Consent basics</a>).</span></li>
+    </ol>
+  </div>
+
+  <div class="note">
+    <strong>Quick routing from the answers</strong>
+    <ul>
+      <li><b>Business phone app</b> (Quo, Grasshopper, RingCentral): a real missed-call text may already be in their plan. Start with that section.</li>
+      <li><b>Mindbody on the Ultimate plan, or Zenoti with HyperConnect</b>: the booking tool itself can text missed callers. Start there.</li>
+      <li><b>Personal cell plus Square, Vagaro, GlossGenius, Booksy, Fresha, Boulevard or Acuity</b>: no built-in automatic missed-call text was found for these. Do the "close the gap" setup: reminders, auto-replies, one-tap Respond with Text, voicemail greeting, Google booking link, Instagram and Facebook replies.</li>
+      <li><b>They say "Schedulicity"</b>: Schedulicity is now Vagaro. Use the Vagaro section.</li>
+    </ul>
+  </div>
+
+  <!-- ===================================================== COMPARISON -->
+  <h2 id="compare">Comparison</h2>
+  <p class="sub">
+    <span class="conf ok">Confirmed</span> stated on the company's own help or product page.
+    <span class="conf third">Third-party</span> from forums or outside sites only.
+    <span class="conf no">Not confirmed</span> no official page describes it, so it may not exist.
+    "None found" means the official help was searched and nothing turned up. That is not proof it doesn't exist.
+    A <b>*</b> means the official page was checked through search-engine excerpts, not read in full (most of these block automated reading). Open it yourself before a visit.
+  </p>
+
+  <div class="table-wrap" role="region" aria-label="Comparison table, scrolls sideways" tabindex="0">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Platform</th>
+          <th scope="col">Missed-call text-back?</th>
+          <th scope="col">Auto-reply?</th>
+          <th scope="col">SMS reminders?</th>
+          <th scope="col">Plan needed</th>
+          <th scope="col">Confidence</th>
+          <th scope="col">Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="grp"><th colspan="7" scope="colgroup"><span>Booking tools</span></th></tr>
+        <tr>
+          <th scope="row"><a href="#p-square">Square Appointments</a></th>
+          <td class="nope">None found</td>
+          <td class="yes">Yes. Square Assistant answers client texts to confirm, cancel or reschedule</td>
+          <td class="yes">Yes</td>
+          <td>Assistant: Appointments Free, Plus or Premium. Reminders: check plan (<a href="https://squareup.com/us/en/appointments/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed</span></td>
+          <td><a href="https://squareup.com/help/us/en/article/6731-get-started-with-square-assistant-on-appointments">Square help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-vagaro">Vagaro</a></th>
+          <td class="nope">None found</td>
+          <td>Paid only. Vagaro AI chatbot, extra monthly fee</td>
+          <td class="yes">Yes, standard reminders are free</td>
+          <td>Reminders: all accounts. SMS inbox (Connect) and AI: paid add-ons (<a href="https://www.vagaro.com/pro/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed*</span></td>
+          <td><a href="https://support.vagaro.com/hc/en-us/articles/115000439594-Send-Notifications-and-Reminders-to-Your-Customers">Vagaro help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-glossgenius">GlossGenius</a></th>
+          <td class="nope">Not described. Reception add-on answers calls instead</td>
+          <td>Reception add-on answers texts</td>
+          <td class="yes">Yes, no extra cost</td>
+          <td>Reception: free until Nov 30, 2026, then paid (<a href="https://glossgenius.com/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed</span></td>
+          <td><a href="https://glossgenius.com/reception">Reception page</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-booksy">Booksy</a></th>
+          <td class="nope">Not described. AI Receptionist (beta) answers calls</td>
+          <td class="nope">None found</td>
+          <td class="yes">Yes, 24 hrs before, no cost</td>
+          <td>Reminders included. AI Receptionist: request access (<a href="https://biz.booksy.com/en-us/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed*</span></td>
+          <td><a href="https://support.booksy.com/hc/en-us/articles/16463854228114-Does-Booksy-send-clients-reminders-of-their-upcoming-appointments">Booksy help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-fresha">Fresha</a></th>
+          <td class="nope">Not described. AI Concierge add-on answers calls</td>
+          <td>AI Concierge add-on</td>
+          <td class="yes">Yes. Email free, texts use the messaging balance</td>
+          <td>Reminders: all plans. AI Concierge: add-on (<a href="https://www.fresha.com/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed</span></td>
+          <td><a href="https://www.fresha.com/help-center/knowledge-base/calendar/167-send-appointment-reminders">Fresha help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-mindbody">Mindbody</a></th>
+          <td class="yes">Yes. AI Concierge, after call forwarding</td>
+          <td class="yes">Yes. AI Concierge</td>
+          <td class="yes">Yes, client must be opted in</td>
+          <td>AI Concierge included in Ultimate; otherwise ask Mindbody (<a href="https://www.mindbodyonline.com/business/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed*</span></td>
+          <td><a href="https://www.mindbodyonline.com/business/ai-concierge">AI Concierge page</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-boulevard">Boulevard</a></th>
+          <td class="nope">No (Boulevard's own FAQ)</td>
+          <td class="yes">Yes. After-hours auto-response to texts</td>
+          <td class="yes">Yes</td>
+          <td>Dedicated number needed; usage rates apply (<a href="https://www.joinblvd.com/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed</span></td>
+          <td><a href="https://support.boulevard.io/en/articles/5941436-messages">Boulevard help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-acuity">Acuity Scheduling</a></th>
+          <td class="nope">None found</td>
+          <td class="nope">No</td>
+          <td class="yes">Yes, 1 per appointment, client opts in</td>
+          <td>Standard or Premium, not on free trial (<a href="https://acuityscheduling.com/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed*</span></td>
+          <td><a href="https://help.acuityscheduling.com/hc/en-us/articles/16676915777293-Sending-appointment-reminders-via-text">Acuity help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-schedulicity">Schedulicity</a></th>
+          <td colspan="4">Now part of Vagaro. Use the Vagaro row.</td>
+          <td><span class="conf ok">Confirmed</span></td>
+          <td><a href="https://www.vagaro.com/pro/schedulicity">Vagaro page</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-zenoti">Zenoti</a></th>
+          <td class="yes">Yes. SmartBot, via call forwarding or HyperConnect</td>
+          <td class="yes">Yes. SmartBot</td>
+          <td class="yes">Yes, uses SMS credits</td>
+          <td>Which plans include HyperConnect or SmartBot: not stated (<a href="https://www.zenoti.com/pricing-zenoti">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed*</span> <span class="conf no">Plan: Not confirmed</span></td>
+          <td><a href="https://help.zenoti.com/en/zenoti-messaging-and-engagement-tools/smartbot---ai-powered-automation-for-guest-engagement/sms-bot--how-sms-bot-works.html">Zenoti help</a></td>
+        </tr>
+
+        <tr class="grp"><th colspan="7" scope="colgroup"><span>Phones and messaging</span></th></tr>
+        <tr>
+          <th scope="row"><a href="#p-gvoice">Google Voice (personal)</a></th>
+          <td class="nope">None found. Email alerts for missed calls only</td>
+          <td class="nope">None found</td>
+          <td>n/a</td>
+          <td>Free</td>
+          <td><span class="conf no">Not confirmed</span></td>
+          <td><a href="https://support.google.com/a/users/answer/9310274?hl=en">Google help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-gvoice">Google Voice (Workspace)</a></th>
+          <td class="nope">None found</td>
+          <td>Calls only: auto attendant with after-hours greeting. Texts: none found</td>
+          <td>n/a</td>
+          <td>Auto attendant: Voice Standard or Premier</td>
+          <td><span class="conf ok">Confirmed*</span> (auto attendant)</td>
+          <td><a href="https://support.google.com/a/answer/9204988">Google help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-iphone">iPhone</a></th>
+          <td class="nope">No</td>
+          <td>Respond with Text (one tap, manual). Driving Focus auto-reply is for messages</td>
+          <td>n/a</td>
+          <td>Free</td>
+          <td><span class="conf ok">Confirmed*</span></td>
+          <td><a href="https://support.apple.com/guide/iphone/answer-or-decline-incoming-calls-iph3c9947bf/ios">Apple Support</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-android">Android (Google Phone app)</a></th>
+          <td class="nope">No</td>
+          <td>Quick responses (one tap, manual)</td>
+          <td>n/a</td>
+          <td>Free</td>
+          <td><span class="conf ok">Confirmed</span> <span class="conf no">Other phone apps: Not confirmed</span></td>
+          <td><a href="https://support.google.com/phoneapp/answer/2811745?hl=en">Google help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-carriers">Verizon / AT&amp;T / T-Mobile</a></th>
+          <td class="nope">None found</td>
+          <td>Verizon Business Assistant: paid AI texting on a separate number</td>
+          <td>n/a</td>
+          <td>Ask the carrier</td>
+          <td><span class="conf no">Not confirmed</span></td>
+          <td><a href="https://www.verizon.com/business/solutions/ai-business-assistant/">Verizon</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-ringcentral">RingCentral</a></th>
+          <td class="yes">Yes, if built in Workflow Builder</td>
+          <td class="yes">Yes, Workflow Builder</td>
+          <td>n/a</td>
+          <td>Plan not stated; texting needs number registration (<a href="https://www.ringcentral.com/office/plansandpricing.html">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed</span> <span class="conf third">Steps: community</span></td>
+          <td><a href="https://developers.ringcentral.com/automator">RingCentral</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-grasshopper">Grasshopper</a></th>
+          <td class="yes">Yes. Instant Response</td>
+          <td>Instant Response is the auto-reply</td>
+          <td>n/a</td>
+          <td>Business texting (in plan or add-on) and number registration (<a href="https://grasshopper.com/pricing/">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed*</span></td>
+          <td><a href="https://support.grasshopper.com/help/set-up-an-instant-response-text-on-a-phone-number">Grasshopper help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-quo">Quo (OpenPhone)</a></th>
+          <td class="yes">Yes. Auto-replies</td>
+          <td class="yes">Yes, also for texts and voicemails</td>
+          <td>n/a</td>
+          <td>All plans; A2P 10DLC registration first (<a href="https://www.quo.com/pricing">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed</span></td>
+          <td><a href="https://support.quo.com/core-concepts/messaging/auto-replies">Quo help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-dialpad">Dialpad</a></th>
+          <td class="nope">Not confirmed</td>
+          <td class="yes">Yes. SMS auto-reply to incoming texts</td>
+          <td>n/a</td>
+          <td>Standard messaging rates (<a href="https://www.dialpad.com/pricing/">pricing</a>)</td>
+          <td><span class="conf ok">Confirmed*</span> (texts)</td>
+          <td><a href="https://help.dialpad.com/docs/sms-auto-reply-message">Dialpad help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-gbp">Google Business Profile</a></th>
+          <td>n/a. Chat ended July 31, 2024</td>
+          <td class="nope">No</td>
+          <td>n/a</td>
+          <td>Free. Booking link is free</td>
+          <td><span class="conf ok">Confirmed</span></td>
+          <td><a href="https://support.google.com/business/answer/14919056?hl=en">Google help</a></td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#p-meta">Instagram / Facebook</a></th>
+          <td>n/a</td>
+          <td class="yes">Yes. Instant reply, away message, FAQs</td>
+          <td>n/a</td>
+          <td>Free</td>
+          <td><span class="conf ok">Confirmed*</span></td>
+          <td><a href="https://www.facebook.com/business/help/395965998733706">Meta help</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="scroll-hint">On a phone, swipe the table sideways. The platform column stays put.</p>
+
+  <div class="note">
+    <strong>Booking links.</strong> Every booking tool above is built around
+    online booking, so each one gives the business a booking link. That link
+    is the most important line in every auto-reply, voicemail greeting and
+    profile on this page. Copy it from the owner's account and open it on
+    your phone before pasting it anywhere.
+  </div>
+
+  <!-- ===================================================== BOOKING TOOLS -->
+  <h2 id="booking">Booking tools: what to turn on</h2>
+  <p class="sub">Menus change. Follow the path, then match the label on screen. Steps marked * come from official pages checked through search excerpts, so open the source before the visit.</p>
+
+  <div class="stack">
+
+    <div class="box" id="p-square">
+      <h3>Square Appointments</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Missed-call text: none found</span><span class="chip">Auto-reply: Square Assistant</span><span class="chip">Reminders: yes</span></p>
+      <h4>Turn on Square Assistant (answers client texts)</h4>
+      <ol>
+        <li>Sign in to Square Dashboard. Go to <b>Appointments &gt; Settings &gt; Communications</b>.</li>
+        <li>Select <b>Square Assistant</b>, toggle it on, click <b>Save</b>.</li>
+        <li>Other route: open the <b>Messages</b> inbox, click the gear icon, toggle <b>Enable Square Assistant</b>, Save.</li>
+      </ol>
+      <p>What it does, per Square: sends SMS appointment reminders, and clients can confirm, reschedule or cancel by text. The calendar updates on its own. Square lists it for Appointments Free, Plus and Premium. The person setting it up needs the "customers" permission.</p>
+      <h4>Turn on text reminders</h4>
+      <ol>
+        <li><b>Appointments &gt; Settings &gt; Communications</b>.</li>
+        <li>In <b>Confirmations and Reminders</b>, toggle on the text reminder (and email if wanted).</li>
+        <li>Pick how far ahead from the drop-down. Click <b>Save</b>.</li>
+      </ol>
+      <p class="aside">Check: Square's reminders article says it applies to Appointments Plus and Premium, and to Free, Plus or Premium sellers with advanced booking added. Confirm on the owner's plan page. Forum posts (<span class="conf third">Third-party</span>) report Square Assistant sometimes answered a client with the wrong policy, so text it yourself and read its replies for the first week. Don't turn on "Do Not Disturb" in Messages: per Square's help*, it sends a fixed reply telling clients messaging isn't active.</p>
+      <p class="src">Sources: <a href="https://squareup.com/help/us/en/article/6731-get-started-with-square-assistant-on-appointments">Set up Square Assistant</a> &middot; <a href="https://squareup.com/help/us/en/article/6729-customer-confirmations-with-square-appointments">Booking notifications and reminders</a> &middot; <a href="https://squareup.com/help/us/en/article/8416-manage-notifications-with-square-messages">Messages notifications*</a></p>
+    </div>
+
+    <div class="box" id="p-vagaro">
+      <h3>Vagaro</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Missed-call text: none found</span><span class="chip">Auto-reply: paid add-on</span><span class="chip">Reminders: free</span></p>
+      <h4>Turn on reminders*</h4>
+      <ol>
+        <li>Phone: <b>More &gt; Settings &gt; Booking &gt; Email &amp; Text Notifications</b>. Web or tablet: <b>Settings gear &gt; Booking &gt; Email &amp; Text Notifications</b>.</li>
+        <li>Turn on <b>Appointment Reminder</b> and choose how far ahead it sends.</li>
+        <li>For one client: open their profile, Edit, and under <b>Appointment Reminders</b> make sure <b>SMS Text</b> is on.</li>
+      </ol>
+      <p>Vagaro says standard reminders are available to all Vagaro businesses at no charge. They come from Vagaro's short code <b>89885</b>, and replies to those automated texts do not reach the business. A client who texted STOP can text START to 89885. Standard reminder wording can't be edited.</p>
+      <h4>What costs extra</h4>
+      <p>Texting clients by SMS from Connect (Vagaro's inbox) needs a Text Messaging plan. The Vagaro AI chatbot can auto-reply 24/7 to chats from the Vagaro listing page and, with a text plan, to SMS. Vagaro's help says turning it on adds a monthly subscription. Not Path B unless the owner already pays for it.</p>
+      <p class="src">Sources: <a href="https://support.vagaro.com/hc/en-us/articles/115000439594-Send-Notifications-and-Reminders-to-Your-Customers">Notifications and reminders*</a> &middot; <a href="https://support.vagaro.com/hc/en-us/articles/26168595985179-Is-Connect-by-Vagaro-Free">Is Connect free?*</a> &middot; <a href="https://support.vagaro.com/hc/en-us/articles/31806231306779-Set-Up-A-Chatbot-for-Your-Business-with-Vagaro-AI">Vagaro AI chatbot*</a></p>
+    </div>
+
+    <div class="box" id="p-glossgenius">
+      <h3>GlossGenius</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Missed-call text: not described</span><span class="chip">Auto-reply: Reception add-on</span><span class="chip">Reminders: yes</span></p>
+      <h4>Reminders</h4>
+      <p>GlossGenius sends automated text reminders and confirmations and says client notifications come "at no extra cost." They go out even to clients who haven't opted in to marketing. Text wording can't be customized; extra language can only be added to emails.</p>
+      <ol>
+        <li>Web: <b>Settings &gt; Business &gt; Client Notifications</b>, then <b>Reminders</b>. App: <b>Features &gt; Settings &gt; Client Notifications</b>.*</li>
+        <li>Check timing. One help article shows a different path (<b>Settings &gt; Booking Controls &amp; Notifications</b>), so match what's on screen.</li>
+      </ol>
+      <h4>Reception (add-on)</h4>
+      <p>An AI front desk that answers calls and texts 24/7 and books into the calendar. It sits under <b>Features &gt; Reception</b> and works with call forwarding. GlossGenius's page says it is free until <b>Nov 30, 2026</b>, then $50/month (100 minutes and 200 texts, with overage charges). Its pages don't describe a text after a missed call.</p>
+      <p class="aside">Only turn Reception on if the owner understands it becomes paid and agrees to decide before Nov 30. Write the date down for them.</p>
+      <p class="src">Sources: <a href="https://glossgenius.com/client-communication-and-notifications">Client notifications</a> &middot; <a href="https://glossgenius.com/reception">Reception</a> &middot; <a href="https://support.glossgenius.com/en/articles/80-how-to-resubscribe-and-unsubscribe-to-email-text-notifications">Opt-in and STOP*</a> &middot; <a href="https://support.glossgenius.com/en/articles/115-how-to-add-custom-language-to-client-appointment-notifications">Custom language*</a></p>
+    </div>
+
+    <div class="box" id="p-booksy">
+      <h3>Booksy</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Missed-call text: not described</span><span class="chip">Auto-reply: none found</span><span class="chip">Reminders: automatic</span></p>
+      <p>Reminders are automatic: a text 24 hours before, at no cost to the business. Clients who booked in the Booksy app and are logged in get a push notification instead of a text.* Nothing to turn on; just confirm the client's phone number is saved.</p>
+      <p><b>AI Receptionist (beta)</b> answers calls when the owner can't and books the appointment. Setup is by forwarding the business number to a Booksy number, or giving clients that number. When it can't handle a request, it texts the provider a summary. Current providers request access; Booksy says it's free for at least 12 months for the first 500 providers who sign up. Its page doesn't describe texting the caller after a missed call.</p>
+      <p class="aside">Replies to Booksy Message Blasts don't reach the business, so don't tell clients to "reply to this text."</p>
+      <p class="src">Sources: <a href="https://support.booksy.com/hc/en-us/articles/16463854228114-Does-Booksy-send-clients-reminders-of-their-upcoming-appointments">Booksy reminders*</a> &middot; <a href="https://biz.booksy.com/features/ai-receptionist-beta">AI Receptionist (beta)</a></p>
+    </div>
+
+    <div class="box" id="p-fresha">
+      <h3>Fresha</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Missed-call text: not described</span><span class="chip">Auto-reply: AI Concierge add-on</span><span class="chip">Reminders: yes</span></p>
+      <h4>Set up reminders</h4>
+      <ol>
+        <li>Desktop: <b>Marketing &gt; Automations</b> (left panel). Phone: <b>More &gt; Marketing &gt; Messaging &gt; Automations</b>.</li>
+        <li>Open a reminder, then <b>Options &gt; Edit</b>. Set timing under <b>Trigger</b>.</li>
+        <li>Pick channels: email, text, WhatsApp. "Or" tries WhatsApp first and falls back to text.</li>
+      </ol>
+      <p>Fresha says email reminders are always free; text and WhatsApp reminders come out of the messaging balance (a monthly allowance, then paid; see pricing). Up to three reminders per appointment.</p>
+      <p><b>Client Connect</b> (clients message the business from their booking in Fresha) is included with every plan. <b>AI Concierge</b> is a separate add-on that answers calls and can auto-reply to messages; the business can forward its existing number to it. Fresha doesn't describe a text after a missed call.</p>
+      <p class="src">Sources: <a href="https://www.fresha.com/help-center/knowledge-base/calendar/167-send-appointment-reminders">Send appointment reminders</a> &middot; <a href="https://www.fresha.com/help-center/knowledge-base/billing-and-fees/123-manage-your-messaging-balance">Messaging balance*</a> &middot; <a href="https://www.fresha.com/for-business/features/connect">Fresha Connect</a> &middot; <a href="https://www.fresha.com/help-center/knowledge-base/calendar/101702-ai-concierge-overview">AI Concierge overview*</a></p>
+    </div>
+
+    <div class="box" id="p-mindbody">
+      <h3>Mindbody</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Missed-call text: yes (AI Concierge)</span><span class="chip">Reminders: yes, opt-in</span></p>
+      <p>Mindbody's AI Concierge (older name: Messenger[ai]) follows up on missed calls by text. Mindbody says AI Concierge is included in the <b>Ultimate</b> plan; for other plans, ask Mindbody. Basic Messenger does not include the missed-call text.</p>
+      <h4>Turn on the missed-call text*</h4>
+      <ol>
+        <li>In AI Concierge, find the <b>call forwarding number</b> under <b>Phone Settings</b>.</li>
+        <li>Ask the phone company to forward unanswered calls to that number. Do not give the carrier the AI Concierge <i>texting</i> number.</li>
+        <li>Record a greeting that tells callers they'll get a text with booking options.</li>
+        <li>Check <b>Preferences &gt; Missed Call Settings</b> (it can respond to the voicemail's content and offer to rebook a past appointment).</li>
+      </ol>
+      <p>Mindbody says the caller usually gets the text within about a minute, and a client gets at most one missed-call text per 24 hours. Pausing the bot pauses these texts.</p>
+      <h4>Text reminders*</h4>
+      <ol>
+        <li><b>Settings &gt; General &gt; General Setup and Options</b>, expand <b>System Settings</b>, enable <b>Automated Mobile Text Messages</b>, click <b>Update</b>.</li>
+        <li>New client profiles default to <b>email only</b>. Switch them to "Email and Text" under <b>Client Info &gt; Contact &amp; Subscriptions</b>, or clients can text START to the studio's number.</li>
+      </ol>
+      <p class="aside">Mindbody recommends using either Messenger[ai] confirmations or standard reminders, not both, to avoid duplicate texts.</p>
+      <p class="src">Sources: <a href="https://www.mindbodyonline.com/business/ai-concierge">AI Concierge</a> &middot; <a href="https://support.mindbodyonline.com/s/article/How-to-set-up-voicemail-and-call-forwarding-AI-Concierge?language=en_US">Voicemail and call forwarding*</a> &middot; <a href="https://support.mindbodyonline.com/s/article/What-s-the-difference-between-Messenger-and-Messenger-ai?language=en_US">Messenger vs. Messenger[ai]*</a> &middot; <a href="https://support.mindbodyonline.com/s/article/206500408-How-do-I-send-text-messages-to-clients?language=en_US">Send or stop text messages*</a></p>
+    </div>
+
+    <div class="box" id="p-boulevard">
+      <h3>Boulevard</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Missed-call text: no</span><span class="chip">Auto-reply: after-hours texts</span><span class="chip">Reminders: yes</span></p>
+      <p>Boulevard's FAQ says plainly that its AI Receptionist does not send a text after a missed call, because it answers every call instead. Boulevard's Caller ID help also says businesses using Caller ID don't get missed-call alerts in the dashboard.*</p>
+      <h4>After-hours auto-reply (to texts)</h4>
+      <ol>
+        <li><b>Manage &gt; Client Notifications &gt; Auto-responses</b>, or the three-dot menu in <b>Messages</b>.</li>
+        <li>It sends when clients text the location's dedicated number outside the business hours set in Settings. At most one per client per 12 hours.</li>
+      </ol>
+      <h4>Text reminders</h4>
+      <ol>
+        <li><b>Manage &gt; Client Notifications &gt; Appointments</b>. Needs the "Manage client notification settings" permission.</li>
+        <li>The default reminder goes 2 days before (adjustable 1 to 5 days); there's also a same-day reminder.</li>
+      </ol>
+      <p class="aside">Both need a dedicated Boulevard phone number, and Boulevard says usage rates apply to texts. The AI Receptionist is a per-location add-on; Boulevard's FAQ says it's free through November 2026 and billing starts Dec 1, 2026.</p>
+      <p class="src">Sources: <a href="https://support.boulevard.io/en/articles/16105159-ai-receptionist-frequently-asked-questions">AI Receptionist FAQ</a> &middot; <a href="https://support.boulevard.io/en/articles/5941436-messages">Messages</a> &middot; <a href="https://support.boulevard.io/en/articles/8447955-client-notifications">Client notifications</a> &middot; <a href="https://support.boulevard.io/en/articles/5941354-caller-id-for-contact-center">Caller ID*</a></p>
+    </div>
+
+    <div class="box" id="p-acuity">
+      <h3>Acuity Scheduling</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Missed-call text: none found</span><span class="chip">Auto-reply: no</span><span class="chip">Reminders: yes</span></p>
+      <ol>
+        <li>Open the <b>Client Text Messages</b> panel in notification settings.*</li>
+        <li>Turn it on, choose which appointment types use it, set the timing, preview, save. A reminder only sends if its template is on and has at least one appointment type.</li>
+      </ol>
+      <p>One text reminder per appointment. Clients opt in with a checkbox when they book (staff can tick it for a client who agreed). Texts come from a number Acuity assigns, not the business's. If a client replies, they get an automatic message to contact the business another way. Replying STOP opts them out of Acuity texts from every business.</p>
+      <p>Plan: Standard or Premium (older names Growing and Powerhouse), not during a free trial. Acuity says there's no extra fee per text. Custom wording needs a verification step; otherwise the default text is used.</p>
+      <p class="src">Source: <a href="https://help.acuityscheduling.com/hc/en-us/articles/16676915777293-Sending-appointment-reminders-via-text">Sending appointment reminders via text*</a></p>
+    </div>
+
+    <div class="box" id="p-schedulicity">
+      <h3>Schedulicity</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Now Vagaro</span></p>
+      <p>schedulicity.com now redirects to a Vagaro page headed "Schedulicity is now Vagaro," and old Schedulicity help links redirect to Vagaro support. Ask the owner which app they actually log in to today. If it's Vagaro, use the <a href="#p-vagaro">Vagaro</a> section. If they're somehow still on old Schedulicity, its current features are <span class="conf no">Not confirmed</span>.</p>
+      <p class="src">Source: <a href="https://www.vagaro.com/pro/schedulicity">vagaro.com/pro/schedulicity</a></p>
+    </div>
+
+    <div class="box" id="p-zenoti">
+      <h3>Zenoti</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Missed-call text: yes (SmartBot)</span><span class="chip">Reminders: yes</span><span class="conf no">Plan: Not confirmed</span></p>
+      <p>Zenoti's help says that when a call goes unanswered because the store is closed or staff are busy, SmartBot (SMS Bot) texts the caller and helps them book, reschedule, cancel or get answers.</p>
+      <h4>Two ways to set it up*</h4>
+      <ol>
+        <li><b>Call forwarding:</b> Zenoti provides a Twilio number; forward the business number to it.</li>
+        <li><b>On HyperConnect</b> (Zenoti's phone system): <b>Settings &gt; Voice</b>, in the business-hours section check forwarding missed calls to <b>SmartBot</b>, set the number of seconds, save. Repeat for after-hours. Zenoti says SmartBot comes pre-configured with HyperConnect.</li>
+      </ol>
+      <h4>Text reminders*</h4>
+      <p>Turn on SMS (<b>Configurations &gt; Notifications &gt; Email/Text &gt; Activate SMS</b>), edit the <b>Appointment Reminder</b> template, and set timing in the Appointment Book settings. Each text uses SMS credits. Zenoti doesn't say which plans include HyperConnect or SmartBot; ask the owner or Zenoti.</p>
+      <p class="src">Sources: <a href="https://help.zenoti.com/en/zenoti-messaging-and-engagement-tools/smartbot---ai-powered-automation-for-guest-engagement/sms-bot--how-sms-bot-works.html">How SMS Bot works*</a> &middot; <a href="https://help.zenoti.com/en/hyperconnect/hyperconnect-configurations/manage-voice-call-settings.html">HyperConnect voice settings*</a> &middot; <a href="https://help.zenoti.com/en/articles/738339-configure-email-and-text-notifications-for-appointment-reminders">Appointment reminders*</a></p>
+    </div>
+
+  </div>
+
+  <!-- ===================================================== PHONES -->
+  <h2 id="phones">Phones and messaging: what to turn on</h2>
+  <p class="sub">No phone maker or major carrier documents an automatic text to someone whose call you missed. Some business phone apps do.</p>
+
+  <div class="stack">
+
+    <div class="box" id="p-iphone">
+      <h3>iPhone</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Missed-call text: no</span><span class="chip">One-tap reply: yes</span></p>
+      <h4>Best $0 option: Respond with Text (manual, one tap)</h4>
+      <ol>
+        <li><b>Settings &gt; Apps &gt; Phone &gt; Respond with Text</b>.</li>
+        <li>Tap one of the fields under <b>Respond With</b> and type the booking-link message (see <a href="#visit">templates</a>).</li>
+        <li>When a call comes in during a service: tap <b>Message</b> and pick that reply. The call goes to voicemail and the caller gets the text.</li>
+      </ol>
+      <h4>Not recommended: Driving Focus auto-reply</h4>
+      <p><b>Settings &gt; Focus &gt; Driving &gt; Auto-Reply</b> (No One, Recents, Favorites, All Contacts). Apple describes it as replying to people who <i>message</i> you, not to callers, and it silences notifications. It's built for driving. Whether a caller gets it is <span class="conf no">Not confirmed</span>.</p>
+      <p class="aside">Also update the voicemail greeting so it names the booking link (script in the <a href="#visit">setup visit</a> section).</p>
+      <p class="src">Sources: <a href="https://support.apple.com/guide/iphone/answer-or-decline-incoming-calls-iph3c9947bf/ios">Answer or decline incoming calls*</a> &middot; <a href="https://support.apple.com/en-us/108384">Driving Focus</a></p>
+    </div>
+
+    <div class="box" id="p-android">
+      <h3>Android (Google Phone app)</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Missed-call text: no</span><span class="chip">One-tap reply: yes</span></p>
+      <ol>
+        <li>Phone app &gt; <b>More &gt; Settings &gt; Quick responses</b>. Tap a response, edit it to the booking-link message, tap <b>OK</b>.</li>
+        <li>When a call comes in: tap <b>Message</b> and choose that response. Google's help describes this as a tap, not something that happens on its own.</li>
+      </ol>
+      <p>"Take a Message" (Pixel 4 and newer, US and a few other countries) answers missed or declined calls with a greeting and records a message. It doesn't text the caller.</p>
+      <p class="aside">Samsung's and other phone makers' own phone apps were not checked: <span class="conf no">Not confirmed</span>. Look in that phone's call settings during the visit.</p>
+      <p class="src">Sources: <a href="https://support.google.com/phoneapp/answer/2811745?hl=en">Make and receive calls</a> &middot; <a href="https://support.google.com/phoneapp/answer/2895524">Change call settings (Quick responses)</a> &middot; <a href="https://support.google.com/phoneapp/answer/16515613?hl=en">Take a Message*</a></p>
+    </div>
+
+    <div class="box" id="p-carriers">
+      <h3>Verizon, AT&amp;T, T-Mobile business lines</h3>
+      <p class="chips"><span class="conf no">Not confirmed</span><span class="chip">Missed-call text: none found</span></p>
+      <p>None of the three carriers' official pages describe an automatic text to a caller after a missed call.</p>
+      <ul>
+        <li><b>Verizon Business Assistant</b> is a paid AI texting service. It runs on a dedicated "lead number" that, per Verizon's terms, can no longer be used for regular calls and texts (calls to it can be forwarded). No price on the page; its pages don't mention missed calls. Not Path B.</li>
+        <li><b>AT&amp;T Office@Hand</b> keeps records of missed calls and can email the business about them. The caller gets nothing.</li>
+        <li><b>T-Mobile</b> lists a star code to forward unanswered calls to another number. Useful only for sending calls to a service that texts back; it doesn't text by itself.</li>
+      </ul>
+      <p class="aside">Worth one question to the owner's carrier rep during the visit. Mark the answer in the visit log.</p>
+      <p class="src">Sources: <a href="https://www.verizon.com/business/solutions/ai-business-assistant/">Verizon Business Assistant</a> &middot; <a href="https://www.verizon.com/support/business-assistant-legal/">Verizon Business Assistant terms*</a> &middot; <a href="https://www.business.att.com/products/office-at-hand-wireless.html">AT&amp;T Office@Hand*</a> &middot; <a href="https://www.t-mobile.com/support/plans-features/self-service-short-codes">T-Mobile short codes*</a></p>
+    </div>
+
+    <div class="box" id="p-gvoice">
+      <h3>Google Voice (personal and Workspace)</h3>
+      <p class="chips"><span class="conf no">Not confirmed</span><span class="chip">Missed-call text: none found</span></p>
+      <p><b>Personal:</b> Google's help doesn't describe an automatic text after a missed call. You can turn on email alerts for missed calls in Voice settings under Calls.</p>
+      <p><b>Workspace:</b> admins can set up an auto attendant with business hours and a separate after-hours greeting (Voice Standard and Premier). That's for calls, not texts. No SMS auto-reply was found.</p>
+      <p class="aside">Path B use: record a greeting (or after-hours greeting) that tells callers how to book online.</p>
+      <p class="src">Sources: <a href="https://support.google.com/a/users/answer/9310274?hl=en">Voice notifications*</a> &middot; <a href="https://support.google.com/a/answer/9204988">Voice auto attendant*</a></p>
+    </div>
+
+    <div class="box" id="p-quo">
+      <h3>Quo (formerly OpenPhone)</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Missed-call text: yes</span><span class="chip">All plans</span></p>
+      <ol>
+        <li>On the web or desktop app (not the phone app): <b>Settings &gt; Phone Numbers</b>, choose the number.</li>
+        <li>Set business hours first if the owner wants different replies during and after hours.</li>
+        <li>Open the <b>Automations</b> tab, scroll to <b>Auto-Replies</b>, click the missed-call reply, write the message, <b>Save</b>.</li>
+      </ol>
+      <p>Triggers include unanswered calls during business hours, calls after hours, new voicemails and incoming texts. It sends at most once every 3 hours per contact, and skips contacts you recently called or texted. Quo's FAQ says auto-replies are on all plans.</p>
+      <p class="aside">Quo says texting needs A2P 10DLC registration, done by the business through Quo. If their number isn't registered yet, no texts will send.</p>
+      <p class="src">Sources: <a href="https://support.quo.com/core-concepts/messaging/auto-replies">Auto-replies</a> &middot; <a href="https://support.quo.com/core-concepts/ai-automations/overview">AI automations (plan note)</a> &middot; <a href="https://www.quo.com/product/messaging/instant-response">Instant response (registration note)</a></p>
+    </div>
+
+    <div class="box" id="p-grasshopper">
+      <h3>Grasshopper</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Missed-call text: yes (Instant Response)</span></p>
+      <ol>
+        <li>Admin portal: <b>Text management &gt; Instant response</b>. Pick the number, toggle <b>Send instant response</b>.*</li>
+        <li>Type the message (160 characters max), choose who gets it, <b>Save</b>. Phone app: <b>Settings &gt; Instant Response</b>, pick the number, <b>Edit</b>.</li>
+      </ol>
+      <p>Requirements*: an admin sets it up; business texting must be on (no extra fee for Instant Response if the plan includes business texting, otherwise an added fee); the number must finish carrier registration. The default sends only to <b>first-time callers</b>. No text goes out if the caller leaves a voicemail or hangs up before picking an extension.</p>
+      <p class="src">Sources: <a href="https://support.grasshopper.com/help/set-up-an-instant-response-text-on-a-phone-number">Set up instant response*</a> &middot; <a href="https://grasshopper.com/features/instant-response">Instant Response</a></p>
+    </div>
+
+    <div class="box" id="p-ringcentral">
+      <h3>RingCentral</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="conf third">Steps: RingCentral community</span><span class="chip">Missed-call text: build it</span></p>
+      <p>RingCentral's Workflow Builder has a <b>Missed call</b> trigger and a <b>Send SMS</b> action. There's no simple on/off setting; a built-in "auto reply SMS to missed calls" request has been marked Planned since April 2024.</p>
+      <ol>
+        <li>Sign in to Workflow Builder as a Super Admin. Create a company workflow.</li>
+        <li>Choose the extension (not "Myself"). Make one for each user extension and each call queue that can receive calls.</li>
+        <li>Trigger: <b>Missed call</b>. Action: <b>Send SMS</b>.</li>
+        <li>Calls that reach voicemail don't count as missed. Add a <b>Voicemail received</b> workflow too.</li>
+      </ol>
+      <p class="aside">A RingCentral product manager wrote (Jan 2025) that RingCentral removed its missed-call templates "because of the risk it creates for customers": carriers can cut off texting if they decide texts went to people without consent. Keep it to one plain reply. Plan eligibility: <span class="conf no">Not confirmed</span>.</p>
+      <p class="src">Sources: <a href="https://developers.ringcentral.com/automator">Workflow Builder</a> &middot; <a href="https://community.ringcentral.com/workflow-builder-38/how-to-setup-automatic-sms-for-missed-calls-and-voicemails-10379">Community answer (staff)</a> &middot; <a href="https://ideas.ringcentral.com/forums/958493-phone-messaging/suggestions/48017807-auto-reply-sms-to-missed-calls">Feature request status</a></p>
+    </div>
+
+    <div class="box" id="p-dialpad">
+      <h3>Dialpad</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Auto-reply: texts</span><span class="conf no">Missed calls: Not confirmed</span></p>
+      <p>SMS auto-reply answers incoming <i>texts</i>. Personal: <b>Call Handling &amp; Voicemail &gt; SMS Auto-Reply</b>, reply during Do Not Disturb or outside working hours (up to 320 characters). Main line: admins choose Never, Always, open hours or closed hours. Standard messaging rates apply. After a missed call, Dialpad prompts the user to call back or send a message, which is manual.</p>
+      <p class="src">Source: <a href="https://help.dialpad.com/docs/sms-auto-reply-message">SMS auto-reply message*</a></p>
+    </div>
+
+    <div class="box" id="p-gbp">
+      <h3>Google Business Profile</h3>
+      <p class="chips"><span class="conf ok">Confirmed</span><span class="chip">Chat: discontinued</span><span class="chip">Booking link: free</span></p>
+      <p>Google ended Business Profile chat on <b>July 31, 2024</b>. Calls from the profile still work. Eligible profiles can now add "text message" or WhatsApp as a contact option (<b>Edit profile &gt; Contact &gt; Chat</b>), but Google says this is available in select regions; for the US it's <span class="conf no">Not confirmed</span>. Texts go straight to that number. There's no Google auto-reply.</p>
+      <h4>Add the booking link</h4>
+      <ol>
+        <li>On Google Search, select <b>Booking</b>; on Google Maps, <b>Edit profile</b> and the booking option.</li>
+        <li><b>Add link</b>, paste the booking link, <b>Save</b>. Or connect a supported booking provider under <b>Bookings &gt; Get started</b>.</li>
+      </ol>
+      <p class="aside">A community guide (<span class="conf third">Third-party</span>) says a pasted link doesn't create the blue "Book" button; only providers connected through Google do.</p>
+      <p class="src">Sources: <a href="https://support.google.com/business/answer/14919056?hl=en">Changes to chat and call history</a> &middot; <a href="https://support.google.com/business/answer/15013580?hl=en">Chat with customers</a> &middot; <a href="https://support.google.com/business/answer/6218037?hl=en">Manage business links*</a> &middot; <a href="https://support.google.com/business/answer/7475773?hl=en">Bookings through a provider*</a></p>
+    </div>
+
+    <div class="box" id="p-meta">
+      <h3>Instagram and Facebook</h3>
+      <p class="chips"><span class="conf ok">Confirmed*</span><span class="chip">Free</span><span class="chip">Not SMS</span></p>
+      <p><b>Meta Business Suite</b> (Inbox automations) covers Facebook, Messenger and Instagram: an <b>instant reply</b> to someone's first message, an <b>away message</b>, suggested <b>FAQs</b> (up to 5) and keyword replies (desktop only). Open Business Suite, go to <b>Inbox</b>, then the automations settings, and match labels to what's on screen.</p>
+      <p><b>Instagram app FAQs:</b> Messages tab &gt; more actions &gt; <b>Tools &gt; Frequently asked questions</b>, turn on <b>Show Questions</b>, add up to 4 questions with optional automatic answers, save.</p>
+      <p class="aside">These messages stay inside Instagram and Facebook, so phone-carrier texting rules don't apply. Put the booking link in the instant reply.</p>
+      <p class="src">Sources: <a href="https://www.facebook.com/business/help/395965998733706">About automated responses*</a> &middot; <a href="https://www.facebook.com/business/help/318238182723007">Set up Inbox automations*</a> &middot; <a href="https://help.instagram.com/4153704678000867/">Instagram FAQs*</a></p>
+    </div>
+
+  </div>
+
+  <!-- ===================================================== SETUP VISIT -->
+  <h2 id="visit">What Meridian does in a setup visit</h2>
+  <p class="sub">Plan for about an hour. The owner stays in control of every account; Meridian just knows where the switches are.</p>
+
+  <div class="box">
+    <ol class="qs">
+      <li><b>Before:</b> ask the <a href="#start">start-here questions</a>. Read the matching sections and open their sources that day, since menus change.</li>
+      <li><b>Logins:</b> the owner signs in on their own device. Never ask for, type in, or write down their passwords.</li>
+      <li><b>No new charges:</b> don't turn on anything that adds a fee. If a feature is a paid add-on or a free period that turns paid, show the owner the pricing page and let them decide.</li>
+      <li><b>Booking link:</b> copy it from their account and open it on your phone. Check services and times look right.</li>
+      <li><b>Reminders:</b> turn on text reminders and confirmations in the booking tool. Pick the timing with the owner.</li>
+      <li><b>Auto-replies:</b> turn on whatever their tools include (Square Assistant, Boulevard after-hours, Quo or Grasshopper missed-call reply, and so on).</li>
+      <li><b>Personal cell:</b> set Respond with Text or Quick responses with the booking-link message, and update the voicemail greeting.</li>
+      <li><b>Online:</b> add the booking link to Google Business Profile; set the Instagram/Facebook instant reply and FAQs.</li>
+      <li><b>Test everything:</b> call from your phone and let it ring out, text the number, message on Instagram. Check what arrives, how fast, and that the link opens. Turn off anything that misfires.</li>
+      <li><b>Leave a summary:</b> a short list of what was turned on, where it lives, how to turn it off, and any dates that matter (GlossGenius Reception turns paid after Nov 30, 2026; Boulevard AI Receptionist billing starts Dec 1, 2026).</li>
+      <li><b>Follow up in 1 to 2 weeks:</b> ask whether clients mentioned the texts, check for wrong automated answers, and log the result.</li>
+    </ol>
+  </div>
+
+  <div class="grid two" style="margin-top:12px">
+    <div class="box">
+      <h3>Missed-call text (Quo, Grasshopper, etc.)</h3>
+      <p>Keep it under 160 characters including the link. Business name first, no offers.</p>
+      <p class="msg">[Salon]: sorry we missed your call, we're with a client. Book here: [link] or reply and we'll text back soon.</p>
+    </div>
+    <div class="box">
+      <h3>Respond with Text / Quick response</h3>
+      <p>Sent by the owner with one tap while the phone rings.</p>
+      <p class="msg">With a client right now. Book here: [link] or I'll call you back soon. - [Name], [Salon]</p>
+    </div>
+    <div class="box">
+      <h3>Instagram / Facebook instant reply</h3>
+      <p class="msg">Thanks for messaging [Salon]! The fastest way to book is here: [link]. Questions? Leave them here and we'll answer between clients.</p>
+    </div>
+    <div class="box">
+      <h3>Voicemail greeting</h3>
+      <p>Links can't be clicked in a greeting, so say where to find it.</p>
+      <p class="msg">You've reached [Salon]. We're probably with a client. You can book anytime online: search [Salon] on Google or Instagram and tap Book. Or leave a message and we'll call you back today.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== CONSENT -->
+  <h2 id="consent">Consent basics (not legal advice)</h2>
+  <p class="sub">Path B stays on the safe side by sending only replies and reminders. When in doubt, don't send it, and tell the owner to ask someone qualified.</p>
+
+  <div class="box">
+    <ul>
+      <li><b>One reply to someone who just called or messaged</b> is generally treated as answering the customer, not marketing. Industry guidelines (CTIA) call a quick, single reply to a consumer's text "conversational." A text after a <i>call</i> is close to that, but some providers are cautious: RingCentral removed its missed-call templates over consent risk. So: one message, name the business, no promotions.</li>
+      <li><b>Appointment reminders</b> are informational. Clients agree to them when they book, and the booking tools handle opt-in (Acuity and Mindbody ask clients directly). Don't copy client lists into another tool to text them.</li>
+      <li><b>Promotions</b> ("20% off this week", "time to rebook") are marketing. The FCC's consumer guide says commercial texts need written consent. Texas also extended its telephone solicitation law to cover marketing texts starting Sept 1, 2025. Path B setups should not include marketing texts.</li>
+      <li><b>STOP always works.</b> The booking tools add opt-out handling automatically. Don't remove opt-out wording or re-add someone who opted out.</li>
+      <li><b>Carrier registration</b> applies to any business texting number (Quo, Grasshopper, RingCentral). The provider walks the owner through it; it's the business's registration, not Meridian's.</li>
+    </ul>
+    <p class="src">Sources: <a href="https://www.fcc.gov/consumers/guides/stop-unwanted-robocalls-and-texts">FCC: Stop unwanted robocalls and texts*</a> &middot; <a href="https://api.ctia.org/wp-content/uploads/2023/05/230523-CTIA-Messaging-Principles-and-Best-Practices-FINAL.pdf">CTIA Messaging Principles and Best Practices (2023, PDF)*</a> &middot; <a href="https://www.morganlewis.com/pubs/2025/09/texas-telephone-solicitation-law-now-covers-text-messages">Morgan Lewis: Texas law now covers text messages*</a></p>
+  </div>
+
+  <!-- ===================================================== LIMITS -->
+  <h2 id="limits">When Path B isn't enough</h2>
+  <p class="sub">Be upfront with the owner about these gaps. Don't oversell what was set up.</p>
+
+  <div class="box">
+    <ul>
+      <li><b>Their number is a personal cell.</b> Neither iPhone nor Android documents an automatic missed-call text. Respond with Text still needs someone to tap.</li>
+      <li><b>The feature exists but costs extra.</b> GlossGenius Reception (after Nov 30, 2026), Boulevard AI Receptionist (from Dec 1, 2026), Fresha AI Concierge, Vagaro AI, Mindbody AI Concierge outside Ultimate, Verizon Business Assistant. Then it's the owner's decision, not $0.</li>
+      <li><b>"Free" features that bill per text.</b> Fresha (after the monthly allowance), Boulevard (usage rates), Zenoti (SMS credits).</li>
+      <li><b>Replies go nowhere.</b> Reminder texts from shared numbers (Vagaro 89885, Acuity's assigned number, Booksy blasts) don't deliver client replies to the owner.</li>
+      <li><b>Only some callers get a text.</b> Grasshopper's default is first-time callers only; Mindbody sends at most one per 24 hours; Quo at most one per 3 hours.</li>
+    </ul>
+  </div>
+
+  <div class="note">
+    <strong>The other option, pending a decision:</strong> Meridian-run texting
+    through Twilio, sending texts from a number Meridian sets up. It needs US
+    carrier A2P 10DLC registration and has monthly and per-message costs. Avin
+    hasn't decided on it yet. Until he does, don't offer it, quote a price, or
+    promise it. If an owner asks, say: <q>That's something I'm still looking
+    into. For now I can set up what your current tools already do.</q>
+  </div>
+
+  <!-- ===================================================== SOURCES -->
+  <h2 id="sources">Sources, checked Oct 8, 2026</h2>
+  <p class="sub">Every link was opened or searched on Oct 8, 2026. A <b>*</b> means the page's content was checked through search-engine excerpts of that official page, not read in full (most of these block automated reading); open it before relying on it. Prices, plans and menus change.</p>
+
+  <div class="box">
+    <ul class="sources">
+      <li><span class="who">Square:</span> <a href="https://squareup.com/help/us/en/article/6731-get-started-with-square-assistant-on-appointments">Set up and manage Square Assistant</a> &middot; <a href="https://squareup.com/help/us/en/article/6729-customer-confirmations-with-square-appointments">Manage booking notifications and reminders</a> &middot; <a href="https://squareup.com/help/us/en/article/8416-manage-notifications-with-square-messages">Manage notifications for Messages*</a> &middot; <a href="https://squareup.com/us/en/appointments/pricing">Appointments pricing</a></li>
+      <li><span class="who">Vagaro:</span> <a href="https://support.vagaro.com/hc/en-us/articles/115000439594-Send-Notifications-and-Reminders-to-Your-Customers">Send notifications and reminders*</a> &middot; <a href="https://support.vagaro.com/hc/en-us/articles/26168595985179-Is-Connect-by-Vagaro-Free">Is Connect by Vagaro free?*</a> &middot; <a href="https://support.vagaro.com/hc/en-us/articles/31806231306779-Set-Up-A-Chatbot-for-Your-Business-with-Vagaro-AI">Set up a chatbot with Vagaro AI*</a> &middot; <a href="https://www.vagaro.com/pro/pricing">Pricing</a></li>
+      <li><span class="who">Schedulicity:</span> <a href="https://www.vagaro.com/pro/schedulicity">Schedulicity is now Vagaro</a></li>
+      <li><span class="who">GlossGenius:</span> <a href="https://glossgenius.com/client-communication-and-notifications">Client notifications</a> &middot; <a href="https://glossgenius.com/reception">Reception</a> &middot; <a href="https://support.glossgenius.com/en/articles/80-how-to-resubscribe-and-unsubscribe-to-email-text-notifications">Resubscribe and unsubscribe*</a> &middot; <a href="https://support.glossgenius.com/en/articles/115-how-to-add-custom-language-to-client-appointment-notifications">Custom language in notifications*</a> &middot; <a href="https://glossgenius.com/pricing">Pricing</a></li>
+      <li><span class="who">Booksy:</span> <a href="https://support.booksy.com/hc/en-us/articles/16463854228114-Does-Booksy-send-clients-reminders-of-their-upcoming-appointments">Client reminders*</a> &middot; <a href="https://biz.booksy.com/features/ai-receptionist-beta">AI Receptionist (beta)</a> &middot; <a href="https://biz.booksy.com/en-us/pricing">Pricing</a></li>
+      <li><span class="who">Fresha:</span> <a href="https://www.fresha.com/help-center/knowledge-base/calendar/167-send-appointment-reminders">Send appointment reminders</a> &middot; <a href="https://www.fresha.com/help-center/knowledge-base/billing-and-fees/123-manage-your-messaging-balance">Messaging balance*</a> &middot; <a href="https://www.fresha.com/for-business/features/connect">Fresha Connect</a> &middot; <a href="https://www.fresha.com/help-center/knowledge-base/calendar/101702-ai-concierge-overview">AI Concierge overview*</a> &middot; <a href="https://www.fresha.com/pricing">Pricing</a></li>
+      <li><span class="who">Mindbody:</span> <a href="https://www.mindbodyonline.com/business/ai-concierge">AI Concierge</a> &middot; <a href="https://support.mindbodyonline.com/s/article/How-to-set-up-voicemail-and-call-forwarding-AI-Concierge?language=en_US">Voicemail and call forwarding*</a> &middot; <a href="https://support.mindbodyonline.com/s/article/What-s-the-difference-between-Messenger-and-Messenger-ai?language=en_US">Messenger vs. Messenger[ai]*</a> &middot; <a href="https://support.mindbodyonline.com/s/article/206500408-How-do-I-send-text-messages-to-clients?language=en_US">Send or stop text messages*</a> &middot; <a href="https://www.mindbodyonline.com/business/pricing">Pricing</a></li>
+      <li><span class="who">Boulevard:</span> <a href="https://support.boulevard.io/en/articles/16105159-ai-receptionist-frequently-asked-questions">AI Receptionist FAQ</a> &middot; <a href="https://support.boulevard.io/en/articles/5941436-messages">Messages</a> &middot; <a href="https://support.boulevard.io/en/articles/8447955-client-notifications">Client notifications</a> &middot; <a href="https://support.boulevard.io/en/articles/5941354-caller-id-for-contact-center">Caller ID*</a> &middot; <a href="https://www.joinblvd.com/pricing">Pricing</a></li>
+      <li><span class="who">Acuity:</span> <a href="https://help.acuityscheduling.com/hc/en-us/articles/16676915777293-Sending-appointment-reminders-via-text">Sending appointment reminders via text*</a> &middot; <a href="https://acuityscheduling.com/pricing">Pricing</a></li>
+      <li><span class="who">Zenoti:</span> <a href="https://help.zenoti.com/en/zenoti-messaging-and-engagement-tools/smartbot---ai-powered-automation-for-guest-engagement/sms-bot--how-sms-bot-works.html">How SMS Bot works*</a> &middot; <a href="https://help.zenoti.com/en/hyperconnect/hyperconnect-configurations/manage-voice-call-settings.html">HyperConnect voice settings*</a> &middot; <a href="https://help.zenoti.com/en/articles/738339-configure-email-and-text-notifications-for-appointment-reminders">Appointment reminder notifications*</a> &middot; <a href="https://www.zenoti.com/pricing-zenoti">Pricing</a></li>
+      <li><span class="who">Apple:</span> <a href="https://support.apple.com/guide/iphone/answer-or-decline-incoming-calls-iph3c9947bf/ios">Answer or decline incoming calls*</a> &middot; <a href="https://support.apple.com/en-us/108384">Driving Focus</a></li>
+      <li><span class="who">Google Phone app:</span> <a href="https://support.google.com/phoneapp/answer/2811745?hl=en">Make and receive calls</a> &middot; <a href="https://support.google.com/phoneapp/answer/2895524">Change call settings</a> &middot; <a href="https://support.google.com/phoneapp/answer/16515613?hl=en">Take a Message*</a></li>
+      <li><span class="who">Google Voice:</span> <a href="https://support.google.com/a/users/answer/9310274?hl=en">Voice notifications*</a> &middot; <a href="https://support.google.com/a/answer/9204988">Auto attendant*</a></li>
+      <li><span class="who">Carriers:</span> <a href="https://www.verizon.com/business/solutions/ai-business-assistant/">Verizon Business Assistant</a> &middot; <a href="https://www.verizon.com/support/business-assistant-user-guide/">VBA user guide</a> &middot; <a href="https://www.verizon.com/support/business-assistant-legal/">VBA terms*</a> &middot; <a href="https://www.business.att.com/products/office-at-hand-wireless.html">AT&amp;T Office@Hand*</a> &middot; <a href="https://www.t-mobile.com/support/plans-features/self-service-short-codes">T-Mobile short codes*</a></li>
+      <li><span class="who">RingCentral:</span> <a href="https://developers.ringcentral.com/automator">Workflow Builder</a> &middot; <a href="https://community.ringcentral.com/workflow-builder-38/how-to-setup-automatic-sms-for-missed-calls-and-voicemails-10379">Community answer, Jan 28, 2025</a> &middot; <a href="https://ideas.ringcentral.com/forums/958493-phone-messaging/suggestions/48017807-auto-reply-sms-to-missed-calls">Feature request</a> &middot; <a href="https://www.ringcentral.com/office/plansandpricing.html">Pricing</a></li>
+      <li><span class="who">Grasshopper:</span> <a href="https://support.grasshopper.com/help/set-up-an-instant-response-text-on-a-phone-number">Set up instant response*</a> &middot; <a href="https://grasshopper.com/features/instant-response">Instant Response</a> &middot; <a href="https://grasshopper.com/pricing/">Pricing</a></li>
+      <li><span class="who">Quo:</span> <a href="https://support.quo.com/core-concepts/messaging/auto-replies">Auto-replies</a> &middot; <a href="https://support.quo.com/core-concepts/ai-automations/overview">AI automations</a> &middot; <a href="https://www.quo.com/product/messaging/instant-response">Instant response</a> &middot; <a href="https://www.quo.com/pricing">Pricing</a></li>
+      <li><span class="who">Dialpad:</span> <a href="https://help.dialpad.com/docs/sms-auto-reply-message">SMS auto-reply message*</a> &middot; <a href="https://www.dialpad.com/pricing/">Pricing</a></li>
+      <li><span class="who">Google Business Profile:</span> <a href="https://support.google.com/business/answer/14919056?hl=en">Changes to chat and call history</a> &middot; <a href="https://support.google.com/business/answer/15013580?hl=en">Chat with customers</a> &middot; <a href="https://support.google.com/business/answer/6218037?hl=en">Manage business links*</a> &middot; <a href="https://support.google.com/business/answer/7475773?hl=en">Bookings through a provider*</a></li>
+      <li><span class="who">Meta:</span> <a href="https://www.facebook.com/business/help/395965998733706">Automated responses in Business Suite*</a> &middot; <a href="https://www.facebook.com/business/help/318238182723007">Set up Inbox automations*</a> &middot; <a href="https://help.instagram.com/4153704678000867/">Instagram FAQs*</a></li>
+      <li><span class="who">Consent:</span> <a href="https://www.fcc.gov/consumers/guides/stop-unwanted-robocalls-and-texts">FCC consumer guide*</a> &middot; <a href="https://api.ctia.org/wp-content/uploads/2023/05/230523-CTIA-Messaging-Principles-and-Best-Practices-FINAL.pdf">CTIA Messaging Principles (May 2023)*</a> &middot; <a href="https://www.morganlewis.com/pubs/2025/09/texas-telephone-solicitation-law-now-covers-text-messages">Morgan Lewis on Texas SB 140*</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    Internal &middot; <code>noindex</code> &middot; Research checked Oct 8, 2026.
+    Re-check a platform's section before each visit. Back to
+    <a href="/tools">/tools</a>.
+  </footer>
+
+</div>
+
+</body>
+</html>
