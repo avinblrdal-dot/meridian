@@ -194,10 +194,13 @@ window.MERIDIAN_CHAT_CONFIG = {
          key server-side. Takes about 5 minutes to deploy.
      ------------------------------------------------------------------ */
   ai: {
-    enabled: false,
+    // On for the demo salon only. Meridian's own site stays answers-only.
+    // The key is NOT here: it lives in Vercel, behind /api/chat. Until a key
+    // is set there, every answer quietly falls back to the written FAQs.
+    enabled: true,
 
-    // 'gemini' (recommended) or 'groq'
-    provider: 'gemini',
+    // Ignored when proxyUrl is set; the server picks Groq, then Gemini.
+    provider: 'groq',
 
     // LOCAL DEMOS ONLY. Never on a public site — see the warning above.
     apiKey: '',
@@ -205,7 +208,7 @@ window.MERIDIAN_CHAT_CONFIG = {
     // PRODUCTION. Your deployed proxy endpoint, e.g.
     // 'https://your-project.vercel.app/api/chat'
     // When set, this is used and apiKey is ignored entirely.
-    proxyUrl: '',
+    proxyUrl: 'https://meridianaiservices.vercel.app/api/chat',
 
     // Leave blank to use the provider's sensible default.
     model: '',
