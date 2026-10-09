@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — One-Pager</title>
+<meta name="description" content="Printable one-page leave-behind: the four fixes, how it works, and a QR code to the 2-minute diagnostic.">
+<link rel="icon" type="image/png" href="/embed/meridian-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     ONE-PAGER — internal, noindex. Served at /tools/one-pager.
+     A single US Letter leave-behind. The sheet below is built at
+     real print size (inches and points), and shrunk to fit on a
+     phone screen. Wording is copied from the live site.
+     ============================================================ */
+  :root {
+    --gold: #B88C29;
+    --gold-deep: #96701E;
+    --gold-soft: #F3E9D2;
+    --navy: #1B2233;
+    --navy-soft: #2C3448;
+    --offwhite: #FBFAF7;
+    --cream: #F6F2EA;
+    --ink-soft: #4A5163;
+    --line: #E9E4DA;
+    --font-display: "Bricolage Grotesque", Georgia, serif;
+    --font-body: "Inter", -apple-system, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); background: var(--offwhite); color: var(--navy);
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 80px; }
+
+  header { background: var(--navy); color: #fff; padding: 34px 16px 30px; margin-bottom: 40px; }
+  .header-inner { max-width: 880px; margin: 0 auto; }
+  .brandline { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
+  .brandline a { display: flex; align-items: center; gap: 11px; color: #fff; text-decoration: none; }
+  .brandline span.name { font-family: var(--font-display); font-weight: 600; font-size: 1.28rem; letter-spacing: 0.01em; }
+  .pill {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold);
+    border: 1px solid rgba(184, 140, 41, 0.45); border-radius: 100px; padding: 3px 11px; margin-left: 4px;
+  }
+  header h1 {
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(1.7rem, 4.4vw, 2.3rem);
+    line-height: 1.15; letter-spacing: -0.015em; margin-bottom: 10px;
+  }
+  header p { color: rgba(255,255,255,0.72); font-size: 1rem; max-width: 60ch; }
+
+  .note {
+    background: var(--cream); border-left: 3px solid var(--gold); border-radius: 0 9px 9px 0;
+    padding: 14px 17px; font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 18px;
+  }
+  .note strong { color: var(--navy); font-weight: 600; }
+  .warn { background: #FBEAEA; border-left-color: #98413F; }
+  .warn strong { color: #7A2F2D; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; font: 600 0.95rem var(--font-body);
+    background: var(--gold); color: var(--navy); border: 0; border-radius: 100px; padding: 12px 22px;
+    cursor: pointer; text-decoration: none;
+  }
+  .btn:hover { background: var(--gold-deep); color: #fff; }
+  .aside { color: var(--ink-soft); font-size: 0.86rem; }
+
+  /* ---- Settings ---- */
+  .settings { display: grid; gap: 12px; margin-bottom: 14px; }
+  @media (min-width: 620px) { .settings { grid-template-columns: 1fr 1fr; } }
+  .settings label { display: block; font-weight: 600; font-size: 0.82rem; margin-bottom: 5px; }
+  .settings input {
+    width: 100%; font: 0.95rem var(--font-body); color: var(--navy); padding: 10px 12px;
+    border: 1.5px solid var(--line); border-radius: 9px; background: #fff;
+  }
+  .settings input:focus { outline: none; border-color: var(--gold); }
+  .url-line { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-soft); margin: 4px 0 18px; word-break: break-all; }
+  .url-line b { color: var(--navy); font-weight: 500; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-bottom: 22px; }
+  .actions .aside { max-width: 52ch; }
+
+  code {
+    font-family: var(--font-mono); font-size: 0.8em; background: var(--cream); border: 1px solid var(--line);
+    border-radius: 5px; padding: 1px 6px; color: var(--navy-soft);
+  }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.83rem; }
+  footer a { color: var(--gold-deep); }
+
+  /* ---- On-screen preview: real-size paper, scaled to fit ---- */
+  .stage { position: relative; width: 100%; overflow: hidden; }
+  .paper {
+    width: 8.5in; height: 11in; padding: 0.5in; background: #fff;
+    box-shadow: 0 10px 34px rgba(27,34,51,0.14); border-radius: 4px;
+    transform-origin: top left;
+  }
+
+  /* ============================================================
+     THE SHEET: 7.5in x 9.9in, the printable area of a Letter
+     page with half-inch margins (less a hair, so it never spills
+     onto a second page).
+     ============================================================ */
+  .sheet {
+    width: 7.5in; height: 9.9in; overflow: hidden; display: flex; flex-direction: column;
+    color: var(--navy); font-family: var(--font-body); line-height: 1.45;
+  }
+  .sheet .k {
+    font-family: var(--font-mono); font-size: 7.2pt; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold-deep);
+  }
+
+  .op-top { display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.13in; border-bottom: 1.5px solid var(--gold); }
+  .op-brand { display: flex; align-items: center; gap: 0.09in; }
+  .op-brand img { width: 0.3in; height: auto; display: block; }
+  .op-brand span { font-family: var(--font-display); font-weight: 600; font-size: 17pt; letter-spacing: 0.01em; }
+
+  .op-hero { padding: 0.22in 0 0.17in; }
+  .op-hero .k { display: block; margin-bottom: 0.07in; }
+  .op-hero h1 {
+    font-family: var(--font-display); font-weight: 700; font-size: 29pt; line-height: 1.04;
+    letter-spacing: -0.02em; margin-bottom: 0.11in;
+  }
+  .op-hero h1 em { font-style: normal; color: var(--gold-deep); }
+  .op-hero p { font-size: 10.5pt; line-height: 1.5; color: var(--ink-soft); max-width: 6.6in; }
+
+  .op-h { display: flex; align-items: baseline; gap: 0.14in; margin-bottom: 0.11in; }
+  .op-h h2 { font-family: var(--font-display); font-weight: 600; font-size: 14.5pt; letter-spacing: -0.01em; line-height: 1.2; }
+
+  .op-fixes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; }
+  .fix { display: grid; grid-template-columns: 0.4in 1fr; gap: 0.13in; align-items: start; border: 1px solid var(--line); border-radius: 9px; padding: 0.11in 0.15in; }
+  .fix .ic { width: 0.4in; height: 0.4in; border-radius: 50%; background: var(--gold-soft); color: var(--gold-deep); display: grid; place-items: center; }
+  .fix .ic svg { width: 0.23in; height: 0.23in; display: block; }
+  .fix h3 { font-family: var(--font-display); font-weight: 600; font-size: 11.5pt; line-height: 1.25; margin: 0.02in 0 0.03in; }
+  .fix p { font-size: 9.2pt; line-height: 1.45; color: var(--ink-soft); }
+  .op-close { font-size: 9.2pt; color: var(--ink-soft); margin-top: 0.08in; }
+
+  .op-how { margin-top: 0.19in; }
+  .op-steps { display: grid; grid-template-columns: 1fr 0.2in 1fr 0.2in 1fr; align-items: start; }
+  .st { border-top: 2px solid var(--gold); padding-top: 0.1in; }
+  .st.opt { border-top-style: dashed; }
+  .st h3 { font-family: var(--font-display); font-weight: 600; font-size: 11.5pt; line-height: 1.25; margin-top: 0.04in; }
+  .st .price { font-family: var(--font-mono); font-size: 7.4pt; letter-spacing: 0.06em; text-transform: uppercase; color: var(--navy-soft); margin: 0.03in 0 0.05in; }
+  .st .price b { color: var(--gold-deep); font-weight: 500; }
+  .st p { font-size: 9pt; line-height: 1.45; color: var(--ink-soft); }
+  .arrow { color: var(--gold); display: grid; place-items: center; padding-top: 0.32in; }
+  .arrow svg { width: 0.15in; height: 0.15in; }
+
+  .op-who { display: flex; flex-wrap: wrap; align-items: center; gap: 0.06in 0.16in; margin-top: 0.16in; padding-top: 0.12in; border-top: 1px solid var(--line); }
+  .op-who h3 { font-family: var(--font-display); font-weight: 600; font-size: 10.5pt; line-height: 1.25; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.05in; }
+  .tags span { font-size: 8.4pt; border: 1px solid var(--line); background: var(--offwhite); border-radius: 100px; padding: 0.02in 0.1in; color: var(--navy-soft); }
+
+  .op-cta {
+    margin-top: auto; display: grid; grid-template-columns: 1.35in 1fr; gap: 0.26in; align-items: center;
+    background: var(--cream); border: 1px solid var(--line); border-radius: 12px; padding: 0.2in 0.24in;
+  }
+  .op-cta .qr { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 0.06in; }
+  .op-cta .qr svg { width: 100%; height: auto; display: block; }
+  .op-cta .scan { font-family: var(--font-mono); font-size: 6.6pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-deep); text-align: center; margin-top: 0.06in; }
+  .op-cta h2 { font-family: var(--font-display); font-weight: 700; font-size: 17pt; line-height: 1.15; letter-spacing: -0.01em; margin: 0.06in 0 0.08in; }
+  .op-cta p { font-size: 9.6pt; line-height: 1.5; color: var(--ink-soft); }
+  .op-cta .who { margin-top: 0.11in; padding-top: 0.09in; border-top: 1px solid rgba(184,140,41,0.35); font-size: 9.4pt; line-height: 1.5; color: var(--navy-soft); }
+  .op-cta .who b { color: var(--navy); font-weight: 600; }
+  .op-cta .who .site { font-family: var(--font-mono); font-size: 8.4pt; color: var(--gold-deep); }
+
+  /* ---- Print: only the sheet, exactly one page ---- */
+  @page { size: letter portrait; margin: 0.5in; }
+  @media print {
+    html, body { background: #fff; }
+    header, footer, .wrap > *:not(.stage) { display: none !important; }
+    .wrap { max-width: none; padding: 0; margin: 0; }
+    .stage { height: auto !important; overflow: visible; }
+    .paper { width: auto; height: auto; padding: 0; box-shadow: none; border-radius: 0; transform: none !important; }
+    .sheet { break-inside: avoid; page-break-inside: avoid; page-break-after: avoid; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brandline">
+      <a href="/tools"><img src="/embed/meridian-logo.png" alt="" width="20" height="22"><span class="name">Meridian</span></a>
+      <span class="pill">Internal</span>
+    </div>
+    <h1>One-page leave-behind</h1>
+    <p>
+      A printable flyer for owners who want something to read later: the four
+      fixes, how it works, and a QR code to the 2-minute diagnostic. Fits on
+      one US Letter page.
+    </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="note warn" id="hostWarn" hidden>
+    <strong>Wrong address for printing.</strong> <span id="hostWarnText"></span>
+  </div>
+
+  <div class="settings">
+    <div>
+      <label for="setEmail">Email on the flyer (optional)</label>
+      <input id="setEmail" type="email" placeholder="hello@yourdomain.com" autocomplete="off">
+    </div>
+    <div>
+      <label for="setPhone">Phone on the flyer (optional)</label>
+      <input id="setPhone" type="tel" placeholder="(469) 555-0123" autocomplete="off">
+    </div>
+  </div>
+  <p class="url-line">QR code opens: <b id="qrUrl"></b></p>
+
+  <div class="actions">
+    <button class="btn" type="button" onclick="window.print()">Print the one-pager</button>
+    <p class="aside">
+      Print at <b>100% / actual size</b> (not "fit to page") on plain letter
+      paper, with background graphics on. Scan the QR code from the preview
+      with your phone before printing a batch.
+    </p>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="paper" id="paper">
+      <div class="sheet" id="sheet">
+
+        <div class="op-top">
+          <div class="op-brand"><img src="/assets/meridian-logo.png" alt=""><span>Meridian</span></div>
+          <div class="k">Hands-on, local: Frisco / DFW</div>
+        </div>
+
+        <div class="op-hero">
+          <h1>Get your <em>time back.</em><br>Let <em>Meridian</em> handle the rest.</h1>
+          <p>We help local salons, spas, and studios stop losing hours, and bookings, to no-shows, missed calls, and repetitive questions. One practical AI fix, built for your business and taught to your team.</p>
+        </div>
+
+        <div class="op-fix-wrap">
+          <div class="op-h"><span class="k">What we build</span><h2>Every business leaks time differently.</h2></div>
+          <div class="op-fixes">
+            <div class="fix">
+              <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M9.5 14.5l1.8 1.8 3.2-3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <div><h3>Fewer no-shows</h3><p>Automated reminders and one-tap rebooking that keep your chairs full.</p></div>
+            </div>
+            <div class="fix">
+              <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5l4-1 2 5-2.5 1.5a12 12 0 006 6L15 15l5 2-1 4a2 2 0 01-2 1.5A16 16 0 013 8 2 2 0 014 5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>
+              <div><h3>No more missed bookings</h3><p>Instant text-back when a call goes unanswered, so the booking still lands.</p></div>
+            </div>
+            <div class="fix">
+              <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.5 8.5 0 01-11.9 7.8L4 21l1.7-5.1A8.5 8.5 0 1121 11.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="9" cy="11.5" r="1" fill="currentColor"/><circle cx="12.5" cy="11.5" r="1" fill="currentColor"/><circle cx="16" cy="11.5" r="1" fill="currentColor"/></svg></span>
+              <div><h3>Your front desk, freed up</h3><p>An assistant that handles the same questions on repeat, across calls, texts, and DMs.</p></div>
+            </div>
+            <div class="fix">
+              <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8-4.3-4.1 5.9-.9L12 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+              <div><h3>A stronger reputation</h3><p>Faster review replies and a simple system to earn more of them.</p></div>
+            </div>
+          </div>
+          <p class="op-close">These are starting points, not a menu. Your Audit tells us what you actually need.</p>
+        </div>
+
+        <div class="op-how">
+          <div class="op-h"><span class="k">How it works</span><h2>One method. Built around your business.</h2></div>
+          <div class="op-steps">
+            <div class="st">
+              <span class="k">Step 1</span>
+              <h3>AI Opportunity Audit</h3>
+              <div class="price"><b>Free</b> &middot; No cost, no obligation</div>
+              <p>A focused session to find your biggest opportunity. No cost, and no obligation to go further.</p>
+            </div>
+            <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="st">
+              <span class="k">Step 2</span>
+              <h3>Build &amp; Setup</h3>
+              <div class="price">One-time &middot; <b>Priced to scope</b></div>
+              <p>A one-time project to build and install your solution, hands-on and priced to scope.</p>
+            </div>
+            <div class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="st opt">
+              <span class="k">Optional</span>
+              <h3>Ongoing Support</h3>
+              <div class="price">Monthly &middot; <b>Priced to scope</b></div>
+              <p>A small monthly plan to keep things running and improving over time. Entirely optional.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="op-who">
+          <h3>Built for owner-run studios, not enterprise.</h3>
+          <div class="tags"><span>Salons</span><span>Barbershops</span><span>Nail &amp; spa studios</span><span>Fitness studios</span><span>Yoga &amp; dance</span></div>
+        </div>
+
+        <div class="op-cta">
+          <div>
+            <div class="qr" id="qr"></div>
+            <div class="scan">Scan to start</div>
+          </div>
+          <div>
+            <span class="k">Free &middot; No obligation</span>
+            <h2>Book your free AI Opportunity Audit.</h2>
+            <p>Not sure where to start? Scan for the 2-minute diagnostic: seven quick questions, then the one fix we'd start with, and why. If you don't need us, it'll say so.</p>
+            <div class="who" id="who"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Internal &middot; <code>noindex</code> &middot; linked only from
+    <a href="/tools">/tools</a>. Wording matches the live site. QR codes by
+    qrcode-generator (MIT, Kazuhiko Arase).
+  </footer>
+
+</div>
+
+<script src="/js/vendor/qrcode-generator.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (id) { return document.getElementById(id); };
+  var KEY = "meridian.onepager.v1";
+  var OUTREACH_KEY = "meridian.outreach.card.v1";   // reuse the card's contact details as a starting point
+  var SRC = "flyer";
+
+  /* ---- Remember the contact fields on this device ---- */
+  function load(k) { try { return JSON.parse(localStorage.getItem(k)) || null; } catch (e) { return null; } }
+  function save(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) { /* private window: fine */ } }
+  var saved = load(KEY) || load(OUTREACH_KEY) || {};
+  if (saved.email) $("setEmail").value = saved.email;
+  if (saved.phone) $("setPhone").value = saved.phone;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  /** QR as a crisp SVG path: scales to any print size without blurring. Same as /tools/outreach. */
+  function qrSvg(text) {
+    var qr = qrcode(0, "M");
+    qr.addData(text);
+    qr.make();
+    var n = qr.getModuleCount(), d = "";
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += "M" + c + " " + r + "h1v1h-1z";
+    return '<svg viewBox="-2 -2 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR code">' +
+      '<rect x="-2" y="-2" width="' + (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path d="' + d + '" fill="#1B2233"/></svg>';
+  }
+
+  var url = location.origin + "/diagnostic?src=" + SRC;
+  $("qrUrl").textContent = url;
+  $("qr").innerHTML = qrSvg(url);
+
+  function render() {
+    var email = $("setEmail").value.trim();
+    var phone = $("setPhone").value.trim();
+    save({ email: email, phone: phone });
+    var contact = [email, phone].filter(Boolean).map(esc);
+    contact.push('<span class="site">' + esc(location.host) + "</span>");
+    $("who").innerHTML =
+      "<b>Avin</b>, Founder &middot; Frisco / Dallas&ndash;Fort Worth, TX<br>" +
+      contact.join(" &middot; ");
+  }
+
+  /* ---- Fit the real-size sheet to the screen ---- */
+  function fit() {
+    var stage = $("stage"), paper = $("paper");
+    paper.style.transform = "";
+    var s = Math.min(1, stage.clientWidth / paper.offsetWidth);
+    paper.style.transform = s < 1 ? "scale(" + s + ")" : "";
+    stage.style.height = Math.ceil(paper.offsetHeight * s) + "px";
+  }
+
+  /* A flyer that points at localhost or a login-protected preview is
+     useless the moment it leaves the house. Same check as /tools/outreach. */
+  var h = location.hostname;
+  if (h === "localhost" || h === "127.0.0.1" || /\.local$/.test(h)) {
+    $("hostWarn").hidden = false;
+    $("hostWarnText").textContent = "You're on " + location.host + ", which only works on this computer. Open this page on the live site before printing.";
+  } else if (/-[a-z0-9]{9}-[a-z0-9-]+\.vercel\.app$/.test(h)) {
+    $("hostWarn").hidden = false;
+    $("hostWarnText").textContent = "This looks like a one-off Vercel preview address, which can ask for a login. Open this page on the main site address (or your own domain) before printing.";
+  }
+
+  ["setEmail", "setPhone"].forEach(function (id) { $(id).addEventListener("input", render); });
+  window.addEventListener("resize", fit);
+  window.addEventListener("load", fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  render();
+  fit();
+})();
+</script>
+
+</body>
+</html>

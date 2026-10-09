@@ -502,7 +502,9 @@
         scroll-behavior: smooth;
       }
 
-      .msg { max-width: 84%; font-size: 14.5px; line-height: 1.5; }
+      /* overflow-wrap: a full URL in an answer is one unbreakable "word"
+         and would otherwise run straight out of the bubble. */
+      .msg { max-width: 84%; font-size: 14.5px; line-height: 1.5; overflow-wrap: break-word; }
       .msg.bot {
         align-self: flex-start;
         background: #fff; border: 1px solid #E9E4DA;

@@ -27,10 +27,12 @@ window.MERIDIAN_CHAT_CONFIG = {
     // later, put it here and swap the wording back.
     phone: '',
 
-    // Used by {booking_link}. Left as the on-page anchor; no answer below
-    // uses it, because a bare "#contact" reads badly in a sentence. Once
-    // there's a real domain or a Calendly link, put it here.
-    bookingLink: '#contact',
+    // Used by {booking_link}, and handed to the AI as the booking link if
+    // AI mode is ever turned on. A full URL, because the widget only turns
+    // full http(s) URLs into links. No answer below uses it yet: they say
+    // "the form at the bottom of this page", which reads better on the page
+    // itself. If there's a Calendly link later, put it here.
+    bookingLink: 'https://meridianaiservices.vercel.app/#contact',
 
     address: 'Frisco / Dallas-Fort Worth, TX',
   },
@@ -77,13 +79,14 @@ window.MERIDIAN_CHAT_CONFIG = {
       id: 'pricing',
       keywords: ['price', 'pricing', 'cost', 'how much', 'expensive', 'cheap',
                  'rate', 'rates', 'fee', 'quote', 'budget', 'afford', 'payment',
-                 'pay', 'charge', 'charges', 'do you charge', 'invoice'],
+                 'pay', 'charge', 'charges', 'do you charge', 'invoice',
+                 'free', 'is it free', 'audit free', 'free audit', 'no cost'],
       answer:
-        "There are three steps: a free Audit to find the opportunity, a " +
-        "one-time Build & Setup priced to scope, and an optional monthly plan " +
-        "if you want ongoing support. We price each to the business rather " +
-        "than publishing a number, so the intro call is free and there's no " +
-        "pressure on it.",
+        "The AI Opportunity Audit is free, with no obligation to go further. " +
+        "After that, a one-time Build & Setup is priced to scope, and the " +
+        "monthly support plan is optional. We don't publish prices for those " +
+        "because each one is priced to the business, so ask on the free intro " +
+        "call - there's no pressure on it.",
     },
     {
       id: 'process',
@@ -91,9 +94,9 @@ window.MERIDIAN_CHAT_CONFIG = {
                  'method', 'what happens', 'audit', 'timeline', 'how long',
                  'take', 'setup', 'install'],
       answer:
-        "Four steps: an AI Opportunity Audit to find the leak, a custom build " +
-        "and setup we install ourselves, training for you and your staff, and " +
-        "a before/after report so you can see what actually changed.",
+        "Four steps: a free AI Opportunity Audit to find the leak, a custom " +
+        "build and setup we install ourselves, training for you and your " +
+        "staff, and a before/after report so you can see what actually changed.",
     },
     {
       id: 'who',
@@ -154,7 +157,8 @@ window.MERIDIAN_CHAT_CONFIG = {
       keywords: ['contact', 'get started', 'get in touch', 'start', 'book',
                  'booking', 'intro call', 'book a call', 'free call', 'talk',
                  'speak', 'reach', 'email', 'sign up', 'next step', 'meeting',
-                 'consultation'],
+                 'consultation', 'free consultation', 'phone number',
+                 'call you', 'need from me', 'what do you need'],
       answer:
         "Fill in the form at the bottom of this page - your name, your " +
         "business, and what's eating your week. We'll set up a free intro " +
@@ -172,8 +176,8 @@ window.MERIDIAN_CHAT_CONFIG = {
     {
       id: 'commitment',
       keywords: ['contract', 'commit', 'commitment', 'lock in', 'monthly',
-                 'subscription', 'ongoing', 'cancel anytime', 'obligation',
-                 'risk'],
+                 'subscription', 'ongoing', 'cancel anytime', 'can i cancel',
+                 'obligation', 'risk'],
       answer:
         "The monthly support plan is entirely optional - the Audit and the " +
         "build stand on their own. Start small, see whether it's working, and " +
@@ -197,6 +201,25 @@ window.MERIDIAN_CHAT_CONFIG = {
         "but the same approach extends to other local service businesses - " +
         "home-service trades especially, where a missed call is a missed job. " +
         "Ask on the call.",
+    },
+    {
+      // For visitors who don't know what they need yet. Kept LAST on
+      // purpose: the matcher breaks ties in list order, so an existing
+      // answer wins any tie. 'sure' / 'unsure' are single words (3 points,
+      // same as any other single keyword) rather than the phrase "not sure"
+      // (6 points), so "not sure about pricing" still gets the pricing
+      // answer while a bare "not sure" lands here.
+      id: 'unsure',
+      keywords: ['which service', 'what do i need', 'what i need',
+                 'where do i start', 'where should i start', 'where to start',
+                 'sure', 'unsure', 'quiz', 'diagnostic', 'recommend',
+                 'help me choose', 'help me decide'],
+      answer:
+        "Try the 2-minute diagnostic at " +
+        "https://meridianaiservices.vercel.app/diagnostic - seven quick " +
+        "questions about how your business runs, and it shows the one fix " +
+        "we'd start with, and why. Or book the free Audit and we'll work it " +
+        "out with you.",
     },
   ],
 

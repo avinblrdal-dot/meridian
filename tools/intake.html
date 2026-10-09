@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — Client Intake</title>
+<meta name="description" content="Client onboarding questionnaire: everything needed to set up the chat assistant, missed-call text, reminders and reviews.">
+<link rel="icon" type="image/png" href="/embed/meridian-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     CLIENT INTAKE — internal, noindex. Served at /tools/intake.
+     Fill it in with the owner; answers stay in this browser.
+     Every "ASK THEM" in /embed/clients/_TEMPLATE.js and every
+     variable the missed-call text uses has a field here.
+     Wording below is written to the owner, since they may fill
+     in the printed copy themselves.
+     ============================================================ */
+  :root {
+    --gold: #B88C29;
+    --gold-deep: #96701E;
+    --gold-soft: #F3E9D2;
+    --navy: #1B2233;
+    --navy-soft: #2C3448;
+    --offwhite: #FBFAF7;
+    --cream: #F6F2EA;
+    --ink-soft: #4A5163;
+    --line: #E9E4DA;
+    --rule: #C9C2B3;
+    --font-display: "Bricolage Grotesque", Georgia, serif;
+    --font-body: "Inter", -apple-system, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body); background: var(--offwhite); color: var(--navy);
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 120px; }
+
+  header { background: var(--navy); color: #fff; padding: 34px 16px 30px; margin-bottom: 40px; }
+  .header-inner { max-width: 880px; margin: 0 auto; }
+  .brandline { display: flex; align-items: center; gap: 11px; margin-bottom: 18px; }
+  .brandline a { display: flex; align-items: center; gap: 11px; color: #fff; text-decoration: none; }
+  .brandline span.name { font-family: var(--font-display); font-weight: 600; font-size: 1.28rem; letter-spacing: 0.01em; }
+  .pill {
+    display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold);
+    border: 1px solid rgba(184, 140, 41, 0.45); border-radius: 100px; padding: 3px 11px; margin-left: 4px;
+  }
+  header h1 {
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(1.7rem, 4.4vw, 2.3rem);
+    line-height: 1.15; letter-spacing: -0.015em; margin-bottom: 10px;
+  }
+  header p { color: rgba(255,255,255,0.72); font-size: 1rem; max-width: 60ch; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .jump a {
+    font-size: 0.82rem; color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 100px; padding: 5px 13px;
+  }
+  .jump a:hover { border-color: var(--gold); color: var(--gold); }
+
+  h2 {
+    font-family: var(--font-display); font-weight: 600; font-size: 1.16rem; letter-spacing: -0.005em;
+    margin: 44px 0 4px; padding-bottom: 9px; border-bottom: 1px solid var(--line); scroll-margin-top: 20px;
+  }
+  h2 .num { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; color: var(--gold-deep); margin-right: 8px; letter-spacing: 0.04em; }
+  .sub { color: var(--ink-soft); font-size: 0.9rem; margin: 10px 0 16px; }
+
+  .box { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 19px; }
+  .box + .box { margin-top: 12px; }
+  .box h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; margin-bottom: 2px; }
+
+  .note {
+    background: var(--cream); border-left: 3px solid var(--gold); border-radius: 0 9px 9px 0;
+    padding: 14px 17px; font-size: 0.88rem; color: var(--ink-soft); margin: 0 0 12px;
+  }
+  .note strong { color: var(--navy); font-weight: 600; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; font: 600 0.92rem var(--font-body);
+    background: var(--gold); color: var(--navy); border: 0; border-radius: 100px; padding: 10px 18px;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+  }
+  .btn:hover { background: var(--gold-deep); color: #fff; }
+  .btn.ghost { background: transparent; border: 1.5px solid rgba(27,34,51,0.22); }
+  .btn.ghost:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .btn.danger { border-color: #98413F; color: #7A2F2D; background: #FBEAEA; }
+  .btn.danger:hover { background: #98413F; color: #fff; }
+
+  code {
+    font-family: var(--font-mono); font-size: 0.8em; background: var(--cream); border: 1px solid var(--line);
+    border-radius: 5px; padding: 1px 6px; color: var(--navy-soft);
+  }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.83rem; }
+  footer a { color: var(--gold-deep); }
+
+  /* ---- Questions ---- */
+  .q { margin-top: 16px; min-width: 0; border: 0; }
+  .q:first-child, .qgrid > .q, .numbered > .q, .rows > .q, .hours > .q { margin-top: 0; }
+  .qgrid { display: grid; gap: 16px; margin-top: 16px; }
+  .qgrid:first-child { margin-top: 0; }
+  @media (min-width: 620px) { .qgrid.two { grid-template-columns: 1fr 1fr; } }
+  .q > label, .q > legend, .q > .label { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 5px; color: var(--navy); padding: 0; }
+  .hint { display: block; color: var(--ink-soft); font-size: 0.8rem; line-height: 1.45; margin-top: 4px; }
+  .q > label + .hint, .q > legend + .hint, .q > .label + .hint { margin: -3px 0 6px; }
+
+  input[type="text"], input[type="tel"], input[type="email"], input[type="url"], textarea {
+    width: 100%; font: 0.95rem var(--font-body); color: var(--navy); padding: 9px 12px;
+    border: 1.5px solid var(--line); border-radius: 9px; background: #fff; line-height: 1.5;
+  }
+  textarea { resize: vertical; min-height: 0; }
+  input:focus, textarea:focus { outline: none; border-color: var(--gold); }
+  ::placeholder { color: #A3A7B1; }
+
+  .opts { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.9rem; color: var(--navy-soft); }
+  .ck { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+  .ck input {
+    -webkit-appearance: none; appearance: none; width: 17px; height: 17px; flex: none; margin: 0;
+    border: 1.5px solid #8A8F9C; border-radius: 4px; background: #fff; cursor: pointer; display: grid; place-items: center;
+  }
+  .ck input[type="radio"] { border-radius: 50%; }
+  .ck input:checked { background: var(--gold); border-color: var(--gold-deep); }
+  .ck input[type="checkbox"]:checked::after {
+    content: ""; width: 9px; height: 5px; border: solid #fff; border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg);
+  }
+  .ck input[type="radio"]:checked::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #fff; }
+  .ck input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .ck .inline { width: 11em; padding: 5px 9px; font-size: 0.88rem; }
+
+  /* Hours */
+  .hours { display: grid; gap: 8px 18px; }
+  @media (min-width: 620px) { .hours { grid-template-columns: 1fr 1fr; } }
+  .day { display: grid; grid-template-columns: 6.2em 1fr; align-items: center; gap: 10px; }
+  .day label { font-weight: 600; font-size: 0.88rem; }
+
+  /* Repeating rows: services, top questions, extra Q&A */
+  .rows { display: grid; gap: 8px; }
+  .rhead, .prow { display: grid; grid-template-columns: 1.4fr 0.7fr 1.4fr; gap: 8px; }
+  .rhead span { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+  @media (max-width: 560px) {
+    .rhead { display: none; }
+    .prow { grid-template-columns: 1fr 1fr; padding-bottom: 8px; border-bottom: 1px dashed var(--line); }
+    .prow > input:first-child { grid-column: 1 / -1; }
+  }
+  .frow { display: grid; gap: 6px; }
+  @media (min-width: 620px) { .frow { grid-template-columns: 1fr 1.4fr; gap: 8px; } }
+  .numbered { display: grid; gap: 8px; }
+  @media (min-width: 620px) { .numbered { grid-template-columns: 1fr 1fr; } }
+
+  .said {
+    font-size: 0.9rem; color: var(--navy-soft); background: var(--cream); border-radius: 9px; padding: 10px 13px; margin-bottom: 8px;
+  }
+  .said q { quotes: "“" "”"; }
+
+  /* Missed-call preview */
+  .sms { margin-top: 12px; display: grid; gap: 6px; }
+  .sms .bubble {
+    background: #E9E9EB; color: #1B2233; border-radius: 16px 16px 16px 4px; padding: 10px 14px;
+    font-size: 0.9rem; line-height: 1.45; max-width: 46ch; white-space: pre-wrap; overflow-wrap: anywhere;
+  }
+  .sms .meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-soft); }
+  .sms .meta.bad { color: #98413F; }
+  .linkbtn { font: 500 0.8rem var(--font-body); color: var(--gold-deep); background: none; border: 0; cursor: pointer; text-decoration: underline; padding: 0; }
+
+  /* ---- Action bar ---- */
+  .bar {
+    position: sticky; bottom: 0; z-index: 5; margin: 28px -16px 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(251,250,247,0.94); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px;
+  }
+  .bar .status { font-size: 0.8rem; color: var(--ink-soft); flex: 1 1 100%; }
+  @media (min-width: 620px) { .bar .status { flex: 1 1 auto; text-align: right; } }
+  .toprow { display: flex; flex-wrap: wrap; gap: 8px 10px; margin-top: 12px; }
+
+  details.out { margin-top: 18px; }
+  details.out summary { cursor: pointer; font-size: 0.88rem; color: var(--gold-deep); font-weight: 600; }
+  details.out pre {
+    margin-top: 10px; font: 0.8rem/1.55 var(--font-mono); color: var(--navy-soft); background: #fff; border: 1px solid var(--line);
+    border-radius: 9px; padding: 14px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 420px; overflow: auto;
+  }
+
+  .print-only { display: none; }
+  .ta-print { display: none; }
+
+  /* ============================================================
+     PRINT — a paper form on US Letter. "Print blank" hides every
+     answer; the browser's own Print keeps them.
+     ============================================================ */
+  @page { size: letter portrait; margin: 0.5in 0.55in; }
+  @media print {
+    html { font-size: 11px; }
+    body { background: #fff; line-height: 1.4; }
+    header, footer, .screen-only, .bar, details.out { display: none !important; }
+    .print-only { display: block !important; }
+    .wrap { max-width: none; padding: 0; }
+
+    .phead { display: flex !important; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--gold); padding-bottom: 6px; margin-bottom: 8px; }
+    .phead .mark { display: flex; align-items: center; gap: 7px; font-family: var(--font-display); font-weight: 600; font-size: 13pt; }
+    .phead .mark img { width: 15px; height: auto; }
+    .phead .mark .sep { color: var(--gold); }
+    .phead .mark .t { font-weight: 700; }
+    .phead .meta { font-family: var(--font-mono); font-size: 7.5pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-deep); }
+    .pintro { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 8px; }
+
+    h2 { margin: 14px 0 6px; padding-bottom: 4px; font-size: 1.25rem; break-after: avoid; page-break-after: avoid; }
+    .sub { margin: 4px 0 6px; break-after: avoid; }
+    .box { border-radius: 6px; padding: 8px 12px; }
+    .box + .box { margin-top: 8px; }
+    .note { padding: 7px 11px; margin-bottom: 8px; break-inside: avoid; }
+    .q, .day, .prow, .frow { break-inside: avoid; page-break-inside: avoid; }
+    .q { margin-top: 9px; }
+    .qgrid { gap: 9px 18px; margin-top: 9px; }
+    .qgrid.two { grid-template-columns: 1fr 1fr; }
+    .hours { grid-template-columns: 1fr 1fr; gap: 6px 18px; }
+    .numbered { grid-template-columns: 1fr 1fr; }
+    .frow { grid-template-columns: 1fr 1.4fr; }
+    .hint { font-size: 0.82rem; }
+    .numbered > .q, .rows > .q, .hours > .q, .qgrid > .q { margin-top: 0; }
+
+    input[type="text"], input[type="tel"], input[type="email"], input[type="url"] {
+      border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent;
+      padding: 1px 2px; height: 21px; font-size: 1rem;
+    }
+    ::placeholder { color: transparent !important; }
+    textarea { display: none !important; }
+    .ta-print { display: block; }
+    .ta-print.lines i { display: block; height: 21px; border-bottom: 1px solid var(--rule); }
+    .ta-print.filled {
+      white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1rem; line-height: 1.5; padding: 2px 2px 3px;
+      min-height: 21px; border-bottom: 1px solid var(--rule);
+    }
+    .ck input { width: 13px; height: 13px; }
+    .ck .inline { width: 9em; }
+    .sms { display: none; }
+
+    /* Print blank: hide what's been typed or ticked. */
+    html.print-blank input[type="text"], html.print-blank input[type="tel"],
+    html.print-blank input[type="email"], html.print-blank input[type="url"] { color: transparent !important; }
+    html.print-blank .ck input:checked { background: #fff; border-color: #8A8F9C; }
+    html.print-blank .ck input:checked::after { display: none; }
+
+    .page-break { break-before: page; page-break-before: always; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brandline">
+      <a href="/tools"><img src="/embed/meridian-logo.png" alt="" width="20" height="22"><span class="name">Meridian</span></a>
+      <span class="pill">Internal</span>
+    </div>
+    <h1>Client intake form</h1>
+    <p>
+      Every answer needed from the owner before building their chat
+      assistant, missed-call text, reminders and review asks. Fill it in
+      together, then copy it out.
+    </p>
+    <nav class="jump" aria-label="On this page">
+      <a href="#services">Services</a>
+      <a href="#business">Business</a>
+      <a href="#hours">Hours</a>
+      <a href="#assistant">FAQ answers</a>
+      <a href="#missed">Missed calls</a>
+      <a href="#reminders">Reminders</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#together">Working together</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="note screen-only">
+    <strong>Saved in this browser only.</strong> Nothing here is sent anywhere.
+    When you're done, use <b>Copy as text</b> to paste the answers into an email
+    or your notes, then <b>Clear</b>. The answers map straight onto
+    <code>embed/clients/_TEMPLATE.js</code> and the missed-call settings.
+    <div class="toprow">
+      <button class="btn ghost" type="button" data-act="print-blank">Print a blank form</button>
+      <button class="btn ghost" type="button" data-act="print-filled">Print with answers</button>
+    </div>
+  </div>
+
+  <!-- Print-only title and intro, written to the owner -->
+  <div class="phead print-only">
+    <div class="mark"><img src="/assets/meridian-logo.png" alt=""><span>Meridian</span><span class="sep">&middot;</span><span class="t">Setup questions</span></div>
+    <div class="meta">Client intake</div>
+  </div>
+  <p class="pintro print-only">
+    These answers are how we set up your services. Your chat assistant only
+    says what's written here, so exact wording matters. Skip anything that
+    doesn't apply, and please don't write any passwords on this form.
+  </p>
+
+  <form id="intake" autocomplete="off" novalidate>
+
+    <div class="box">
+      <div class="qgrid two">
+        <div class="q" data-k="Date"><label for="meta_date">Date</label><input id="meta_date" name="meta_date" type="text"></div>
+        <div class="q" data-k="Filled in by"><label for="meta_by">Filled in by</label><input id="meta_by" name="meta_by" type="text"></div>
+      </div>
+    </div>
+
+    <!-- ================================================= 0. SERVICES -->
+    <section class="sec" data-t="Services we're setting up">
+      <h2 id="services"><span class="num">00</span>Services we're setting up</h2>
+      <div class="box">
+        <fieldset class="q" data-k="Services">
+          <legend>Tick the ones you want</legend>
+          <span class="hint">Only the sections for these need answers.</span>
+          <div class="opts" style="display:grid;gap:8px">
+            <label class="ck"><input type="checkbox" name="svc" value="Fewer no-shows: reminders and rebooking"> Fewer no-shows: reminders and rebooking</label>
+            <label class="ck"><input type="checkbox" name="svc" value="Missed-call text-back"> Missed-call text-back</label>
+            <label class="ck"><input type="checkbox" name="svc" value="Front-desk FAQ assistant"> Front-desk FAQ assistant</label>
+            <label class="ck"><input type="checkbox" name="svc" value="Reviews"> Reviews</label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- ================================================= 1. BUSINESS -->
+    <section class="sec" data-t="The business">
+      <h2 id="business"><span class="num">01</span>Your business</h2>
+      <p class="sub">Used by the chat assistant and the missed-call text.</p>
+      <div class="box">
+        <div class="qgrid two">
+          <div class="q" data-k="Business name">
+            <label for="biz_name">Business name, exactly as you write it</label>
+            <input id="biz_name" name="biz_name" type="text">
+          </div>
+          <div class="q" data-k="Phone">
+            <label for="biz_phone">Phone number clients should call</label>
+            <input id="biz_phone" name="biz_phone" type="tel">
+          </div>
+        </div>
+        <div class="q" data-k="Booking link">
+          <label for="biz_booking">Online booking link</label>
+          <span class="hint">The full address clients use to book, starting with https://</span>
+          <input id="biz_booking" name="biz_booking" type="url" placeholder="https://">
+        </div>
+        <div class="qgrid two" style="margin-top:16px">
+          <div class="q" data-k="Address">
+            <label for="biz_address">Street address</label>
+            <input id="biz_address" name="biz_address" type="text">
+          </div>
+          <div class="q" data-k="Website">
+            <label for="biz_website">Website</label>
+            <input id="biz_website" name="biz_website" type="url">
+          </div>
+        </div>
+        <div class="q" data-k="Landmark">
+          <label for="biz_landmark">A landmark that helps people find you</label>
+          <span class="hint">For example: next to the dry cleaner, upstairs. It helps more than the street name.</span>
+          <input id="biz_landmark" name="biz_landmark" type="text">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================= 2. HOURS -->
+    <section class="sec" data-t="Hours">
+      <h2 id="hours"><span class="num">02</span>Hours</h2>
+      <p class="sub">Write "Closed" for days you're closed.</p>
+      <div class="box">
+        <div class="hours">
+          <div class="day q" data-k="Monday"><label for="h_mon">Monday</label><input id="h_mon" name="h_mon" type="text" placeholder="9am-6pm"></div>
+          <div class="day q" data-k="Tuesday"><label for="h_tue">Tuesday</label><input id="h_tue" name="h_tue" type="text"></div>
+          <div class="day q" data-k="Wednesday"><label for="h_wed">Wednesday</label><input id="h_wed" name="h_wed" type="text"></div>
+          <div class="day q" data-k="Thursday"><label for="h_thu">Thursday</label><input id="h_thu" name="h_thu" type="text"></div>
+          <div class="day q" data-k="Friday"><label for="h_fri">Friday</label><input id="h_fri" name="h_fri" type="text"></div>
+          <div class="day q" data-k="Saturday"><label for="h_sat">Saturday</label><input id="h_sat" name="h_sat" type="text"></div>
+          <div class="day q" data-k="Sunday"><label for="h_sun">Sunday</label><input id="h_sun" name="h_sun" type="text"></div>
+        </div>
+        <div class="qgrid two" style="margin-top:16px">
+          <div class="q" data-k="Last appointment">
+            <label for="h_last">Last appointment of the day</label>
+            <span class="hint">Clients ask this a lot.</span>
+            <input id="h_last" name="h_last" type="text">
+          </div>
+          <div class="q" data-k="Hours, short (for texts)">
+            <label for="h_short">Your hours in one short line, for texts</label>
+            <span class="hint">Like "Tue-Sat, 9am-6pm". Plain characters only.</span>
+            <input id="h_short" name="h_short" type="text">
+          </div>
+        </div>
+        <div class="q" data-k="Holiday or seasonal changes">
+          <label for="h_holiday">Holiday or seasonal changes</label>
+          <input id="h_holiday" name="h_holiday" type="text">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================= 3. FAQ ASSISTANT -->
+    <section class="sec" data-t="Front-desk FAQ assistant: answers">
+      <h2 id="assistant"><span class="num">03</span>Front-desk FAQ assistant: your answers</h2>
+      <div class="note">
+        <strong>Your assistant only answers from what's written here</strong>, and
+        anyone on your website can see it. Write it the way you'd say it to a
+        client. If a question isn't covered, it tells people to call or book
+        online rather than guess.
+      </div>
+
+      <div class="box">
+        <div class="q">
+          <span class="label">The four questions people ask you most</span>
+          <span class="hint">These become tap-to-ask buttons, since most people tap rather than type.</span>
+          <div class="numbered">
+            <div class="q" data-k="Most-asked question 1"><input name="fa_q1" type="text" aria-label="Most-asked question 1" placeholder="1."></div>
+            <div class="q" data-k="Most-asked question 2"><input name="fa_q2" type="text" aria-label="Most-asked question 2" placeholder="2."></div>
+            <div class="q" data-k="Most-asked question 3"><input name="fa_q3" type="text" aria-label="Most-asked question 3" placeholder="3."></div>
+            <div class="q" data-k="Most-asked question 4"><input name="fa_q4" type="text" aria-label="Most-asked question 4" placeholder="4."></div>
+          </div>
+        </div>
+        <div class="q" data-k="Most-booked service">
+          <label for="fa_popular">Your most-booked service</label>
+          <span class="hint">For a button like "How much is a ___?"</span>
+          <input id="fa_popular" name="fa_popular" type="text">
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="q">
+          <span class="label">Services and prices</span>
+          <span class="hint">What you offer and what it costs. "From $__" is fine.</span>
+          <div class="rows">
+            <div class="rhead" aria-hidden="true"><span>Service</span><span>Price</span><span>Notes (length, who does it)</span></div>
+            <div class="prow q" data-k="Service 1"><input name="p1_name" type="text" aria-label="Service 1" placeholder="Service"><input name="p1_price" type="text" aria-label="Service 1 price" placeholder="$"><input name="p1_note" type="text" aria-label="Service 1 notes" placeholder="Notes"></div>
+            <div class="prow q" data-k="Service 2"><input name="p2_name" type="text" aria-label="Service 2" placeholder="Service"><input name="p2_price" type="text" aria-label="Service 2 price" placeholder="$"><input name="p2_note" type="text" aria-label="Service 2 notes" placeholder="Notes"></div>
+            <div class="prow q" data-k="Service 3"><input name="p3_name" type="text" aria-label="Service 3" placeholder="Service"><input name="p3_price" type="text" aria-label="Service 3 price" placeholder="$"><input name="p3_note" type="text" aria-label="Service 3 notes" placeholder="Notes"></div>
+            <div class="prow q" data-k="Service 4"><input name="p4_name" type="text" aria-label="Service 4" placeholder="Service"><input name="p4_price" type="text" aria-label="Service 4 price" placeholder="$"><input name="p4_note" type="text" aria-label="Service 4 notes" placeholder="Notes"></div>
+            <div class="prow q" data-k="Service 5"><input name="p5_name" type="text" aria-label="Service 5" placeholder="Service"><input name="p5_price" type="text" aria-label="Service 5 price" placeholder="$"><input name="p5_note" type="text" aria-label="Service 5 notes" placeholder="Notes"></div>
+            <div class="prow q" data-k="Service 6"><input name="p6_name" type="text" aria-label="Service 6" placeholder="Service"><input name="p6_price" type="text" aria-label="Service 6 price" placeholder="$"><input name="p6_note" type="text" aria-label="Service 6 notes" placeholder="Notes"></div>
+          </div>
+        </div>
+        <div class="q" data-k="If prices vary, they depend on">
+          <label for="fa_vary">If prices vary, what do they depend on?</label>
+          <span class="hint">We'll add that the price is confirmed before anything starts. That one sentence prevents a lot of arguments.</span>
+          <textarea id="fa_vary" name="fa_vary" rows="2"></textarea>
+        </div>
+        <div class="q" data-k="Unusual services, who to ask for">
+          <label for="fa_unusual">Anything unusual you offer, and who to ask for</label>
+          <textarea id="fa_unusual" name="fa_unusual" rows="2"></textarea>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="q" data-k="Walk-ins / same day">
+          <label for="fa_walkins">Do you take walk-ins or same-day appointments?</label>
+          <textarea id="fa_walkins" name="fa_walkins" rows="2"></textarea>
+        </div>
+        <div class="q" data-k="How to book">
+          <label for="fa_booking">How should people book?</label>
+          <span class="hint">Unless you say otherwise: "You can book online at [your booking link], or give us a ring."</span>
+          <textarea id="fa_booking" name="fa_booking" rows="2"></textarea>
+        </div>
+        <div class="q" data-k="Parking">
+          <label for="fa_parking">Where do people park? Is it free?</label>
+          <span class="hint">Whether it's free is usually the real question.</span>
+          <textarea id="fa_parking" name="fa_parking" rows="2"></textarea>
+        </div>
+        <div class="q" data-k="Cancellation, late and no-show policy">
+          <label for="fa_cancel">Cancellation, late arrival and no-show policy, word for word</label>
+          <span class="hint">This is the answer most likely to be quoted back to you, so it has to be exactly right.</span>
+          <textarea id="fa_cancel" name="fa_cancel" rows="3"></textarea>
+        </div>
+        <div class="q" data-k="First-time clients">
+          <label for="fa_first">What should a first-time client know?</label>
+          <span class="hint">Consultations, what to expect, what to bring. Nervous first-timers often ask late at night.</span>
+          <textarea id="fa_first" name="fa_first" rows="2"></textarea>
+        </div>
+        <fieldset class="q" data-k="Payment">
+          <legend>How can people pay?</legend>
+          <div class="opts">
+            <label class="ck"><input type="checkbox" name="fa_pay" value="Card"> Card</label>
+            <label class="ck"><input type="checkbox" name="fa_pay" value="Cash"> Cash</label>
+            <label class="ck"><input type="checkbox" name="fa_pay" value="Apple Pay"> Apple Pay</label>
+            <label class="ck"><input type="checkbox" name="fa_pay" value="Venmo"> Venmo</label>
+            <label class="ck">Other <input class="inline" name="fa_pay_other" type="text" aria-label="Other payment methods"></label>
+          </div>
+        </fieldset>
+        <div class="q" data-k="Tips and deposits">
+          <label for="fa_tips">Tips and deposits</label>
+          <span class="hint">Can tips go on a card? Is a deposit needed to book?</span>
+          <input id="fa_tips" name="fa_tips" type="text">
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="q">
+          <span class="label">Other questions specific to your business</span>
+          <span class="hint">For example, a barbershop: beard trims. A yoga studio: is the first class free, what should I bring?</span>
+          <div class="rows">
+            <div class="frow q" data-k="Extra Q&amp;A 1"><input name="x1_q" type="text" aria-label="Question 1" placeholder="Question"><input name="x1_a" type="text" aria-label="Answer 1" placeholder="Your answer"></div>
+            <div class="frow q" data-k="Extra Q&amp;A 2"><input name="x2_q" type="text" aria-label="Question 2" placeholder="Question"><input name="x2_a" type="text" aria-label="Answer 2" placeholder="Your answer"></div>
+            <div class="frow q" data-k="Extra Q&amp;A 3"><input name="x3_q" type="text" aria-label="Question 3" placeholder="Question"><input name="x3_a" type="text" aria-label="Answer 3" placeholder="Your answer"></div>
+          </div>
+        </div>
+        <div class="q" data-k="How they talk to clients">
+          <label for="fa_voice">How do you talk to clients?</label>
+          <span class="hint">A phrase or two you'd actually say, like "give us a ring". Answers get written in your voice.</span>
+          <input id="fa_voice" name="fa_voice" type="text">
+        </div>
+        <fieldset class="q" data-k="When it isn't sure">
+          <legend>When it isn't sure, it says:</legend>
+          <p class="said"><q>I'm not sure about that one, sorry! Give us a call on [your phone] and we'll answer properly - or you can book in at [your booking link].</q></p>
+          <div class="opts">
+            <label class="ck"><input type="radio" name="fa_fallback" value="Fine as written"> Fine as written</label>
+            <label class="ck"><input type="radio" name="fa_fallback" value="Change it"> Change it to:</label>
+          </div>
+          <input name="fa_fallback_text" type="text" aria-label="New wording for when it isn't sure" style="margin-top:8px">
+        </fieldset>
+      </div>
+
+      <div class="box">
+        <h3>How it looks <span class="hint" style="display:inline;font-family:var(--font-body);font-weight:400">(optional)</span></h3>
+        <div class="qgrid two" style="margin-top:12px">
+          <div class="q" data-k="Brand colors">
+            <label for="look_colors">Brand colors</label>
+            <span class="hint">Or "match our website".</span>
+            <input id="look_colors" name="look_colors" type="text">
+          </div>
+          <div class="q" data-k="Logo">
+            <label for="look_logo">Logo</label>
+            <span class="hint">A link to the image on your website, or "send later".</span>
+            <input id="look_logo" name="look_logo" type="text">
+          </div>
+        </div>
+        <fieldset class="q" data-k="Chat button side">
+          <legend>Chat button on the</legend>
+          <div class="opts">
+            <label class="ck"><input type="radio" name="look_side" value="Right"> Right</label>
+            <label class="ck"><input type="radio" name="look_side" value="Left"> Left</label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- ================================================= 4. MISSED CALLS -->
+    <section class="sec" data-t="Missed-call text-back">
+      <h2 id="missed"><span class="num">04</span>Missed-call text-back</h2>
+      <div class="note">
+        When a call goes unanswered, the caller gets a text with your booking
+        link. It uses your business name, phone, booking link and short hours
+        from above. The caller's number and first name fill in by themselves on
+        each call.
+      </div>
+      <div class="box">
+        <div class="qgrid two">
+          <div class="q" data-k="Name in the text">
+            <label for="mc_name">Name to use in the text, if different</label>
+            <span class="hint">Only if it should be shorter than your full business name.</span>
+            <input id="mc_name" name="mc_name" type="text">
+          </div>
+          <div class="q" data-k="Ring time before it counts as missed">
+            <label for="mc_ring">How long should it ring before it counts as missed?</label>
+            <span class="hint">15 to 20 seconds is a good place to start.</span>
+            <input id="mc_ring" name="mc_ring" type="text">
+          </div>
+        </div>
+        <fieldset class="q" data-k="Line type">
+          <legend>The line clients call is a</legend>
+          <div class="opts">
+            <label class="ck"><input type="radio" name="mc_line" value="Cell phone"> Cell phone</label>
+            <label class="ck"><input type="radio" name="mc_line" value="Landline"> Landline</label>
+            <label class="ck"><input type="radio" name="mc_line" value="Internet phone system (VoIP)"> Internet phone system (VoIP)</label>
+          </div>
+        </fieldset>
+        <div class="qgrid two" style="margin-top:16px">
+          <div class="q" data-k="Carrier or provider">
+            <label for="mc_carrier">Carrier or phone provider</label>
+            <span class="hint">For example AT&amp;T, T-Mobile, Verizon, or your phone system's name.</span>
+            <input id="mc_carrier" name="mc_carrier" type="text">
+          </div>
+          <div class="q" data-k="Who sees replies">
+            <label for="mc_reply">When a client texts back, who should see it?</label>
+            <span class="hint">Name and number.</span>
+            <input id="mc_reply" name="mc_reply" type="text">
+          </div>
+        </div>
+        <div class="q" data-k="The text clients get">
+          <label for="mc_text">The text clients get</label>
+          <span class="hint">Words in {curly brackets} fill in from your answers. Plain characters only: curly quotes, long dashes and emoji make every text cost more to send.</span>
+          <textarea id="mc_text" name="mc_text" rows="4" data-blank-keep>Hi, it's {business_name}! Sorry we missed your call - we're with a client right now. Book online here: {booking_link} or reply to this text and we'll call you straight back. ({hours})</textarea>
+          <div class="sms screen-only" aria-live="polite">
+            <span class="meta">How it reads with your details:</span>
+            <div class="bubble" id="mcPreview"></div>
+            <span class="meta" id="mcCount"></span>
+            <span><button class="linkbtn" type="button" id="mcReset">Reset to the standard wording</button></span>
+          </div>
+        </div>
+        <fieldset class="q" data-k="Wording approved">
+          <legend class="screen-only" style="position:absolute;left:-9999px">Approval</legend>
+          <div class="opts"><label class="ck"><input type="checkbox" name="mc_ok" value="Yes, owner approved this wording"> The owner has approved this wording</label></div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- ================================================= 5. REMINDERS -->
+    <section class="sec" data-t="Reminders and rebooking">
+      <h2 id="reminders"><span class="num">05</span>Reminders and rebooking</h2>
+      <p class="sub">For fewer no-shows. Set up inside the booking tool you already use.</p>
+      <div class="box">
+        <div class="qgrid two">
+          <div class="q" data-k="Booking software">
+            <label for="rm_tool">Booking software</label>
+            <span class="hint">For example Vagaro, Fresha, Square or Acuity.</span>
+            <input id="rm_tool" name="rm_tool" type="text">
+          </div>
+          <fieldset class="q" data-k="Sends reminders now">
+            <legend>Does it send reminders now?</legend>
+            <div class="opts">
+              <label class="ck"><input type="radio" name="rm_now" value="Yes"> Yes</label>
+              <label class="ck"><input type="radio" name="rm_now" value="No"> No</label>
+              <label class="ck"><input type="radio" name="rm_now" value="Not sure"> Not sure</label>
+            </div>
+          </fieldset>
+        </div>
+        <div class="q" data-k="When reminders go out">
+          <label for="rm_when">When should reminders go out?</label>
+          <span class="hint">For example a day before, and again two hours before.</span>
+          <input id="rm_when" name="rm_when" type="text">
+        </div>
+        <div class="q" data-k="Rebooking nudge">
+          <label for="rm_rebook">After a visit, when should a client be nudged to rebook?</label>
+          <span class="hint">For example a text a few weeks later with your booking link.</span>
+          <input id="rm_rebook" name="rm_rebook" type="text">
+        </div>
+        <div class="q" data-k="Who can log in to the booking software">
+          <label for="rm_access">Who can log in to the booking software?</label>
+          <span class="hint">Name only. Please never write a password on this form.</span>
+          <input id="rm_access" name="rm_access" type="text">
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================= 6. REVIEWS -->
+    <section class="sec" data-t="Reviews">
+      <h2 id="reviews"><span class="num">06</span>Reviews</h2>
+      <div class="box">
+        <div class="q" data-k="Google review link">
+          <label for="rv_link">Your Google review link, or your business name as it shows on Google</label>
+          <input id="rv_link" name="rv_link" type="text">
+        </div>
+        <div class="qgrid two" style="margin-top:16px">
+          <div class="q" data-k="When to ask for a review">
+            <label for="rv_when">When should clients be asked for a review?</label>
+            <span class="hint">For example a text the same evening as their visit.</span>
+            <input id="rv_when" name="rv_when" type="text">
+          </div>
+          <div class="q" data-k="Who replies to reviews now">
+            <label for="rv_reply">Who replies to reviews now?</label>
+            <span class="hint">&nbsp;</span>
+            <input id="rv_reply" name="rv_reply" type="text">
+          </div>
+        </div>
+        <fieldset class="q" data-k="Reply drafts approved first">
+          <legend>Should reply drafts come to you to approve first?</legend>
+          <div class="opts">
+            <label class="ck"><input type="radio" name="rv_drafts" value="Yes"> Yes</label>
+            <label class="ck"><input type="radio" name="rv_drafts" value="No"> No</label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- ================================================= 7. WORKING TOGETHER -->
+    <section class="sec" data-t="Working together">
+      <h2 id="together"><span class="num">07</span>Working together</h2>
+      <div class="box">
+        <div class="qgrid two">
+          <div class="q" data-k="Main contact">
+            <label for="wt_contact">Main contact (name and role)</label>
+            <input id="wt_contact" name="wt_contact" type="text">
+          </div>
+          <div class="q" data-k="Backup contact">
+            <label for="wt_backup">Backup, if they're not available</label>
+            <input id="wt_backup" name="wt_backup" type="text">
+          </div>
+        </div>
+        <div class="q" data-k="Who approves changes">
+          <label for="wt_approver">Who approves changes?</label>
+          <span class="hint">Prices, wording and policies. Nothing goes live without this person's okay.</span>
+          <input id="wt_approver" name="wt_approver" type="text">
+        </div>
+        <fieldset class="q" data-k="Preferred contact">
+          <legend>How would you like to be contacted?</legend>
+          <div class="opts">
+            <label class="ck"><input type="checkbox" name="wt_how" value="Text"> Text</label>
+            <label class="ck"><input type="checkbox" name="wt_how" value="Phone call"> Phone call</label>
+            <label class="ck"><input type="checkbox" name="wt_how" value="Email"> Email</label>
+            <label class="ck"><input type="checkbox" name="wt_how" value="In person"> In person</label>
+          </div>
+        </fieldset>
+        <div class="qgrid two" style="margin-top:16px">
+          <div class="q" data-k="Best number">
+            <label for="wt_phone">Best number</label>
+            <input id="wt_phone" name="wt_phone" type="tel">
+          </div>
+          <div class="q" data-k="Best email">
+            <label for="wt_email">Best email</label>
+            <input id="wt_email" name="wt_email" type="email">
+          </div>
+        </div>
+        <div class="q" data-k="Best times, times to avoid">
+          <label for="wt_times">Best times to reach you, and times to avoid</label>
+          <span class="hint">For example: mornings before 10, never on Saturdays.</span>
+          <input id="wt_times" name="wt_times" type="text">
+        </div>
+        <div class="q" data-k="Who tells Meridian about changes">
+          <label for="wt_changes">When prices, hours or policies change, who will let us know?</label>
+          <input id="wt_changes" name="wt_changes" type="text">
+        </div>
+        <div class="q" data-k="Anything else">
+          <label for="wt_notes">Anything else we should know?</label>
+          <textarea id="wt_notes" name="wt_notes" rows="3"></textarea>
+        </div>
+      </div>
+    </section>
+
+  </form>
+
+  <details class="out screen-only">
+    <summary>Show the text that "Copy as text" will copy</summary>
+    <pre id="outText"></pre>
+  </details>
+
+  <div class="bar screen-only">
+    <button class="btn" type="button" data-act="copy">Copy as text</button>
+    <button class="btn ghost" type="button" data-act="print-blank">Print blank</button>
+    <button class="btn ghost" type="button" data-act="clear" id="clearBtn">Clear</button>
+    <span class="status" id="status" role="status" aria-live="polite"></span>
+  </div>
+
+  <footer>
+    Internal &middot; <code>noindex</code> &middot; linked only from
+    <a href="/tools">/tools</a>. Next step: copy
+    <a href="/embed/clients/_TEMPLATE.js">_TEMPLATE.js</a> and fill it in from these answers.
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var $ = function (id) { return document.getElementById(id); };
+  var form = $("intake");
+  var KEY = "meridian.intake.v1";
+  var storageOk = true;
+
+  /* ---- Save and restore every named field, on this device only ---- */
+  function collect() {
+    var d = {};
+    Array.prototype.forEach.call(form.querySelectorAll("[name]"), function (el) {
+      if (el.type === "checkbox") { d[el.name] = d[el.name] || []; if (el.checked) d[el.name].push(el.value); }
+      else if (el.type === "radio") { if (el.checked) d[el.name] = el.value; else if (!(el.name in d)) d[el.name] = ""; }
+      else d[el.name] = el.value;
+    });
+    return d;
+  }
+  function restore(d) {
+    Array.prototype.forEach.call(form.querySelectorAll("[name]"), function (el) {
+      if (!(el.name in d)) return;
+      var v = d[el.name];
+      if (el.type === "checkbox") el.checked = Array.isArray(v) && v.indexOf(el.value) >= 0;
+      else if (el.type === "radio") el.checked = v === el.value;
+      else el.value = v == null ? "" : String(v);
+    });
+  }
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { storageOk = false; return null; } }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(collect())); storageOk = true; }
+    catch (e) { storageOk = false; }
+  }
+
+  /* ---- Missed-call text: same variables and rules as meridian-missed-call/src/template.js ---- */
+  var GSM7 =
+    "@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !\"#¤%&'()*+,-./0123456789:;<=>?" +
+    "¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà";
+  var GSM7_EXTENDED = "^{}\\[~]|€";
+
+  function analyze(body) {
+    var isGsm = true, units = 0, chars = Array.from(body);
+    for (var i = 0; i < chars.length; i++) {
+      var ch = chars[i];
+      if (GSM7.indexOf(ch) >= 0) units += 1;
+      else if (GSM7_EXTENDED.indexOf(ch) >= 0) units += 2;
+      else { isGsm = false; break; }
+    }
+    if (!isGsm) units = body.length;
+    var single = isGsm ? 160 : 70, multi = isGsm ? 153 : 67;
+    return { chars: chars.length, gsm: isGsm, segments: units <= single ? 1 : Math.ceil(units / multi) };
+  }
+  function variables() {
+    var v = function (id) { return ($(id).value || "").trim(); };
+    return {
+      business_name: v("mc_name") || v("biz_name") || "our team",
+      booking_link: v("biz_booking"),
+      hours: v("h_short"),
+      phone: v("biz_phone"),
+      caller_number: "",
+      first_name: "there"
+    };
+  }
+  function renderTemplate(t, vars) {
+    return String(t || "").replace(/\{(\w+)\}/g, function (m, k) { return k in vars ? String(vars[k] || "") : m; })
+      .replace(/[ \t]{2,}/g, " ").trim();
+  }
+  function mcText() { return renderTemplate($("mc_text").value, variables()); }
+  function updatePreview() {
+    var text = mcText();
+    $("mcPreview").textContent = text || "(empty)";
+    var a = analyze(text);
+    var plural = a.segments === 1 ? " text" : " texts";
+    $("mcCount").textContent = a.chars + " characters · billed as " + a.segments + plural +
+      (a.gsm ? "" : " · has a special character (curly quote, long dash or emoji) that raises the cost");
+    $("mcCount").className = "meta" + (a.gsm && a.segments === 1 ? "" : " bad");
+  }
+
+  /* ---- Plain-text summary, for an email or notes ---- */
+  function valuesOf(q) {
+    var parts = [], seen = {};
+    Array.prototype.forEach.call(q.querySelectorAll("input, textarea"), function (el) {
+      if (el.closest(".q") !== q) return;               // nested questions report themselves
+      if (el.type === "checkbox" || el.type === "radio") {
+        if (seen[el.name]) return; seen[el.name] = true;
+        var picked = Array.prototype.filter.call(q.querySelectorAll('input[name="' + el.name + '"]'), function (x) { return x.checked; })
+          .map(function (x) { return x.value; });
+        if (picked.length) parts.push(picked.join(", "));
+      } else {
+        var v = el.value.trim();
+        if (v) parts.push(v);
+      }
+    });
+    return parts;
+  }
+  function line(label, value) {
+    if (value.indexOf("\n") >= 0) return label + ":\n" + value.split("\n").map(function (l) { return "  " + l; }).join("\n");
+    return label + ": " + value;
+  }
+  function summary() {
+    var out = [];
+    var name = $("biz_name").value.trim();
+    out.push("MERIDIAN CLIENT INTAKE" + (name ? ": " + name : ""));
+    var meta = [];
+    if ($("meta_date").value.trim()) meta.push("Date: " + $("meta_date").value.trim());
+    if ($("meta_by").value.trim()) meta.push("Filled in by: " + $("meta_by").value.trim());
+    if (meta.length) out.push(meta.join("  |  "));
+
+    var wantsMissed = Array.prototype.some.call(form.querySelectorAll('input[name="svc"]'), function (x) {
+      return x.checked && /missed-call/i.test(x.value);
+    });
+    Array.prototype.forEach.call(form.querySelectorAll("section.sec"), function (sec) {
+      var lines = [], answered = 0;
+      Array.prototype.forEach.call(sec.querySelectorAll(".q[data-k]"), function (q) {
+        var vals = valuesOf(q);
+        if (!vals.length) return;
+        if (q.querySelector("#mc_text")) {
+          // Always has the standard wording, so it only counts as an answer if it was changed.
+          var ta = $("mc_text");
+          if (ta.value.trim() !== ta.defaultValue.trim()) answered++;
+          lines.push(line("The text clients get (template)", ta.value.trim()));
+          lines.push(line("As it reads now", mcText()));
+          return;
+        }
+        answered++;
+        var sep = q.querySelector('input[type="checkbox"]') ? ", " : " / ";   // "Card, Cash, Zelle"
+        lines.push(line(q.getAttribute("data-k"), vals.join(sep)));
+      });
+      var keep = answered > 0 || (wantsMissed && sec.querySelector("#mc_text"));
+      if (keep) out.push("", sec.getAttribute("data-t").toUpperCase(), lines.join("\n"));
+    });
+    if (out.length <= 2) out.push("", "(No answers yet.)");
+    return out.join("\n");
+  }
+
+  /* ---- Status line ---- */
+  var statusTimer;
+  function status(msg, keep) {
+    $("status").textContent = msg;
+    clearTimeout(statusTimer);
+    if (!keep) statusTimer = setTimeout(idleStatus, 4000);
+  }
+  function idleStatus() {
+    $("status").textContent = storageOk ? "Saved in this browser." : "Not saving: this browser is blocking storage (private window?). Copy as text before you close it.";
+  }
+
+  function refresh() { updatePreview(); $("outText").textContent = summary(); }
+
+  /* ---- Copy ---- */
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.position = "fixed"; ta.style.top = "0"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copy() {
+    var text = summary();
+    $("outText").textContent = text;
+    var done = function () { status("Copied. Paste it into an email or your notes."); };
+    var fail = function () {
+      if (fallbackCopy(text)) done();
+      else { status("Couldn't copy automatically. Open “Show the text” below and copy it by hand.", true); document.querySelector("details.out").open = true; }
+    };
+    try {
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fail);
+      else fail();
+    } catch (e) { fail(); }
+  }
+
+  /* ---- Clear: two taps, so a stray tap can't wipe a client's answers ---- */
+  var armed = false, armTimer;
+  function clearAll() {
+    var btn = $("clearBtn");
+    if (!armed) {
+      armed = true; btn.textContent = "Tap again to clear"; btn.classList.add("danger");
+      status("This erases every answer on this device.", true);
+      armTimer = setTimeout(disarm, 4000);
+      return;
+    }
+    disarm();
+    form.reset();
+    try { localStorage.removeItem(KEY); } catch (e) { /* fine */ }
+    refresh();
+    status("Cleared.");
+  }
+  function disarm() { armed = false; clearTimeout(armTimer); $("clearBtn").textContent = "Clear"; $("clearBtn").classList.remove("danger"); idleStatus(); }
+
+  /* ---- Print: textareas become ruled lines; "blank" hides every answer ---- */
+  function preparePrint() {
+    var blank = document.documentElement.classList.contains("print-blank");
+    Array.prototype.forEach.call(form.querySelectorAll("textarea"), function (ta) {
+      var p = ta.nextElementSibling && ta.nextElementSibling.classList.contains("ta-print") ? ta.nextElementSibling : null;
+      if (!p) {
+        p = document.createElement("div");
+        p.className = "ta-print"; p.setAttribute("aria-hidden", "true");
+        ta.parentNode.insertBefore(p, ta.nextSibling);
+      }
+      if (blank && !ta.hasAttribute("data-blank-keep")) {
+        var n = parseInt(ta.getAttribute("rows"), 10) || 2;
+        p.className = "ta-print lines";
+        p.innerHTML = new Array(n + 1).join("<i></i>");
+      } else {
+        p.className = "ta-print filled";
+        p.textContent = blank ? ta.defaultValue : ta.value;
+      }
+    });
+  }
+  function printForm(blank) {
+    document.documentElement.classList.toggle("print-blank", !!blank);
+    preparePrint();
+    window.print();
+  }
+  window.addEventListener("beforeprint", preparePrint);
+  window.addEventListener("afterprint", function () { document.documentElement.classList.remove("print-blank"); });
+
+  /* ---- Wire up ---- */
+  var saved = load();
+  if (saved) restore(saved);
+  form.addEventListener("input", function () { save(); refresh(); if (!armed) idleStatus(); });
+  form.addEventListener("change", function () { save(); refresh(); });
+  form.addEventListener("submit", function (e) { e.preventDefault(); });
+  $("mcReset").addEventListener("click", function () { $("mc_text").value = $("mc_text").defaultValue; save(); refresh(); });
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-act]"), function (b) {
+    b.addEventListener("click", function () {
+      var act = b.getAttribute("data-act");
+      if (act !== "clear" && armed) disarm();
+      if (act === "copy") copy();
+      else if (act === "clear") clearAll();
+      else if (act === "print-blank") printForm(true);
+      else if (act === "print-filled") printForm(false);
+    });
+  });
+
+  refresh();
+  idleStatus();
+})();
+</script>
+
+</body>
+</html>

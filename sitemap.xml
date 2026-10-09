@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Public pages only. Internal pages are noindex and stay out of here. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://meridianaiservices.vercel.app/</loc>
+  </url>
+  <url>
+    <loc>https://meridianaiservices.vercel.app/diagnostic</loc>
+  </url>
+</urlset>

@@ -612,7 +612,9 @@ section { padding: clamp(64px, 9vw, 112px) 0; }
 /* ============================================================
    FOOTER
    ============================================================ */
-.site-footer { background: #141A28; color: #B9C0CE; padding: 56px 0 34px; }
+/* Bottom padding keeps the last line clear of the chat bubble, which is
+   fixed to the bottom-right corner and would otherwise sit on top of it. */
+.site-footer { background: #141A28; color: #B9C0CE; padding: 56px 0 96px; }
 .footer-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px; align-items: flex-start; }
 .footer-brand { max-width: 320px; }
 .footer-brand .brand-name { color: #fff; }

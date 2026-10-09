@@ -69,19 +69,24 @@
     background: var(--navy); color: #E8EBF2;
     font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
     font-size: 13px; line-height: 1.7;
-    padding: 20px 20px 20px 22px; border-radius: 12px;
+    /* Right padding clears the Copy button once the line is scrolled to
+       its end. The line is longer than the box on most screens. */
+    padding: 20px 88px 20px 22px; border-radius: 12px;
     overflow-x: auto; white-space: pre; -webkit-overflow-scrolling: touch;
   }
   .snippet .tag { color: #E8C874; }
   .snippet .attr { color: #9DD2B0; }
+  /* Solid colours (navy with 10% / 20% white mixed in), not rgba: the code
+     scrolls underneath this button, and a see-through button let the two
+     sets of text overlap. */
   .copy {
     position: absolute; top: 11px; right: 11px;
-    background: rgba(255,255,255,0.1); color: #fff;
+    background: #323847; color: #fff;
     border: 1px solid rgba(255,255,255,0.16); border-radius: 8px;
     font: inherit; font-size: 12.5px; font-weight: 600;
     padding: 6px 13px; cursor: pointer;
   }
-  .copy:hover { background: rgba(255,255,255,0.2); }
+  .copy:hover { background: #494E5C; }
   .copy[data-done="true"] { background: #1F7A4D; border-color: #1F7A4D; }
 
   /* ---- Platform accordion ---- */

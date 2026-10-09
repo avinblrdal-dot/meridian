@@ -25,13 +25,16 @@
   <link rel="icon" type="image/png" href="assets/meridian-logo.png" />
   <link rel="apple-touch-icon" href="assets/meridian-logo.png" />
 
-  <!-- Open Graph / social preview (edit the URL + image when you deploy) -->
+  <!-- Open Graph / social preview. Link previews need absolute URLs, so
+       these point at the live domain. Change them if the domain changes. -->
   <meta property="og:title" content="Meridian — Get your time back." />
   <meta property="og:description" content="Practical AI for local salons, spas, and studios. Fewer no-shows, no missed calls, a fuller book." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/meridian-logo.png" />
+  <meta property="og:url" content="https://meridianaiservices.vercel.app/" />
+  <meta property="og:image" content="https://meridianaiservices.vercel.app/assets/meridian-logo.png" />
+  <meta name="twitter:card" content="summary" />
 
-  <!-- Fonts: Space Grotesk (modern geometric sans for headings) + Inter (clean, readable sans for body) -->
+  <!-- Fonts: Bricolage Grotesque (headings) + Inter (body) + JetBrains Mono (small labels) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -410,20 +413,20 @@
         <div class="price-grid">
           <!-- NOTE: the Audit is free (agreed with mentor, Oct 2026). Build and Support
                stay "Contact for pricing" until real pilots are priced. -->
-          <article class="price-card">
+          <article class="price-card featured">
             <div class="tier-kind">Step 1</div>
             <div class="tier">AI Opportunity Audit</div>
             <p class="tier-desc">A focused session to find your biggest opportunity. No cost, and no obligation to go further.</p>
             <div class="price-tag">Free <small>No cost, no obligation</small></div>
-            <a class="btn btn-ghost" href="#contact">Book your free Audit</a>
+            <a class="btn btn-primary" href="#contact">Book your free Audit</a>
           </article>
 
-          <article class="price-card featured">
+          <article class="price-card">
             <div class="tier-kind">Step 2</div>
             <div class="tier">Build &amp; Setup</div>
             <p class="tier-desc">A one-time project to build and install your solution, hands-on and priced to scope.</p>
             <div class="price-tag">Contact for pricing <small>One-time, priced to scope</small></div>
-            <a class="btn btn-primary" href="#contact">Book a Free Intro Call</a>
+            <a class="btn btn-ghost" href="#contact">Book a Free Intro Call</a>
           </article>
 
           <article class="price-card">

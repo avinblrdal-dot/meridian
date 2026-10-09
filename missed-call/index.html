@@ -279,7 +279,11 @@ $('#reset-demo').addEventListener('click', () => {
 $('#send-real').addEventListener('change', (e) => {
   const hint = $('#real-hint');
   if (e.target.checked) {
-    if (!status?.smsLive) {
+    if (status?.staticBuild) {
+      hint.innerHTML =
+        '<strong style="color:var(--amber)">Browser-only demo.</strong> Nothing can be ' +
+        'sent from this page, so this will still simulate.';
+    } else if (!status?.smsLive) {
       hint.innerHTML =
         '<strong style="color:var(--red)">Twilio is not configured</strong> &mdash; ' +
         'this will still simulate. Add credentials in .env to send for real.';
