@@ -93,6 +93,7 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: 'AI is not configured' });
   }
 
+  const failures = [];
   for (const call of providers) {
     try {
       const reply = await call(system, question);
@@ -100,9 +101,12 @@ export default async function handler(req, res) {
     } catch (err) {
       // Logged for Vercel's function logs. Never sent to the browser.
       console.error('[meridian-chat]', err.message);
+      // Only the provider name and status code: enough to diagnose, and
+      // never the key or the provider's full error text.
+      failures.push(String(err.message).split(' ').slice(0, 2).join(' '));
     }
   }
-  return res.status(502).json({ error: 'No reply from AI' });
+  return res.status(502).json({ error: 'No reply from AI', detail: failures });
 }
 
 /* ---- Providers -------------------------------------------------------- */
@@ -144,13 +148,19 @@ async function callGemini(system, question) {
       body: JSON.stringify({
         system_instruction: { parts: [{ text: system }] },
         contents: [{ role: 'user', parts: [{ text: question }] }],
-        generationConfig: { maxOutputTokens: 200, temperature: 0.3 },
+        // Newer Flash models "think" first, and thinking counts against this
+        // budget. Too small a number leaves no room for the actual reply.
+        generationConfig: { maxOutputTokens: 1024, temperature: 0.3 },
       }),
     }
   );
   if (!r.ok) throw new Error('Gemini ' + r.status + ' ' + (await r.text()).slice(0, 200));
   const data = await r.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+  // Skip any "thought" parts and join the rest: the reply isn't always parts[0].
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  const text = parts.filter((p) => p.text && !p.thought).map((p) => p.text).join('').trim();
+  if (!text) throw new Error('Gemini returned no text (' + (data?.candidates?.[0]?.finishReason || 'no candidate') + ')');
+  return text;
 }
 
 function safeParse(s) {
