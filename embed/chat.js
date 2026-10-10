@@ -121,6 +121,9 @@
           // Path or URL to the business's own logo, shown in the chat
           // header. Falls back to their initials if unset or if it 404s.
           logo: '',
+          // Circle behind that logo. White suits most logos; a light or
+          // gold logo needs a dark one (Meridian's own uses navy).
+          logoBg: '#FFFFFF',
           // Set false only if a client objects to the credit line.
           poweredBy: true },
         RAW.brand
@@ -512,8 +515,15 @@
       /* A client logo can be any shape or aspect ratio, so contain it
          rather than cropping someone's wordmark in half. */
       .head .avatar-img {
-        width: 100%; height: 100%; object-fit: contain; padding: 5px;
+        width: 100%; height: 100%; object-fit: contain; padding: 7px;
         display: block;
+      }
+      /* With a real logo: a solid circle in the logo's own colour, and a
+         thin gold ring so it still reads against the navy header. */
+      .head .avatar.has-logo {
+        width: 42px; height: 42px;
+        background: ${b.logoBg};
+        box-shadow: 0 0 0 1.5px ${b.gold}, 0 2px 8px rgba(0,0,0,0.25);
       }
       .head .who { font-weight: 600; font-size: 14.5px; }
       .head .status { font-size: 12px; opacity: 0.66; display: flex; align-items: center; gap: 5px; }
@@ -686,7 +696,7 @@
     wrap.innerHTML = `
       <div class="panel" data-open="false" role="dialog" aria-label="Chat with ${esc(CFG.business.name)}">
         <div class="head">
-          <div class="avatar">${
+          <div class="avatar${CFG.brand.logo ? ' has-logo' : ''}">${
             /* The client's own logo if they gave us one, otherwise their
                initials. Deliberately NOT the Meridian logo: to a visitor
                this is the salon's front desk, not ours. Our credit goes in
@@ -694,7 +704,7 @@
                initials rather than showing a broken-image icon. */
             CFG.brand.logo
               ? `<img src="${esc(CFG.brand.logo)}" alt="" class="avatar-img"
-                      onerror="this.parentNode.textContent=${JSON.stringify(initials(CFG.business.name))}">`
+                      onerror="this.parentNode.classList.remove('has-logo');this.parentNode.textContent=${JSON.stringify(initials(CFG.business.name))}">`
               : esc(initials(CFG.business.name))
           }</div>
           <div>

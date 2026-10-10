@@ -297,6 +297,8 @@ window.MERIDIAN_CHAT_CONFIG = {
     // On a CLIENT's widget this is their logo and the header shows their
     // brand. Here we are the business, so it's ours.
     logo: '/embed/meridian-logo.png',
+    // The gold mark needs a dark circle behind it to stand out.
+    logoBg: '#1B2233',
 
     // The "Powered by Meridian" credit is pointless on Meridian's own site.
     poweredBy: false,
