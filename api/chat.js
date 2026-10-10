@@ -103,7 +103,7 @@ export default async function handler(req, res) {
       console.error('[meridian-chat]', err.message);
       // Only the provider name and status code: enough to diagnose, and
       // never the key or the provider's full error text.
-      failures.push(String(err.message).split(' ').slice(0, 2).join(' '));
+      failures.push(String(err.message).slice(0, 80));
     }
   }
   return res.status(502).json({ error: 'No reply from AI', detail: failures });
@@ -111,26 +111,46 @@ export default async function handler(req, res) {
 
 /* ---- Providers -------------------------------------------------------- */
 
+/** Tried in order: if one is retired or unavailable, the next one answers. */
+const GROQ_MODELS = ['llama-3.3-70b-versatile', 'openai/gpt-oss-20b', 'llama-3.1-8b-instant'];
+
 async function callGroq(system, question) {
-  const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + process.env.GROQ_API_KEY,
-    },
-    body: JSON.stringify({
-      model: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: question },
-      ],
-      max_tokens: 160,
-      temperature: 0.3,
-    }),
-  });
-  if (!r.ok) throw new Error('Groq ' + r.status + ' ' + (await r.text()).slice(0, 200));
-  const data = await r.json();
-  return data?.choices?.[0]?.message?.content?.trim() || null;
+  const models = process.env.GROQ_MODEL
+    ? [process.env.GROQ_MODEL].concat(GROQ_MODELS)
+    : GROQ_MODELS;
+  let lastError;
+
+  for (const model of models) {
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + process.env.GROQ_API_KEY,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: system },
+          { role: 'user', content: question },
+        ],
+        max_tokens: 400,
+        temperature: 0.3,
+      }),
+    });
+    if (r.ok) {
+      const data = await r.json();
+      const text = data?.choices?.[0]?.message?.content?.trim();
+      if (text) return text;
+      lastError = new Error('Groq empty ' + model);
+      continue;
+    }
+    // Groq's short error code (e.g. model_not_found) is safe to report.
+    const code = (await r.json().catch(() => ({})))?.error?.code || '';
+    lastError = new Error('Groq ' + r.status + ':' + code + ' ' + model);
+    // A bad key or rate limit won't be fixed by another model.
+    if (r.status === 401 || r.status === 429) break;
+  }
+  throw lastError;
 }
 
 async function callGemini(system, question) {
