@@ -158,8 +158,9 @@ async function callGroq(system, question, history = []) {
     // Groq's short error code (e.g. model_not_found) is safe to report.
     const code = (await r.json().catch(() => ({})))?.error?.code || '';
     lastError = new Error('Groq ' + r.status + ':' + code + ' ' + model);
-    // A bad key or rate limit won't be fixed by another model.
-    if (r.status === 401 || r.status === 429) break;
+    // A bad key won't be fixed by another model. A rate limit (429) can be:
+    // Groq's limits are per model, so the next one may still have room.
+    if (r.status === 401) break;
   }
   throw lastError;
 }
