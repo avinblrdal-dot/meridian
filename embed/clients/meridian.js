@@ -205,6 +205,21 @@ window.MERIDIAN_CHAT_CONFIG = {
         "Ask on the call.",
     },
     {
+      // What Meridian does NOT do. With AI on, this is what stops the model
+      // saying yes to "can you build me an app".
+      id: 'scope',
+      keywords: ['app', 'build me an app', 'mobile app', 'website', 'build a website',
+                 'web design', 'custom software', 'social media', 'marketing',
+                 'ads', 'seo', 'guarantee', 'guaranteed'],
+      answer:
+        "We don't build custom phone apps or full websites, and we don't run " +
+        "ads or social media. We set up practical fixes inside the tools you " +
+        "already use: reminders and rebooking, missed-call text-back, a chat " +
+        "assistant for repeat questions, and review requests. We also can't " +
+        "guarantee a number of bookings; the free Audit tells you honestly " +
+        "what's likely to help.",
+    },
+    {
       // For visitors who don't know what they need yet. Kept LAST on
       // purpose: the matcher breaks ties in list order, so an existing
       // answer wins any tie. 'sure' / 'unsure' are single words (3 points,
