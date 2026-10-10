@@ -264,6 +264,21 @@ window.MERIDIAN_CHAT_CONFIG = {
     provider: 'groq',
     apiKey: '',
     proxyUrl: 'https://meridianaiservices.vercel.app/api/chat',
+    // Open mode: chats like a normal AI assistant, with the whole website
+    // below as background. Facts about Meridian still only come from here.
+    mode: 'open',
+    about: [
+      "Meridian is a hands-on AI consultancy for owner-run local businesses in Frisco and the Dallas-Fort Worth area, Texas: salons, barbershops, nail and spa studios, fitness studios, and yoga and dance studios. Ideal clients are owner-operated with roughly 15 or fewer staff, where the owner personally handles booking, messages and marketing. ",
+      "The problem we solve: no-shows leaving chairs empty, calls and DMs going unanswered while the owner is with a client, and the same questions (hours, pricing, walk-ins) answered again and again. Many owners have heard they should use AI but haven't had the time, know-how or a reason to trust it.",
+      "How it works: 1) AI Opportunity Audit: we sit down with the owner and find where time or money is leaking. 2) Custom Build & Setup: we build and install the fix ourselves, hands-on. 3) Owner & Staff Training: the team learns to run it, no tech background needed. 4) Before/After Impact Report: we measure the result, such as fewer no-shows, hours saved and more booked chairs. ",
+      "What we often build: fewer no-shows (automated reminders and one-tap rebooking); no more missed bookings (instant text-back when a call goes unanswered); a front desk freed up (an assistant that answers repeat questions across calls, texts and DMs, like this chat); a stronger reputation (faster review replies and a simple system to earn more reviews). These are starting points, not a menu; the Audit decides what a business actually needs. ",
+      "Why Meridian: hands-on, not hands-off. We build it rather than just advise, we teach the team so they are not dependent on us, and we are local and personal, one-on-one in DFW. ",
+      "Pricing: the AI Opportunity Audit is free with no obligation. Build & Setup is a one-time project priced to scope. Ongoing Support is an optional, affordable monthly plan, priced to scope. No published prices beyond the free Audit. A limited number of pilot spots are offered at a reduced rate to founding clients in exchange for documented results. ",
+      "Where we're headed: starting with beauty and wellness, later other local service businesses that lose time the same way, like home-service trades.",
+      "Founder: Meridian is founded and built by Avin, who is hands-on with every AI workflow and tool. Meridian exists because local owners deserve AI that's simple, personal and explained to them, not sold to them.",
+      "Ways to start: book a free intro call through the contact form at https://meridianaiservices.vercel.app/#contact, or take the 2-minute diagnostic at https://meridianaiservices.vercel.app/diagnostic.",
+    ].join(' '),
+
     model: '',
     timeoutMs: 8000,
   },

@@ -106,7 +106,13 @@
         "I'm not sure about that one, sorry! Give us a call and we'll answer properly.",
       ai: Object.assign(
         { enabled: false, provider: 'gemini', apiKey: '', proxyUrl: '',
-          model: '', timeoutMs: 8000 },
+          model: '', timeoutMs: 8000,
+          // 'strict': answer only from the facts. 'open': chat like a normal
+          // assistant, but never invent facts about the business.
+          mode: 'strict',
+          // Optional long-form background (e.g. the whole website's text),
+          // given to the AI on top of the FAQs.
+          about: '' },
         RAW.ai
       ),
       brand: Object.assign(
@@ -274,10 +280,31 @@
     CFG.faqs.forEach(function (f) {
       lines.push('- ' + (f.id || '') + ': ' + fill(f.answer));
     });
+    if (CFG.ai.about) lines.push('', 'MORE ABOUT THE BUSINESS:', CFG.ai.about);
     return lines.join('\n');
   }
 
   function systemPrompt() {
+    if (CFG.ai.mode === 'open') {
+      return (
+        'You are the AI assistant on the website of ' + CFG.business.name + '. ' +
+        'Chat naturally, like a knowledgeable, friendly person.\n\n' +
+        knowledgeBase() + '\n\n' +
+        'HOW TO ANSWER:\n' +
+        '1. You may talk freely: explain how AI works, give general, practical ' +
+        'advice to small business owners, answer follow-up questions, and use ' +
+        'your own words. Be genuinely helpful.\n' +
+        '2. Facts ABOUT ' + CFG.business.name + ' (services, prices, timelines, ' +
+        'results, guarantees, who runs it) must come only from the information ' +
+        'above. Never invent a price, a promise, a client, a statistic or a ' +
+        'service. If it is not covered, say so and suggest the free intro call: ' +
+        CFG.business.bookingLink + '\n' +
+        '3. When it fits naturally, connect the conversation back to how ' +
+        CFG.business.name + ' could help, without being pushy.\n' +
+        '4. Keep replies short: usually 2 to 4 sentences. Plain text, no ' +
+        'markdown, no bullet points, no emoji. Speak as "we".'
+      );
+    }
     return (
       'You are the front desk assistant for ' + CFG.business.name + ', ' +
       'answering questions from customers on their website.\n\n' +
@@ -298,6 +325,9 @@
    * the caller then falls back to keyword matching, so the widget never dies
    * because an API had a bad day.
    */
+  /** The AI conversation so far (proxy mode only), oldest first. */
+  const history = [];
+
   async function askAI(question) {
     const ai = CFG.ai;
     if (!ai.enabled) return null;
@@ -313,7 +343,8 @@
       if (ai.proxyUrl) {
         // Production path: our own endpoint holds the key server-side.
         url = ai.proxyUrl;
-        body = { question: question, system: systemPrompt() };
+        // Recent turns, so follow-ups like "how long does that take?" make sense.
+        body = { question: question, system: systemPrompt(), history: history.slice(-6) };
       } else if (ai.provider === 'groq') {
         url = 'https://api.groq.com/openai/v1/chat/completions';
         headers.Authorization = 'Bearer ' + ai.apiKey;
@@ -381,7 +412,10 @@
 
   async function answer(question) {
     const aiText = await askAI(question);
-    if (aiText) return { text: aiText, source: 'ai' };
+    if (aiText) {
+      history.push({ role: 'user', content: question }, { role: 'assistant', content: aiText });
+      return { text: aiText, source: 'ai' };
+    }
 
     const faq = matchFaq(question);
     if (faq) return { text: fill(faq.answer), source: 'faq' };
