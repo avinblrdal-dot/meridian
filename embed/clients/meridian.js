@@ -8,9 +8,11 @@
  * Meridian's own site runs the exact same install a client gets. If it breaks
  * here, it is broken for everyone - which is the point of dogfooding it.
  *
- * AI IS OFF. With it off the widget answers only from the `faqs` list below
- * and physically cannot invent a price or a turnaround time. On the site that
- * sells your credibility, that is the setting you want.
+ * AI IS ON, through /api/chat (Groq, free). The model is told to answer only
+ * from the `faqs` below, and the server repeats that rule where nobody can
+ * edit it. If the AI is down or over its limit, the widget falls back to the
+ * written `faqs`, so it can't break. To go back to answers-only, set
+ * ai.enabled to false.
  * ==========================================================================*/
 
 window.MERIDIAN_CHAT_CONFIG = {
@@ -238,16 +240,15 @@ window.MERIDIAN_CHAT_CONFIG = {
   /* ------------------------------------------------------------------
      5. AI MODE
      ------------------------------------------------------------------
-     OFF, and it should stay off here unless you deploy the proxy in
-     ../meridian-chatbot/proxy/. Anything in this file is visible to
-     anyone who views the page source, so an API key pasted below would
-     be public. Full explanation in ../meridian-chatbot/README.md.
+     ON via /api/chat. The key lives only in Vercel's environment
+     variables. Never paste a key below: anything in this file is visible
+     to anyone who views the page source.
      ------------------------------------------------------------------ */
   ai: {
-    enabled: false,
-    provider: 'gemini',
+    enabled: true,
+    provider: 'groq',
     apiKey: '',
-    proxyUrl: '',
+    proxyUrl: 'https://meridianaiservices.vercel.app/api/chat',
     model: '',
     timeoutMs: 8000,
   },
