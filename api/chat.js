@@ -7,7 +7,7 @@ const RATE_WINDOW_MS = 60_000;
 
 const DEFAULT_MODELS = {
   gemini: 'gemini-2.5-flash',
-  groq: 'llama-3.3-70b-versatile',
+  groq: 'openai/gpt-oss-20b',
 };
 
 function loadConfig() {
@@ -134,7 +134,8 @@ async function callGroq(cfg, system, question) {
         { role: 'system', content: system },
         { role: 'user', content: question },
       ],
-      max_tokens: 160,
+      // gpt-oss models think before answering, so they need room past the reply itself.
+      ...(cfg.model.startsWith('openai/gpt-oss') ? { reasoning_effort: 'low', max_tokens: 600 } : { max_tokens: 160 }),
       temperature: 0.3,
     }),
   });
