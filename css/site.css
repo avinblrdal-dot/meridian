@@ -89,6 +89,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   transition: transform .3s ease;
 }
 .site-header.tucked { transform: translateY(-100%); }
+/* On the homepage the bar starts out the same cream as the top of the hero, so the two read as one surface. */
+body:has(.hero) .site-header:not(.scrolled) { background: transparent; border-bottom-color: transparent; }
+/* The hero slides up under the bar so its glow and sun show through it. */
+.hero { margin-top: -73px; padding-top: 73px; }
+.site-header { transition: transform .3s ease, background-color .25s ease, border-color .25s ease; }
 .header-bar { display: flex; align-items: center; gap: 32px; min-height: 72px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--navy); }
 .brand span { font-family: "Josefin Sans", var(--font); font-weight: 600; font-size: 1.125rem; letter-spacing: .2em; text-transform: uppercase; padding-top: 3px; }
@@ -110,28 +115,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .hero-sun {
   --sun: clamp(440px, 62vw, 860px);
-  position: absolute; left: 50%; top: calc(240px - var(--sun) / 2);
+  position: absolute; left: 50%; top: calc(313px - var(--sun) / 2);
   width: var(--sun); aspect-ratio: 1;
   transform: translateX(-50%);
   pointer-events: none;
 }
 .hero-rays { width: 100%; height: 100%; display: block; }
-.hero-rays line, .hero-rays circle { fill: none; stroke: var(--gold); stroke-width: 1.2; opacity: .2; }
-.hero-rays .faint { opacity: .1; }
+.hero-rays line, .hero-rays circle { fill: none; stroke: var(--gold); stroke-width: 1.2; opacity: .13; }
+.hero-rays .faint { opacity: .07; }
 .hero-sun-mark {
   position: absolute; top: 50%; left: 50%;
   width: 28%; height: auto;
   transform: translate(-50%, -50%);
-  opacity: .42;
-  filter: drop-shadow(0 0 22px rgba(232, 200, 116, .6));
+  opacity: .2;
+  filter: drop-shadow(0 0 28px rgba(237, 208, 138, .45));
 }
 .hero-fold { display: flex; flex-direction: column; min-height: calc(100svh - 73px); padding-top: clamp(28px, 6vh, 72px); }
 .hero-head { position: relative; text-align: center; }
 .hero h1 { font-size: clamp(2.5rem, 5.2vw, 4.5rem); font-weight: 500; line-height: 1.06; letter-spacing: -0.02em; margin: 0 auto 18px; }
 .hero h1 em {
-  font-style: normal; font-weight: 500;
+  font-style: normal; font-weight: 600;
   color: #A47B1E;
-  background: linear-gradient(100deg, #8F6A16 0%, #C99B33 48%, #9A7420 100%);
+  background: linear-gradient(100deg, #946B10 0%, #D8AA3C 45%, #F0CB6E 60%, #A87C1C 100%);
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -150,21 +155,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .hero-card {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: min(620px, calc(100% - 2 * var(--gutter)));
-  display: grid; grid-template-columns: 1fr auto; gap: 12px;
-  padding: 28px;
-  background: rgba(255, 255, 255, .6);
-  border: 1px solid rgba(255, 255, 255, .75);
-  border-radius: 16px;
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-  box-shadow: 0 10px 40px rgba(27, 34, 51, .16);
+  display: grid; grid-template-columns: 1fr auto; gap: 10px;
+  padding: 18px 18px 14px;
+  background: rgba(255, 255, 255, .42);
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 10px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 12px rgba(27, 34, 51, .08);
+  font-family: var(--font-head);
 }
 .hero-card input {
   min-height: 44px; padding: 0 14px;
-  font: inherit; font-size: 1rem; color: var(--navy);
-  border: 1px solid var(--field); border-radius: 8px; background: #fff;
+  font: inherit; font-size: 1.0625rem; color: var(--navy);
+  border: 1px solid rgba(27, 34, 51, .14); border-radius: 6px; background: rgba(255, 255, 255, .85);
 }
-.hero-card p { grid-column: 1 / -1; margin: 0; text-align: center; font-size: 0.875rem; color: var(--navy); }
+.hero-card p { grid-column: 1 / -1; margin: 0; text-align: left; font-size: 0.9375rem; color: var(--navy); }
+.hero-card .btn { font-family: var(--font-head); font-size: 1rem; border-radius: 6px; }
 
 /* Metrics */
 .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: clamp(48px, 6vw, 80px); text-align: center; }
@@ -279,8 +286,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .mini-quiz .picked { border-color: var(--gold); background: var(--gold-soft); }
 
 /* Cost calculator */
-.calc { display: grid; grid-template-columns: 1fr 1fr; background: #fff; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; }
-.calc-result { display: grid; grid-template-rows: 1fr auto; background: linear-gradient(165deg, var(--gold-light), #D2AA55); color: var(--navy); }
+#cost {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(201, 162, 74, .55), transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(27, 34, 51, .28), transparent 45%),
+    linear-gradient(135deg, #F7E9C4 0%, #FBF7EE 45%, #E6C77E 100%);
+}
+.calc {
+  display: grid; grid-template-columns: 1fr 1fr;
+  background: rgba(255, 255, 255, .5);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 20px; overflow: hidden;
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  backdrop-filter: blur(16px) saturate(130%);
+  box-shadow: 0 12px 40px rgba(27, 34, 51, .12);
+}
+.calc-fields input { background: rgba(255, 255, 255, .75); }
+.calc-result { display: grid; grid-template-rows: 1fr auto; background: linear-gradient(160deg, rgba(240, 208, 128, .8) 0%, rgba(201, 162, 74, .78) 55%, rgba(150, 112, 30, .82) 100%); color: var(--navy); }
 .calc-main { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 48px 24px; }
 .calc-main p { font-size: 1.25rem; font-weight: 500; margin: 0 0 8px; max-width: 22ch; }
 .calc-main strong { font-family: var(--font-head); font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 500; letter-spacing: -0.02em; line-height: 1; }

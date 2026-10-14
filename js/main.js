@@ -17,11 +17,13 @@
   var header = document.querySelector(".site-header");
   if (header) {
     var lastY = window.scrollY;
+    header.classList.toggle("scrolled", lastY > 8);
     var keepOpen = function () {
       return (nav && nav.classList.contains("open")) || header.contains(document.activeElement);
     };
     window.addEventListener("scroll", function () {
       var y = window.scrollY;
+      header.classList.toggle("scrolled", y > 8);
       if (y > lastY && y > 120 && !keepOpen()) header.classList.add("tucked");
       else if (y < lastY) header.classList.remove("tucked");
       lastY = y;
