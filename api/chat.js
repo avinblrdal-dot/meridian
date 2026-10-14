@@ -12,14 +12,15 @@ const DEFAULT_MODELS = {
 
 function loadConfig() {
   const env = process.env;
-  const provider = (env.PROVIDER || 'gemini').toLowerCase();
+  const clean = (v) => (v || '').trim().replace(/^["']|["']$/g, '');
+  const provider = clean(env.PROVIDER || 'gemini').toLowerCase();
   return {
     allowedOrigins: (env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean),
     systemPrompt: env.SYSTEM_PROMPT || '',
     systemPrompts: parsePrompts(env.SYSTEM_PROMPTS),
     provider,
-    model: env.MODEL || DEFAULT_MODELS[provider],
-    apiKey: provider === 'groq' ? env.GROQ_API_KEY : env.GEMINI_API_KEY,
+    model: clean(env.MODEL) || DEFAULT_MODELS[provider],
+    apiKey: clean(provider === 'groq' ? env.GROQ_API_KEY : env.GEMINI_API_KEY),
   };
 }
 
@@ -137,7 +138,7 @@ async function callGroq(cfg, system, question) {
       temperature: 0.3,
     }),
   });
-  if (!r.ok) throw new Error('groq status=' + r.status);
+  if (!r.ok) throw new Error('groq status=' + r.status + ' model=' + cfg.model + ' ' + (await r.text()).slice(0, 200));
   const data = await r.json();
   return data?.choices?.[0]?.message?.content?.trim() || null;
 }
