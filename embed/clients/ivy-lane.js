@@ -1,22 +1,9 @@
-/* ============================================================================
- * CLIENT CONFIG — ivy-lane  (SAMPLE, not a real business)
- * ----------------------------------------------------------------------------
- * Loaded by /embed/chat.js when a page carries:
- *
- *   <script src="/embed/chat.js" data-client="ivy-lane" defer></script>
- *
- * This is the one you show a prospect:
- *   /preview?client=ivy-lane
- *
- * Keep it here as a worked example of what a finished client config looks
- * like. Copy _TEMPLATE.js - not this file - when you take on a real client.
- * ==========================================================================*/
+// Widget config for ivy-lane. Loaded by /embed/chat.js via data-client="ivy-lane".
+// Everything here is public; never put a key in this file.
 
-window.MERIDIAN_CHAT_CONFIG = {
+window.Meridian = window.Meridian || {};
+window.Meridian.config = {
 
-  /* ------------------------------------------------------------------
-     1. THE BUSINESS
-     ------------------------------------------------------------------ */
   business: {
     name: 'Ivy Lane Hair Studio',
 
@@ -30,14 +17,8 @@ window.MERIDIAN_CHAT_CONFIG = {
     address: '218 Ivy Lane, Austin, TX 78704',
   },
 
-  /* ------------------------------------------------------------------
-     2. GREETING + QUICK BUTTONS
-     ------------------------------------------------------------------
-     The quick buttons matter more than they look. Most visitors won't
-     type anything — they'll tap. Put your four most-asked questions here.
-     ------------------------------------------------------------------ */
   greeting:
-    "Hi! I'm the front desk assistant for Ivy Lane. Ask me anything — hours, " +
+    "Hi! I'm the front desk assistant for Ivy Lane. Ask me anything, hours, " +
     "pricing, parking, or booking.",
 
   quickReplies: [
@@ -47,20 +28,6 @@ window.MERIDIAN_CHAT_CONFIG = {
     'Where do I park?',
   ],
 
-  /* ------------------------------------------------------------------
-     3. THE ANSWERS
-     ------------------------------------------------------------------
-     Each entry needs:
-       id       – any unique short name
-       keywords – words/phrases that should match this answer.
-                  Include how REAL people type: misspellings, slang,
-                  short forms. "cancel", "cancelation", "reschedule".
-       answer   – written in the business's voice. Keep it short.
-                  Two sentences is usually plenty.
-
-     Keywords are matched loosely — plurals and word endings are handled
-     for you, so "price" also catches "prices" and "pricing".
-     ------------------------------------------------------------------ */
   faqs: [
     {
       id: 'hours',
@@ -115,7 +82,7 @@ window.MERIDIAN_CHAT_CONFIG = {
       keywords: ['where', 'address', 'located', 'location', 'directions',
                  'find you', 'near'],
       answer:
-        "We're at 218 Ivy Lane, Austin TX 78704 — just off South Congress, " +
+        "We're at 218 Ivy Lane, Austin TX 78704, just off South Congress, " +
         "next to the coffee shop.",
     },
     {
@@ -147,7 +114,7 @@ window.MERIDIAN_CHAT_CONFIG = {
       id: 'kids',
       keywords: ['kid', 'kids', 'child', 'children', 'toddler', 'family'],
       answer:
-        "Yes, we cut kids' hair — $35 for under 12s. Best to book earlier in " +
+        "Yes, we cut kids' hair, $35 for under 12s. Best to book earlier in " +
         "the day when it's quieter.",
     },
     {
@@ -158,69 +125,17 @@ window.MERIDIAN_CHAT_CONFIG = {
     },
   ],
 
-  /* ------------------------------------------------------------------
-     4. WHEN IT DOESN'T KNOW
-     ------------------------------------------------------------------
-     Deliberately honest. A bot that guesses a wrong price costs the
-     business real money and real trust. {phone} and {booking_link} are
-     filled in from the business block above.
-     ------------------------------------------------------------------ */
   fallback:
     "I'm not sure about that one, sorry! Give us a call on {phone} and we'll " +
-    "answer properly — or you can book in at {booking_link}.",
+    "answer properly, or you can book in at {booking_link}.",
 
-  /* ------------------------------------------------------------------
-     5. AI MODE  (optional — leave off and everything still works)
-     ------------------------------------------------------------------
-     OFF by default, and that is the recommended setting for a real
-     client website. Read this before turning it on.
-
-     With AI off, the widget answers from the `faqs` list above using
-     keyword matching. It is instant, free forever, works offline, and
-     physically cannot invent a price that isn't in this file.
-
-     With AI on, questions go to a language model along with the FAQ list
-     as context, so it handles phrasings your keywords missed and answers
-     more naturally.
-
-     >>> THE SECURITY POINT <<<
-     Anything in this file is visible to anyone who views the page source.
-     If you put a real API key in `apiKey` on a public website, people can
-     and will take it and spend your quota.
-
-       - Demoing on your own laptop?  `apiKey` is fine.
-       - Live on a client's website?  Use `proxyUrl` instead. See proxy/
-         in this folder — it's a free serverless function that holds the
-         key server-side. Takes about 5 minutes to deploy.
-     ------------------------------------------------------------------ */
   ai: {
-    // On for the demo salon only. Meridian's own site stays answers-only.
-    // The key is NOT here: it lives in Vercel, behind /api/chat. Until a key
-    // is set there, every answer quietly falls back to the written FAQs.
     enabled: true,
-
-    // Ignored when proxyUrl is set; the server picks Groq, then Gemini.
-    provider: 'groq',
-
-    // LOCAL DEMOS ONLY. Never on a public site — see the warning above.
-    apiKey: '',
-
-    // PRODUCTION. Your deployed proxy endpoint, e.g.
-    // 'https://your-project.vercel.app/api/chat'
-    // When set, this is used and apiKey is ignored entirely.
     proxyUrl: 'https://meridianaiservices.vercel.app/api/chat',
-
-    // Leave blank to use the provider's sensible default.
-    model: '',
-
-    // How long to wait before giving up and falling back to keyword
-    // matching. Keeps a slow API from leaving the visitor staring at dots.
+    businessId: 'ivy-lane',
     timeoutMs: 8000,
   },
 
-  /* ------------------------------------------------------------------
-     6. LOOK
-     ------------------------------------------------------------------ */
   brand: {
     gold: '#B88C29',
     goldDark: '#96701E',

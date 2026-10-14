@@ -4,34 +4,35 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard · Meridian</title>
+<title>Call log | Meridian</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="/missed-call/assets/meridian-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&family=League+Spartan:wght@400;500;600;700&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/assets/meridian-logo.png">
 <link rel="stylesheet" href="/missed-call/styles.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="/missed-call"><img class="brand-mark" src="/missed-call/assets/meridian-logo.png" alt="">Meridian</a>
-    <nav class="nav">
-      <a href="/missed-call">Live Demo</a>
-      <a href="/missed-call/dashboard">Dashboard</a>
+    <a class="brand" href="/" aria-label="Meridian home"><img class="brand-mark" src="/assets/meridian-logo.png" alt="" width="28" height="31"></a>
+    <nav class="nav" aria-label="Missed-call demo">
+      <a href="/missed-call">Demo</a>
+      <a href="/missed-call/dashboard">Call log</a>
       <a href="/missed-call/settings">Settings</a>
-      <a href="/animation">Animation</a>
     </nav>
+    <a class="btn btn-gold topbar-cta" href="/#contact">Book a free audit</a>
   </div>
 </header>
 <div class="modebar" id="modebar" data-mode="dry">Checking mode&hellip;</div>
 
-<main>
+<main id="main">
   <div class="page-head">
     <h1>Recovered calls</h1>
     <p>
       Every missed call and the text that went back out. This is the page a
-      client logs into &mdash; it is the receipt for what they're paying for.
+      client logs into. It is the receipt for what they're paying for.
     </p>
   </div>
 
@@ -39,16 +40,16 @@
     <div class="stat"><div class="n" id="stat-total">0</div><div class="k">Calls recovered</div></div>
     <div class="stat"><div class="n" id="stat-sent">0</div><div class="k">Texts delivered</div></div>
     <div class="stat"><div class="n" id="stat-simulated">0</div><div class="k">Simulated</div></div>
-    <div class="stat"><div class="n" id="stat-latency">&mdash;</div><div class="k">Avg reply time</div></div>
+    <div class="stat"><div class="n" id="stat-latency">&ndash;</div><div class="k">Avg reply time</div></div>
   </div>
 
   <div class="card">
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px">
-      <h2 style="margin:0">Call log</h2>
-      <span class="small muted" id="live-dot">Live</span>
-      <div style="margin-left:auto;display:flex;gap:8px">
-        <button class="btn btn-ghost btn-sm" id="refresh">Refresh</button>
-        <button class="btn btn-danger btn-sm" id="clear-log">Clear log</button>
+    <div class="card-head">
+      <h2>Call log</h2>
+      <span class="small live-dot" id="live-dot">Live</span>
+      <div class="card-actions">
+        <button type="button" class="btn btn-ghost btn-sm" id="refresh">Refresh</button>
+        <button type="button" class="btn btn-danger btn-sm" id="clear-log">Clear log</button>
       </div>
     </div>
 
@@ -70,7 +71,7 @@
 
     <div class="empty-state" id="empty" hidden>
       <p><strong>Nothing here yet.</strong></p>
-      <p class="small">Head to the <a href="/missed-call">Live Demo</a> and press the gold button.</p>
+      <p class="small">Head to the <a href="/missed-call">demo</a> and press the gold button.</p>
     </div>
   </div>
 </main>
@@ -90,33 +91,57 @@
    this page appears without a refresh.
    ============================================================ */
 
-/** Render one row of the call log. */
-function rowHtml(row, isNew = false) {
-  const badge =
-      row.status === 'sent'      ? '<span class="badge badge-sent">Sent</span>'
-    : row.status === 'simulated' ? '<span class="badge badge-simulated">Simulated</span>'
-    :                              '<span class="badge badge-failed">Failed</span>';
+/** One table cell. Text goes in with textContent, never as HTML. */
+function cell(label, text, className = '') {
+  const td = document.createElement('td');
+  td.dataset.label = label;          // shown as the row label on phones
+  if (className) td.className = className;
+  if (text instanceof Node) td.appendChild(text);
+  else td.textContent = text ?? '';
+  return td;
+}
+
+/** Build one row of the call log as a <tr> element. */
+function rowEl(row, isNew = false) {
+  const badge = document.createElement('span');
+  const kind = row.status === 'sent' ? 'sent' : row.status === 'simulated' ? 'simulated' : 'failed';
+  badge.className = `badge badge-${kind}`;
+  badge.textContent = kind === 'sent' ? 'Sent' : kind === 'simulated' ? 'Simulated' : 'Failed';
 
   const source =
       row.source === 'demo'         ? 'Demo button'
     : row.source === 'twilio-voice' ? 'Real call'
     : row.source === 'webhook'      ? 'Webhook'
-    :                                 esc(row.source);
+    :                                 String(row.source ?? '');
 
   // A failed send shows WHY, inline. The reason is the actionable part.
-  const message = row.status === 'failed' && row.error
-    ? `<span style="color:var(--red)">${esc(row.error)}</span>`
-    : esc(row.message_body);
+  let message = row.message_body;
+  if (row.status === 'failed' && row.error) {
+    message = document.createElement('span');
+    message.className = 'err-text';
+    message.textContent = row.error;
+  }
 
-  return `
-    <tr class="${isNew ? 'row-new' : ''}">
-      <td class="mono small" style="white-space:nowrap">${esc(formatTime(row.created_at))}</td>
-      <td class="mono small" style="white-space:nowrap">${esc(row.caller_display || formatNumber(row.caller_number))}</td>
-      <td>${esc(row.business_name)}</td>
-      <td class="msg">${message}</td>
-      <td class="small muted" style="white-space:nowrap">${source}</td>
-      <td>${badge}</td>
-    </tr>`;
+  const tr = document.createElement('tr');
+  if (isNew) tr.className = 'row-new';
+  tr.append(
+    cell('Time', formatTime(row.created_at), 'num small nowrap'),
+    cell('Caller', row.caller_display || formatNumber(row.caller_number), 'num small nowrap'),
+    cell('Business', row.business_name),
+    cell('Text sent', message, 'msg'),
+    cell('Source', source, 'small muted nowrap'),
+    cell('Status', badge),
+  );
+  return tr;
+}
+
+function paintStats(s) {
+  $('#stat-total').textContent     = s.total ?? 0;
+  $('#stat-sent').textContent      = s.sent ?? 0;
+  $('#stat-simulated').textContent = s.simulated ?? 0;
+  $('#stat-latency').textContent   = s.avg_latency_ms
+    ? `${(s.avg_latency_ms / 1000).toFixed(1)}s`
+    : '–';
 }
 
 /** Fetch and repaint everything. */
@@ -124,17 +149,9 @@ async function loadLog() {
   const data = await api('/api/missed-calls?limit=200');
   if (!data.ok) { toast(data.error, 'err'); return; }
 
-  const body = $('#log-body');
-  body.innerHTML = data.missedCalls.map((r) => rowHtml(r)).join('');
+  $('#log-body').replaceChildren(...data.missedCalls.map((r) => rowEl(r)));
   $('#empty').hidden = data.missedCalls.length > 0;
-
-  const s = data.stats ?? {};
-  $('#stat-total').textContent     = s.total ?? 0;
-  $('#stat-sent').textContent      = s.sent ?? 0;
-  $('#stat-simulated').textContent = s.simulated ?? 0;
-  $('#stat-latency').textContent   = s.avg_latency_ms
-    ? `${(s.avg_latency_ms / 1000).toFixed(1)}s`
-    : '—';
+  paintStats(data.stats ?? {});
 }
 
 $('#refresh').addEventListener('click', loadLog);
@@ -154,17 +171,12 @@ liveEvents.on('missed-call:handled', (record) => {
   // Prepend the new row rather than refetching, so the flash animation lands
   // on exactly the row that just arrived.
   $('#empty').hidden = true;
-  $('#log-body').insertAdjacentHTML('afterbegin', rowHtml(record, true));
+  $('#log-body').prepend(rowEl(record, true));
 
   // Stats are cheap to refetch and this keeps them exactly right.
   api('/api/missed-calls?limit=1').then((data) => {
     if (!data.ok) return;
-    const s = data.stats ?? {};
-    $('#stat-total').textContent     = s.total ?? 0;
-    $('#stat-sent').textContent      = s.sent ?? 0;
-    $('#stat-simulated').textContent = s.simulated ?? 0;
-    $('#stat-latency').textContent   = s.avg_latency_ms
-      ? `${(s.avg_latency_ms / 1000).toFixed(1)}s` : '—';
+    paintStats(data.stats ?? {});
   });
 });
 

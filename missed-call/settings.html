@@ -4,34 +4,35 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Settings · Meridian</title>
+<title>Settings | Meridian</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="/missed-call/assets/meridian-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&family=League+Spartan:wght@400;500;600;700&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/assets/meridian-logo.png">
 <link rel="stylesheet" href="/missed-call/styles.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="/missed-call"><img class="brand-mark" src="/missed-call/assets/meridian-logo.png" alt="">Meridian</a>
-    <nav class="nav">
-      <a href="/missed-call">Live Demo</a>
-      <a href="/missed-call/dashboard">Dashboard</a>
+    <a class="brand" href="/" aria-label="Meridian home"><img class="brand-mark" src="/assets/meridian-logo.png" alt="" width="28" height="31"></a>
+    <nav class="nav" aria-label="Missed-call demo">
+      <a href="/missed-call">Demo</a>
+      <a href="/missed-call/dashboard">Call log</a>
       <a href="/missed-call/settings">Settings</a>
-      <a href="/animation">Animation</a>
     </nav>
+    <a class="btn btn-gold topbar-cta" href="/#contact">Book a free audit</a>
   </div>
 </header>
 <div class="modebar" id="modebar" data-mode="dry">Checking mode&hellip;</div>
 
-<main>
+<main id="main">
   <div class="page-head">
     <h1>Business profiles</h1>
     <p>
       Each profile is one client. Switch the active profile and the whole demo
-      re-skins instantly &mdash; name, message, booking link and hours. Add the
+      re-skins instantly: name, message, booking link and hours. Add the
       business you're pitching to before you walk in, and the demo speaks their
       language from the first click.
     </p>
@@ -43,11 +44,9 @@
     <div class="profile-list" id="profiles"></div>
 
     <details>
-      <summary style="cursor:pointer;font-weight:600;color:var(--gold-deep);padding:6px 0">
-        + Add a new business
-      </summary>
-      <div style="padding-top:16px;border-top:1px solid var(--line);margin-top:12px">
-        <div class="grid-2" style="gap:0 20px">
+      <summary class="add-summary">+ Add a new business</summary>
+      <div class="add-form">
+        <div class="grid-2 tight">
           <div class="field">
             <label for="new-name">Business name</label>
             <input type="text" id="new-name" placeholder="e.g. Ivy Lane Hair Studio">
@@ -66,7 +65,7 @@
             <input type="tel" id="new-phone" placeholder="+1 555 000 1111">
           </div>
         </div>
-        <button class="btn btn-gold" id="add-business">Add business</button>
+        <button type="button" class="btn btn-gold" id="add-business">Add business</button>
       </div>
     </details>
   </div>
@@ -74,8 +73,8 @@
   <!-- ============ Template editor ============ -->
   <div class="card">
     <h2>The auto-text</h2>
-    <p class="muted small" style="margin-bottom:20px">
-      Editing the profile currently active: <strong id="editing-name">&mdash;</strong>
+    <p class="muted small">
+      Editing the profile currently active: <strong id="editing-name">loading&hellip;</strong>
     </p>
 
     <div class="grid-2">
@@ -88,10 +87,10 @@
         </div>
 
         <div class="segment-meter" id="meter">
-          <span id="meter-text">&mdash;</span>
+          <span id="meter-text">Checking length&hellip;</span>
         </div>
 
-        <div class="grid-2" style="gap:0 20px;margin-top:20px">
+        <div class="grid-2 tight" style="margin-top:20px">
           <div class="field">
             <label for="edit-name">Business name</label>
             <input type="text" id="edit-name">
@@ -110,23 +109,25 @@
           </div>
         </div>
 
-        <button class="btn btn-gold" id="save-tpl">Save changes</button>
-        <button class="btn btn-ghost" id="revert-tpl">Revert</button>
+        <div class="btn-row">
+          <button type="button" class="btn btn-gold" id="save-tpl">Save changes</button>
+          <button type="button" class="btn btn-ghost" id="revert-tpl">Revert</button>
+        </div>
       </div>
 
       <!-- Live preview on a phone, so the owner sees exactly what lands -->
       <div>
-        <label>What the customer receives</label>
-        <div class="phone" style="position:static;max-width:320px">
+        <p class="label">What the customer receives</p>
+        <div class="phone phone-preview">
           <div class="phone-notch"></div>
-          <div class="phone-screen" style="min-height:340px">
+          <div class="phone-screen">
             <div class="phone-header">
               <div class="avatar" id="pv-initials">SB</div>
               <div class="who" id="pv-name">Sample Business</div>
               <div class="num">Text message</div>
             </div>
             <div class="phone-thread">
-              <div class="bubble" id="pv-bubble" style="animation:none">&mdash;</div>
+              <div class="bubble bubble-static" id="pv-bubble">&hellip;</div>
             </div>
           </div>
         </div>
@@ -148,12 +149,12 @@
           Any system that can fire an HTTP request on an unanswered call can drive
           this. Point it at:
         </p>
-        <p class="mono small" style="background:var(--cream);padding:10px 12px;border-radius:8px;word-break:break-all">
+        <p class="mono small code-line">
           POST <span id="webhook-url">/api/webhook/missed-call</span>
         </p>
         <p class="small muted">
           Body: <span class="mono">{"caller_number": "+14155550123"}</span>.
-          Visiting that URL on a running server prints the full contract &mdash;
+          Visiting that URL on a running server prints the full contract,
           handy when you are on the phone with someone else's IT provider.
         </p>
         <p class="small muted">
@@ -260,13 +261,13 @@ function refreshPreview() {
 
     let text = `${a.characters} characters · ${a.encoding} · ${a.segments} SMS segment${a.segments === 1 ? '' : 's'}`;
     if (a.encoding === 'UCS-2') {
-      text += ' — a special character (curly quote, em dash, emoji) dropped this ' +
+      text += '. A special character (curly quote, em dash, emoji) dropped this ' +
               'to a 70-character limit. Swap it for a plain one to halve the cost.';
     } else if (a.segments > 1) {
-      text += ` — over 160 characters, so it bills as ${a.segments}. ` +
+      text += `. Over 160 characters, so it bills as ${a.segments}. ` +
               `${a.remainingInSegment} characters until the next one.`;
     } else {
-      text += ` — fits in one message. ${a.remainingInSegment} characters spare.`;
+      text += `. Fits in one message, with ${a.remainingInSegment} characters spare.`;
     }
     $('#meter-text').textContent = text;
   }, 220);

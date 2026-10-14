@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy | Meridian</title>
+  <meta name="description" content="What the Meridian website and missed-call text-back collect, and what we do with it." />
+  <link rel="icon" type="image/png" href="/assets/meridian-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&family=League+Spartan:wght@400;500;600;700&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/site.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-bar">
+      <a class="brand" href="/" aria-label="Meridian home">
+        <img src="/assets/meridian-logo.png" alt="" width="28" height="31" />
+      </a>
+      <nav class="nav" id="nav" aria-label="Primary">
+        <ul>
+          <li><a href="/#tools">What we set up</a></li>
+          <li><a href="/#demo">Demo</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/#faq">Questions</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-quiet" href="/demo">Try the demo</a>
+          <a class="btn btn-gold" href="/#contact">Book a free audit</a>
+        </div>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="nav">
+        <span class="sr-only">Menu</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="page">
+      <div class="wrap narrow">
+        <h1>Privacy</h1>
+        <p class="muted">Last updated October 12, 2026</p>
+        <h2>What this website collects</h2>
+        <p><strong>Contact form.</strong> Your name, business name, email, phone if you give it, and your message. It reaches us by email through Web3Forms (web3forms.com). We use it only to reply to you.</p>
+        <p><strong>2-minute diagnostic.</strong> Your answers stay in your browser unless you choose to send them with your contact details, which reach us the same way as the contact form.</p>
+        <p><strong>Chat assistant.</strong> The questions you type are sent to an AI provider (Google Gemini or Groq) to write the reply. Please don't type personal or payment details into the chat.</p>
+        <p><strong>Live demo.</strong> The demo saves its settings in your own browser. Nothing you enter there is sent to us.</p>
+        <p>This site doesn't use cookies, analytics, or ad tracking. It's hosted on Vercel, which keeps standard server logs such as IP address and the page requested. Fonts load from Google Fonts and homepage photos load from Unsplash, and both of those also see your IP address.</p>
+        <h2>Missed-call text-back</h2>
+        <p>When you call a business that uses Meridian and the call goes unanswered, we receive your phone number from the carrier through Twilio and send you a text on that business's behalf. We keep a log of the call (your number, the time, and whether the text went out) so the business can call you back.</p>
+        <p>Reply STOP to any of these texts and you won't get another one. We don't sell phone numbers, and we don't share them or any text-message consent with third parties for their marketing.</p>
+        <h2>Questions or deletion</h2>
+        <p>To find out what we have about you, or to have it deleted, send us a message through the <a href="/#contact">contact form</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <a class="brand" href="/" aria-label="Meridian home">
+          <img src="/assets/meridian-logo.png" alt="" width="24" height="26" />
+          <span>Meridian</span>
+        </a>
+        <p>Missed-call text-back and website chat for owner-run salons and spas. Frisco, TX.</p>
+      </div>
+      <ul>
+        <li><a href="/demo">Live demo</a></li>
+        <li><a href="/diagnostic">2-minute diagnostic</a></li>
+        <li><a href="/#contact">Book a free audit</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+      </ul>
+      <p class="copyright">&copy; 2026 Meridian</p>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

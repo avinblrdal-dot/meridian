@@ -9,11 +9,14 @@ Plain static site — **no build step**. Just HTML, CSS, JS, and images.
 
 ```
 meridian-website/
-├── index.html                      # Page structure + all copy
+├── index.html                      # Homepage structure + all copy
+├── privacy.html, 404.html          # Privacy page and the not-found page
 ├── css/
-│   └── styles.css                  # All styling (brand tokens at the top)
+│   ├── site.css                    # Homepage, privacy and 404 styling (tokens at the top)
+│   └── styles.css                  # Older styling, still used by /diagnostic
 ├── js/
-│   ├── main.js                     # Nav, scroll animations, contact-form logic
+│   ├── main.js                     # Homepage: nav, hero email box, tool cards, cost calculator, contact form
+│   ├── forms.js                    # Sends the contact form and diagnostic through Web3Forms
 │   └── meridian-flow.js            # The missed-call animation (How It Works)
 ├── embed/                          # THE PRODUCT — the chat widget clients install
 │   ├── chat.js                     # The widget. Served to client sites. Don't edit per client.
@@ -79,12 +82,14 @@ vercel --prod   # production deploy
 ## Editing guide
 
 - **Copy:** edit directly in `index.html`, section by section.
-- **Colors / fonts / spacing:** `css/styles.css` → the `:root` "DESIGN TOKENS" block.
+- **Colors / fonts / spacing:** the `:root` block at the top of `css/site.css`.
 - **Logo:** `assets/meridian-logo.png` (swap the file, keep the name — or update the
   `<img src>` in the header and footer).
 - **Real contact info:** search `index.html` for `EDIT:` (email, phone, socials).
-- **Photos:** each image slot is marked with an `IMAGE SLOT` comment describing what
-  goes there. Drop a file in `assets/` and replace the placeholder block with an `<img>`.
+- **Hero photos:** four of the five shapes under the headline are placeholders
+  (`<div class="tile ... ph">`). Add a photo to `assets/` (about 600 x 720, cropped
+  to the subject's face or hands) and replace the placeholder's `<span>` with
+  `<img src="assets/your-photo.jpg" alt="" width="600" height="720" />`.
 
 ## The two embedded demos
 
@@ -233,16 +238,25 @@ Ready-to-paste email HTML is in `../meridian-missed-call/export/out/email-snippe
 To regenerate the GIF after changing the animation, see
 `../meridian-missed-call/export/`.
 
-## Make the contact form live
+## Contact form
 
-The form currently validates and shows a thank-you message (no data is sent). Pick one:
+The homepage form and the diagnostic send through Web3Forms using the access key in
+`js/forms.js`. The thank-you message only appears after Web3Forms confirms the send.
+If the key is missing or the request fails, the visitor sees an error instead.
 
-- **Formspree:** add `action="https://formspree.io/f/XXXX" method="post"` to the
-  `<form>` in `index.html`, then remove the submit handler in `js/main.js`.
-- **Netlify Forms:** add the `netlify` attribute to the `<form>` tag (auto-detected on Netlify).
-- **Custom endpoint:** POST `new FormData(form)` to your API inside `js/main.js`.
+## Chat settings on Vercel
+
+`/api/chat` refuses requests until these are set in the Vercel project:
+
+- `ALLOWED_ORIGINS`: comma-separated sites allowed to use the chat, for example
+  `https://www.meridianaiservices.com,https://meridianaiservices.com,https://meridianaiservices.vercel.app`
+- `SYSTEM_PROMPTS`: JSON of business id to prompt. The current value for `meridian`
+  and `ivy-lane` is in `../vercel-env-SYSTEM_PROMPTS.json`.
+- `GEMINI_API_KEY` or `GROQ_API_KEY`, plus `PROVIDER` if you use Groq.
+
+Without them the widget still answers from its keyword FAQ.
 
 ## Pricing note
 
-The pricing section intentionally shows **"Contact for pricing"** with no dollar
-figures — real numbers go in once a pilot has been priced.
+The site doesn't publish prices. The FAQ says the audit is free, setup is quoted once,
+and the monthly plan is optional. Add real numbers once a pilot has been priced.

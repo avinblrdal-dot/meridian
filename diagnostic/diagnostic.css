@@ -1,0 +1,155 @@
+/* ============================================================
+   MERIDIAN: 2-minute diagnostic, page styles
+   ------------------------------------------------------------
+   Loaded after /css/site.css, which supplies the tokens (:root),
+   header, footer, buttons (.btn, .btn-gold, .btn-quiet), .checks,
+   .eyebrow, .hp and .form-error. Only quiz-specific rules live
+   here, so the page stays in step with the homepage.
+   ============================================================ */
+
+/* ---- Header: brand on the left, one gold button on the right ---- */
+.dx-header .header-bar { justify-content: space-between; gap: 16px; }
+.dx-header-cta { margin-left: auto; }
+
+/* ---- Stage ---- */
+.dx-main { padding: clamp(32px, 6vw, 72px) 0 clamp(56px, 8vw, 96px); }
+.dx-wrap { width: 100%; max-width: 760px; margin: 0 auto; padding: 0 var(--gutter); }
+.dx-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: clamp(24px, 5vw, 48px);
+  box-shadow: 0 10px 40px rgba(27, 34, 51, .06);
+}
+/* Each screen moves focus to its heading for screen readers; no ring needed there. */
+.dx-card h1[tabindex="-1"]:focus, .dx-card h2[tabindex="-1"]:focus { outline: none; }
+
+/* ---- Intro ---- */
+.dx-intro h1 { font-size: clamp(2.25rem, 5.6vw, 3.25rem); line-height: 1.04; letter-spacing: -0.02em; margin-bottom: 16px; }
+.dx-lead { font-size: 1.1875rem; color: var(--muted); max-width: 52ch; margin-bottom: 8px; }
+.dx-intro .checks { margin: 24px 0 32px; }
+
+/* ---- Progress ---- */
+.dx-progress { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+.dx-bar { flex: 1; height: 6px; background: var(--band); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.dx-bar span { display: block; height: 100%; width: 0; background: var(--gold); border-radius: 6px; transition: width .35s ease; }
+.dx-count { font-size: 0.875rem; font-weight: 600; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* ---- Question ---- */
+.dx-q h2 { font-size: clamp(1.625rem, 3.8vw, 2.125rem); line-height: 1.12; margin-bottom: 8px; }
+.dx-hint { color: var(--muted); margin-bottom: 22px; }
+.dx-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dx-opt {
+  font: inherit; font-weight: 500; text-align: left; color: var(--navy);
+  display: flex; align-items: center; gap: 12px;
+  min-height: 60px; padding: 14px 16px;
+  background: #fff; border: 1px solid var(--field); border-radius: 12px;
+  cursor: pointer;
+  transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+}
+.dx-opt:hover { border-color: var(--navy); }
+.dx-opt[aria-pressed="true"] { border-color: var(--gold); background: var(--gold-soft); box-shadow: inset 0 0 0 1px var(--gold); }
+.dx-opt .tick {
+  flex: none; width: 22px; height: 22px;
+  display: grid; place-items: center;
+  border: 1.5px solid #B9B4A8; border-radius: 6px;
+  color: transparent; background: #fff;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+.dx-opt.single .tick { border-radius: 50%; }
+.dx-opt[aria-pressed="true"] .tick { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+
+.dx-nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 28px; }
+.dx-back {
+  font: inherit; font-weight: 600; color: var(--muted);
+  min-height: 44px; padding: 0 4px;
+  background: none; border: 0; border-radius: 8px; cursor: pointer;
+}
+.dx-back:hover { color: var(--navy); }
+.dx-back[hidden] { display: inline-block; visibility: hidden; }
+
+/* ---- Results ---- */
+.dx-result-head { margin-bottom: 24px; }
+.dx-result-head h1 { font-size: clamp(2rem, 4.8vw, 2.75rem); line-height: 1.06; }
+
+.dx-best {
+  background: var(--navy); color: var(--on-navy);
+  border-radius: 20px; padding: clamp(24px, 4vw, 36px);
+  margin-bottom: 16px;
+}
+.dx-best .dx-tag { display: block; font-family: var(--font-head); font-weight: 600; color: var(--gold-light); margin-bottom: 6px; }
+.dx-best h2 { color: #fff; font-size: clamp(1.75rem, 3.8vw, 2.25rem); margin-bottom: 10px; }
+.dx-best p { color: #C9CEDA; margin-bottom: 0; }
+.dx-why { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 8px; }
+.dx-why li { display: flex; gap: 10px; color: #fff; }
+.dx-why li::before { content: "\2192"; flex: none; color: var(--gold-light); }
+.dx-best .btn { margin-top: 24px; }
+
+.dx-alts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+.dx-alt { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; }
+.dx-alt .dx-tag { font-family: var(--font-head); font-weight: 600; color: var(--gold-deep); font-size: 0.9375rem; }
+.dx-alt h3 { font-size: 1.25rem; margin: 6px 0 8px; }
+.dx-alt p { font-size: 0.9375rem; color: var(--muted); margin: 0; }
+.dx-alt a { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; font-weight: 600; color: var(--navy); }
+.dx-alt a:hover { color: var(--gold-deep); }
+
+.dx-caveat { font-size: 0.9375rem; color: var(--muted); border-left: 3px solid var(--gold); padding: 2px 0 2px 14px; margin: 0 0 32px; }
+
+/* ---- Sign-up ---- */
+.dx-capture { border-top: 1px solid var(--line); padding-top: 32px; }
+.dx-capture h2 { font-size: clamp(1.5rem, 3.2vw, 2rem); margin-bottom: 8px; }
+.dx-capture .dx-lead { font-size: 1.0625rem; margin-bottom: 24px; }
+.dx-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.dx-form .field { margin-bottom: 18px; }
+.dx-form label { display: block; font-size: 0.875rem; font-weight: 600; color: var(--navy); }
+.dx-form input:not(.hp) {
+  font: inherit; font-size: 1rem; font-weight: 400; color: var(--navy);
+  display: block; width: 100%; margin-top: 6px;
+  min-height: 46px; padding: 10px 12px;
+  border: 1px solid var(--field); border-radius: 8px; background: #fff;
+}
+.dx-form input:not(.hp):focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; border-color: var(--gold); }
+.dx-form .btn { margin-top: 6px; }
+
+/* The thank-you stays hidden until diagnostic.js adds .show after a
+   confirmed send. Never visible by default. */
+.form-success { display: none; text-align: center; padding: 16px 0 4px; }
+.form-success.show { display: block; }
+.form-success .check {
+  width: 56px; height: 56px; margin: 0 auto 16px;
+  display: grid; place-items: center;
+  border-radius: 50%; background: var(--gold-soft); color: var(--gold-deep);
+}
+.form-success h3 { font-size: 1.5rem; margin-bottom: 6px; }
+.form-success p { color: var(--muted); margin: 0; }
+
+.dx-restart {
+  display: block; margin: 20px auto 0;
+  min-height: 44px; padding: 0 12px;
+  font: inherit; font-weight: 600; color: var(--muted);
+  background: none; border: 0; border-radius: 8px; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.dx-restart:hover { color: var(--navy); }
+
+/* ---- Motion ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .dx-fade { animation: dxIn .3s ease both; }
+  @keyframes dxIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .dx-bar span, .dx-opt, .dx-opt .tick { transition: none; }
+}
+
+/* ---- Small screens ---- */
+@media (max-width: 620px) {
+  .dx-options, .dx-alts, .dx-form .form-row { grid-template-columns: 1fr; }
+  .dx-form .form-row { gap: 0; }
+  .dx-nav .btn { flex: 1; }
+  .dx-intro .btn, .dx-best .btn { width: 100%; }
+}
+@media (max-width: 360px) {
+  .dx-header-cta { padding: 0 12px; font-size: 0.875rem; }
+  .dx-header .brand span { font-size: 1.25rem; }
+}

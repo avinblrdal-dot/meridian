@@ -1,29 +1,13 @@
-/* ============================================================================
- * CLIENT CONFIG — meridian  (Meridian's own website)
- * ----------------------------------------------------------------------------
- * Loaded by /embed/chat.js when a page carries:
- *
- *   <script src="/embed/chat.js" data-client="meridian" defer></script>
- *
- * Meridian's own site runs the exact same install a client gets. If it breaks
- * here, it is broken for everyone - which is the point of dogfooding it.
- *
- * AI IS ON, through /api/chat (Groq, free). The model is told to answer only
- * from the `faqs` below, and the server repeats that rule where nobody can
- * edit it. If the AI is down or over its limit, the widget falls back to the
- * written `faqs`, so it can't break. To go back to answers-only, set
- * ai.enabled to false.
- * ==========================================================================*/
+// Widget config for meridian. Loaded by /embed/chat.js via data-client="meridian".
+// Everything here is public; never put a key in this file.
 
-window.MERIDIAN_CHAT_CONFIG = {
+window.Meridian = window.Meridian || {};
+window.Meridian.config = {
 
-  /* ------------------------------------------------------------------
-     1. THE BUSINESS
-     ------------------------------------------------------------------ */
   business: {
     name: 'Meridian',
 
-    // Meridian doesn't publish a phone number — the site routes everything
+    // Meridian doesn't publish a phone number, the site routes everything
     // to the contact form. So the answers below say "the form at the bottom
     // of this page" rather than using {phone}. If you add a real number
     // later, put it here and swap the wording back.
@@ -34,20 +18,14 @@ window.MERIDIAN_CHAT_CONFIG = {
     // full http(s) URLs into links. No answer below uses it yet: they say
     // "the form at the bottom of this page", which reads better on the page
     // itself. If there's a Calendly link later, put it here.
-    bookingLink: 'https://meridianaiservices.vercel.app/#contact',
+    bookingLink: 'https://www.meridianaiservices.com/#contact',
 
     address: 'Frisco / Dallas-Fort Worth, TX',
   },
 
-  /* ------------------------------------------------------------------
-     2. GREETING + QUICK BUTTONS
-     ------------------------------------------------------------------
-     Most visitors tap rather than type. These four are the questions a
-     salon owner actually has before they'll give you their email.
-     ------------------------------------------------------------------ */
   greeting:
-    "Hi - I'm Meridian's assistant. Ask me anything about what we do, what " +
-    "it costs, or how we'd start with your business.",
+    "Hi, I'm Meridian's assistant. I can tell you what we set up, how " +
+    "pricing works, and how to book an intro call.",
 
   quickReplies: [
     'What does Meridian actually do?',
@@ -56,14 +34,6 @@ window.MERIDIAN_CHAT_CONFIG = {
     'How do we get started?',
   ],
 
-  /* ------------------------------------------------------------------
-     3. THE ANSWERS
-     ------------------------------------------------------------------
-     Every answer here is taken from copy already on this page. Nothing
-     is promised that the site doesn't already promise. If you change the
-     site copy, change it here too - a bot contradicting the page it sits
-     on is worse than no bot.
-     ------------------------------------------------------------------ */
   faqs: [
     {
       id: 'what',
@@ -233,63 +203,29 @@ window.MERIDIAN_CHAT_CONFIG = {
                  'help me choose', 'help me decide'],
       answer:
         "Try the 2-minute diagnostic at " +
-        "https://meridianaiservices.vercel.app/diagnostic - seven quick " +
+        "https://www.meridianaiservices.com/diagnostic - seven quick " +
         "questions about how your business runs, and it shows the one fix " +
         "we'd start with, and why. Or book the free Audit and we'll work it " +
         "out with you.",
     },
   ],
 
-  /* ------------------------------------------------------------------
-     4. WHEN IT DOESN'T KNOW
-     ------------------------------------------------------------------
-     Deliberately honest, and deliberately not using {phone} - there
-     isn't one. On a site whose whole pitch is "explained to you, not
-     sold to you", a bot that guesses would undercut the argument.
-     ------------------------------------------------------------------ */
   fallback:
     "I'm not sure about that one - I'd rather say so than guess. Put it in " +
     "the form at the bottom of this page and Avin will answer it properly, " +
     "usually the same day.",
 
-  /* ------------------------------------------------------------------
-     5. AI MODE
-     ------------------------------------------------------------------
-     ON via /api/chat. The key lives only in Vercel's environment
-     variables. Never paste a key below: anything in this file is visible
-     to anyone who views the page source.
-     ------------------------------------------------------------------ */
   ai: {
     enabled: true,
-    provider: 'groq',
-    apiKey: '',
     proxyUrl: 'https://meridianaiservices.vercel.app/api/chat',
-    // Open mode: chats like a normal AI assistant, with the whole website
-    // below as background. Facts about Meridian still only come from here.
-    mode: 'open',
-    about: [
-      "Meridian is a hands-on AI consultancy for owner-run local businesses in Frisco and the Dallas-Fort Worth area, Texas: salons, barbershops, nail and spa studios, fitness studios, and yoga and dance studios. Ideal clients are owner-operated with roughly 15 or fewer staff, where the owner personally handles booking, messages and marketing. ",
-      "The problem we solve: no-shows leaving chairs empty, calls and DMs going unanswered while the owner is with a client, and the same questions (hours, pricing, walk-ins) answered again and again. Many owners have heard they should use AI but haven't had the time, know-how or a reason to trust it.",
-      "How it works: 1) AI Opportunity Audit: we sit down with the owner and find where time or money is leaking. 2) Custom Build & Setup: we build and install the fix ourselves, hands-on. 3) Owner & Staff Training: the team learns to run it, no tech background needed. 4) Before/After Impact Report: we measure the result, such as fewer no-shows, hours saved and more booked chairs. ",
-      "What we often build: fewer no-shows (automated reminders and one-tap rebooking); no more missed bookings (instant text-back when a call goes unanswered); a front desk freed up (an assistant that answers repeat questions across calls, texts and DMs, like this chat); a stronger reputation (faster review replies and a simple system to earn more reviews). These are starting points, not a menu; the Audit decides what a business actually needs. ",
-      "Why Meridian: hands-on, not hands-off. We build it rather than just advise, we teach the team so they are not dependent on us, and we are local and personal, one-on-one in DFW. ",
-      "Timelines: there is no standard timeline. How long a build takes depends on what the Audit finds, and we agree the timeline with the owner after the Audit, never before.",
-      "Pricing: the AI Opportunity Audit is free with no obligation. Build & Setup is a one-time project priced to scope. Ongoing Support is an optional, affordable monthly plan, priced to scope. No published prices beyond the free Audit. A limited number of pilot spots are offered at a reduced rate to founding clients in exchange for documented results. ",
-      "Where we're headed: starting with beauty and wellness, later other local service businesses that lose time the same way, like home-service trades.",
-      "Founder: Meridian is founded and built by Avin, who is hands-on with every AI workflow and tool. Meridian exists because local owners deserve AI that's simple, personal and explained to them, not sold to them.",
-      "Ways to start: book a free intro call through the contact form at https://meridianaiservices.vercel.app/#contact, or take the 2-minute diagnostic at https://meridianaiservices.vercel.app/diagnostic.",
-    ].join(' '),
-
-    model: '',
+    businessId: 'meridian',
     timeoutMs: 8000,
   },
 
-  /* ------------------------------------------------------------------
-     6. LOOK — matched to the site's design tokens in css/styles.css
-     ------------------------------------------------------------------ */
   brand: {
     gold: '#B88C29',
     goldDark: '#96701E',
+    goldLight: '#E8C874',
     navy: '#1B2233',
     position: 'right',
     teaser: 'Questions? Ask away',
@@ -297,7 +233,6 @@ window.MERIDIAN_CHAT_CONFIG = {
     // On a CLIENT's widget this is their logo and the header shows their
     // brand. Here we are the business, so it's ours.
     logo: '/embed/meridian-logo.png',
-    // The gold mark needs a dark circle behind it to stand out.
     logoBg: '#1B2233',
 
     // The "Powered by Meridian" credit is pointless on Meridian's own site.

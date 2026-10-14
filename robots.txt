@@ -1,5 +1,4 @@
-# Allow all crawlers. The sitemap lists the public pages.
 User-agent: *
 Allow: /
 
-Sitemap: https://meridianaiservices.vercel.app/sitemap.xml
+Sitemap: https://www.meridianaiservices.com/sitemap.xml

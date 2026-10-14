@@ -173,12 +173,12 @@ async function paintModeBar() {
   const live = status.smsLive && !status.demoDefaultDryRun;
   bar.dataset.mode = live ? 'live' : 'dry';
   bar.textContent = live
-    ? `LIVE MODE — real texts will be sent from ${status.twilioNumber}`
+    ? `Live mode: real texts will be sent from ${status.twilioNumber}.`
     : status.smsLive
-      ? 'SAFE MODE — the demo button simulates by default. Tick "send for real" to actually text.'
+      ? 'Safe mode: the demo button simulates by default. Tick "Send this one for real" to actually text.'
       : status.staticBuild
-        ? 'DEMO MODE — this is the browser-only demo. Every text is simulated and nothing is sent.'
-        : 'SAFE MODE — no Twilio credentials configured. Every text is simulated.';
+        ? 'Demo mode: this is the browser-only demo. Every text is simulated and nothing is sent.'
+        : 'Safe mode: no Twilio credentials configured. Every text is simulated.';
 
   return status;
 }

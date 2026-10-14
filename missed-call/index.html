@@ -4,37 +4,38 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live Demo · Meridian</title>
+<title>Missed-call demo | Meridian</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Fonts are a progressive enhancement. If there's no wifi in the salon,
      the system-font fallback in styles.css takes over and nothing breaks. -->
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="/missed-call/assets/meridian-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@600&family=League+Spartan:wght@400;500;600;700&family=Libre+Franklin:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="/assets/meridian-logo.png">
 <link rel="stylesheet" href="/missed-call/styles.css">
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a class="brand" href="/missed-call"><img class="brand-mark" src="/missed-call/assets/meridian-logo.png" alt="">Meridian</a>
-    <nav class="nav">
-      <a href="/missed-call">Live Demo</a>
-      <a href="/missed-call/dashboard">Dashboard</a>
+    <a class="brand" href="/" aria-label="Meridian home"><img class="brand-mark" src="/assets/meridian-logo.png" alt="" width="28" height="31"></a>
+    <nav class="nav" aria-label="Missed-call demo">
+      <a href="/missed-call">Demo</a>
+      <a href="/missed-call/dashboard">Call log</a>
       <a href="/missed-call/settings">Settings</a>
-      <a href="/animation">Animation</a>
     </nav>
+    <a class="btn btn-gold topbar-cta" href="/#contact">Book a free audit</a>
   </div>
 </header>
 <div class="modebar" id="modebar" data-mode="dry">Checking mode&hellip;</div>
 
-<main>
+<main id="main">
   <div class="page-head">
     <h1>Never lose another booking to a missed call</h1>
     <p>
       When <strong id="head-business">this business</strong> can't get to the phone,
-      the caller gets a text back within seconds &mdash; before they scroll down to
-      the next business on the list. Press the button and watch it happen.
+      the caller gets a text back within seconds, before they scroll on to the
+      next business on the list. Press the button and watch it happen.
     </p>
   </div>
 
@@ -42,18 +43,18 @@
     <!-- ============ LEFT: the trigger ============ -->
     <div>
       <button class="big-button" id="simulate-btn" type="button">
-        Simulate a Missed Call
+        Simulate a missed call
         <span class="sub" id="btn-sub">No real phone needed</span>
       </button>
 
       <ol class="steps" id="steps">
         <li data-step="ring"  data-state="idle"><span class="dot">1</span> A customer calls&hellip;</li>
-        <li data-step="miss"  data-state="idle"><span class="dot">2</span> Nobody can pick up &mdash; call missed</li>
+        <li data-step="miss"  data-state="idle"><span class="dot">2</span> Nobody can pick up, so the call is missed</li>
         <li data-step="send"  data-state="idle"><span class="dot">3</span> Meridian texts them back automatically</li>
         <li data-step="book"  data-state="idle"><span class="dot">4</span> They tap the link and book</li>
       </ol>
 
-      <div class="card" style="margin-top:24px">
+      <div class="card controls">
         <h3>Demo controls</h3>
 
         <div class="field">
@@ -67,11 +68,11 @@
           </p>
         </div>
 
-        <label class="checkbox" style="margin-bottom:14px">
+        <label class="checkbox">
           <input type="checkbox" id="send-real">
           <span>
             <strong>Send this one for real</strong>
-            <span class="hint" id="real-hint" style="display:block">
+            <span class="hint" id="real-hint">
               Leave unticked to simulate. Nothing leaves the building.
             </span>
           </span>
@@ -276,21 +277,27 @@ $('#reset-demo').addEventListener('click', () => {
 });
 
 // Warn clearly when the operator arms a real send.
+// Built from nodes rather than an HTML string: a bold lead-in, then the rest.
+function setHint(lead, tone, rest) {
+  const hint = $('#real-hint');
+  const strong = document.createElement('strong');
+  strong.className = `hint-strong ${tone}`;
+  strong.textContent = lead;
+  hint.replaceChildren(strong, document.createTextNode(` ${rest}`));
+}
+
 $('#send-real').addEventListener('change', (e) => {
   const hint = $('#real-hint');
   if (e.target.checked) {
     if (status?.staticBuild) {
-      hint.innerHTML =
-        '<strong style="color:var(--amber)">Browser-only demo.</strong> Nothing can be ' +
-        'sent from this page, so this will still simulate.';
+      setHint('Browser-only demo.', 'amber',
+        'Nothing can be sent from this page, so this will still simulate.');
     } else if (!status?.smsLive) {
-      hint.innerHTML =
-        '<strong style="color:var(--red)">Twilio is not configured</strong> &mdash; ' +
-        'this will still simulate. Add credentials in .env to send for real.';
+      setHint('Twilio is not configured,', 'red',
+        'so this will still simulate. Add credentials in .env to send for real.');
     } else {
-      hint.innerHTML =
-        '<strong style="color:var(--amber)">Armed.</strong> A real SMS will be sent ' +
-        'to the number above, and it will cost you a fraction of a cent.';
+      setHint('Armed.', 'amber',
+        'A real SMS will be sent to the number above, and it will cost you a fraction of a cent.');
     }
   } else {
     hint.textContent = 'Leave unticked to simulate. Nothing leaves the building.';
@@ -332,7 +339,7 @@ liveEvents.on('missed-call:handled', (record) => {
     $('#ph-num').textContent = status.twilioNumber
       ? formatNumber(status.twilioNumber)
       : 'Text message';
-    document.title = `Live Demo · ${b.name} · Meridian`;
+    document.title = `Missed-call demo for ${b.name} | Meridian`;
   }
 })();
 </script>

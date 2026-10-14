@@ -21,7 +21,7 @@
 (function () {
   "use strict";
 
-  var ACCESS_KEY = "";   // ← paste the Web3Forms access key here
+  var ACCESS_KEY = "fee1279b-ba27-421c-a9b5-5a54e6a8c48d";
 
   var ENDPOINT = "https://api.web3forms.com/submit";
 

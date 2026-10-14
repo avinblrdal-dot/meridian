@@ -1,140 +1,135 @@
-/* ============================================================
-   MERIDIAN — Site interactions
-   - Mobile nav toggle
-   - Sticky header shadow on scroll
-   - Subtle scroll-in reveal (IntersectionObserver)
-   - Lead form (sends via js/forms.js)
-   ============================================================ */
 (function () {
   "use strict";
 
-  /* --- Mobile nav toggle --- */
+  var nav = document.getElementById("nav");
   var toggle = document.getElementById("navToggle");
-  var links = document.getElementById("navLinks");
-  if (toggle && links) {
-    toggle.addEventListener("click", function () {
-      var open = links.classList.toggle("open");
+  if (nav && toggle) {
+    var setOpen = function (open) {
+      nav.classList.toggle("open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-    });
-    // Close the menu after tapping a link (mobile)
-    links.addEventListener("click", function (e) {
-      if (e.target.tagName === "A") {
-        links.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Open menu");
-      }
-    });
+    };
+    toggle.addEventListener("click", function () { setOpen(!nav.classList.contains("open")); });
+    nav.addEventListener("click", function (e) { if (e.target.closest("a")) setOpen(false); });
   }
 
-  /* --- Sticky header shadow on scroll --- */
+  // The header tucks away while scrolling down and comes back on scroll up,
+  // or when the pointer reaches the top edge of the window.
   var header = document.querySelector(".site-header");
   if (header) {
-    var onScroll = function () {
-      if (window.scrollY > 8) header.classList.add("scrolled");
-      else header.classList.remove("scrolled");
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-  }
-
-  /* --- Auto-hide nav (mouse/trackpad only — see the matching
-     "(hover: hover) and (pointer: fine)" block in styles.css) ---
-     Hidden above the viewport by default. Scrolling down hides it (or
-     keeps it hidden); scrolling up reveals it. The cursor can also pull
-     it into view directly — near the very top edge (#navHoverZone) or
-     hovering the header itself — and it stays visible while a header
-     link has keyboard focus or the mobile menu is open. */
-  var hoverZone = document.getElementById("navHoverZone");
-  var hoverCapable = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  if (header && hoverZone && hoverCapable) {
-    var isHovering = false;
-    var showNav = function () { header.classList.add("nav-visible"); };
-    var hideNav = function () {
-      if (isHovering) return;
-      if (links && links.classList.contains("open")) return;      // mobile menu open
-      if (header.contains(document.activeElement)) return;         // keyboard focus inside
-      header.classList.remove("nav-visible");
-    };
-    hoverZone.addEventListener("mouseenter", function () { isHovering = true; showNav(); });
-    header.addEventListener("mouseenter", function () { isHovering = true; showNav(); });
-    header.addEventListener("mouseleave", function () { isHovering = false; hideNav(); });
-    header.addEventListener("focusin", showNav);
-    header.addEventListener("focusout", function () { setTimeout(hideNav, 0); });
-    if (toggle) toggle.addEventListener("click", showNav);
-
-    // Scroll direction only: down hides it, up shows it.
     var lastY = window.scrollY;
+    var keepOpen = function () {
+      return (nav && nav.classList.contains("open")) || header.contains(document.activeElement);
+    };
     window.addEventListener("scroll", function () {
       var y = window.scrollY;
-      if (y > lastY) hideNav();       // scrolling down
-      else if (y < lastY) showNav();  // scrolling up
+      if (y > lastY && y > 120 && !keepOpen()) header.classList.add("tucked");
+      else if (y < lastY) header.classList.remove("tucked");
       lastY = y;
     }, { passive: true });
+    document.addEventListener("mousemove", function (e) {
+      if (e.clientY < 24) header.classList.remove("tucked");
+    }, { passive: true });
+    header.addEventListener("focusin", function () { header.classList.remove("tucked"); });
   }
 
-  /* --- Subtle scroll-in reveal (IntersectionObserver) --- */
-  var reveals = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("in");
-          io.unobserve(entry.target);
-        }
+  // The hero email box carries the address down to the full form.
+  var heroForm = document.getElementById("heroForm");
+  if (heroForm) {
+    heroForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = document.getElementById("email");
+      if (email) email.value = document.getElementById("heroEmail").value.trim();
+      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
+      var name = document.getElementById("name");
+      if (name) name.focus({ preventScroll: true });
+    });
+  }
+
+  // Metric graphics animate once, the first time the panel scrolls into view.
+  var metrics = document.getElementById("metrics");
+  if (metrics) {
+    if ("IntersectionObserver" in window) {
+      var seen = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) { metrics.classList.add("in"); seen.disconnect(); }
+      }, { threshold: 0.4 });
+      seen.observe(metrics);
+    } else {
+      metrics.classList.add("in");
+    }
+  }
+
+  var carousel = document.getElementById("carousel");
+  if (carousel) {
+    var track = carousel.querySelector(".carousel-track");
+    carousel.querySelectorAll(".round-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var card = track.querySelector(".tool-card");
+        var step = card ? card.getBoundingClientRect().width + 20 : 320;
+        track.scrollBy({ left: step * Number(btn.dataset.dir), behavior: "smooth" });
       });
-    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    // Fallback: no IO support — just show everything
-    reveals.forEach(function (el) { el.classList.add("in"); });
+    });
   }
 
-  /* --- Lead form ---
-     Validates required fields, sends through /js/forms.js (Web3Forms),
-     then swaps in the thank-you message. If sending fails, the form
-     stays put with an error, so a lead is never told "we've got it"
-     when we haven't. Until forms.js has a key, it falls back to the
-     old placeholder behaviour (see the note at the top of forms.js). */
-  var form = document.getElementById("leadForm");
-  var success = document.getElementById("formSuccess");
-  var formError = document.getElementById("formError");
-  if (form) {
-    var submitBtn = form.querySelector('button[type="submit"]');
-    var submitLabel = submitBtn ? submitBtn.textContent : "";
+  var calcIds = ["inCalls", "inTicket", "inLost"];
+  if (document.getElementById("inCalls")) {
+    var money = function (n) { return "$" + Math.round(n).toLocaleString("en-US"); };
+    var read = function (id, max) {
+      var v = parseFloat(document.getElementById(id).value);
+      return isFinite(v) ? Math.min(Math.max(v, 0), max) : 0;
+    };
+    var update = function () {
+      var calls = read("inCalls", 500);
+      var ticket = read("inTicket", 2000);
+      var lost = read("inLost", 100) / 100;
+      var week = calls * ticket * lost;
+      document.getElementById("calcYear").textContent = money(week * 52);
+      document.getElementById("calcWeek").textContent = money(week);
+      document.getElementById("calcCalls").textContent = Math.round(calls * 52).toLocaleString("en-US");
+      document.getElementById("calcLine").textContent =
+        "from " + calls + " missed call" + (calls === 1 ? "" : "s") + " a week";
+    };
+    calcIds.forEach(function (id) { document.getElementById(id).addEventListener("input", update); });
+    update();
+  }
 
-    var showSuccess = function () {
-      form.style.display = "none";
-      if (success) {
-        success.classList.add("show");
-        success.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
+  var form = document.getElementById("leadForm");
+  if (form) {
+    var done = document.getElementById("formSuccess");
+    var error = document.getElementById("formError");
+    var submit = form.querySelector('button[type="submit"]');
+    var label = submit.textContent;
+
+    var showError = function (message) {
+      error.textContent = message;
+      error.hidden = false;
     };
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-      if (formError) formError.hidden = true;
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      error.hidden = true;
 
       var forms = window.MeridianForms;
-      if (!forms || !forms.configured) { showSuccess(); return; }
+      if (!forms || !forms.configured) {
+        showError("The form isn't connected yet, so this message can't be sent.");
+        return;
+      }
 
-      var data = new FormData(form);
       var fields = {};
-      data.forEach(function (v, k) { fields[k] = v; });
+      new FormData(form).forEach(function (v, k) { fields[k] = v; });
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Sending…";
-      forms.send("New intro call request: " + (fields.business || fields.name), fields)
-        .then(function (ok) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = submitLabel;
-          if (ok) showSuccess();
-          else if (formError) formError.hidden = false;
-        });
+      submit.disabled = true;
+      submit.textContent = "Sending...";
+      forms.send("New intro call request: " + (fields.business || fields.name), fields).then(function (ok) {
+        submit.disabled = false;
+        submit.textContent = label;
+        if (ok) {
+          form.hidden = true;
+          done.hidden = false;
+        } else {
+          showError("That didn't send. Check your connection and try again.");
+        }
+      });
     });
   }
 })();

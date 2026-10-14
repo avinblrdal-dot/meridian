@@ -177,25 +177,29 @@
     });
   }
 
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Every string passed in here is either fixed copy from this file or run
+  // through esc(). Nothing the visitor types is ever rendered back.
   function render(html) {
     root.innerHTML = '<div class="dx-fade">' + html + "</div>";
     var focus = root.querySelector("h1, h2");
     if (focus) { focus.setAttribute("tabindex", "-1"); focus.focus({ preventScroll: true }); }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: reduceMotion && reduceMotion.matches ? "auto" : "smooth" });
   }
 
   function intro() {
     render(
       '<div class="dx-intro">' +
-        '<span class="eyebrow">2-minute diagnostic</span>' +
+        '<p class="eyebrow">2-minute diagnostic</p>' +
         "<h1>Find your biggest time-waster.</h1>" +
-        '<p class="lead">Seven quick questions about how your business runs. At the end you get the one fix we\'d start with, and why.</p>' +
-        '<ul class="dx-points">' +
+        '<p class="dx-lead">Seven quick questions about how your business runs. At the end you get the one fix we\'d start with, and why.</p>' +
+        '<ul class="checks">' +
           "<li>No sign-up needed to see your result</li>" +
           "<li>Built for salons, spas and studios</li>" +
           "<li>Honest: if you don't need us, it'll say so</li>" +
         "</ul>" +
-        '<button class="btn btn-primary btn-lg" id="dxStart">Start</button>' +
+        '<button type="button" class="btn btn-gold btn-lg" id="dxStart">Start the diagnostic</button>' +
       "</div>"
     );
     document.getElementById("dxStart").addEventListener("click", function () { step = 0; question(); });
@@ -221,7 +225,7 @@
       "</div>" +
       '<div class="dx-nav">' +
         '<button type="button" class="dx-back" id="dxBack"' + (step === 0 ? " hidden" : "") + ">← Back</button>" +
-        (q.multi ? '<button type="button" class="btn btn-primary" id="dxNext"' + (picked.length ? "" : " disabled") + ">Next</button>" : "") +
+        (q.multi ? '<button type="button" class="btn btn-gold" id="dxNext"' + (picked.length ? "" : " disabled") + ">Next</button>" : "") +
       "</div>"
     );
 
@@ -272,36 +276,36 @@
       ? '<ul class="dx-why">' + r.why.map(function (w) { return "<li>" + esc(w) + "</li>"; }).join("") + "</ul>"
       : "";
     var demo = best.demo
-      ? '<a class="btn btn-on-dark" href="' + best.demo.href + '" target="_blank" rel="noopener">' + esc(best.demo.label) + " →</a>"
+      ? '<a class="btn btn-gold" href="' + best.demo.href + '" target="_blank" rel="noopener">' + esc(best.demo.label) + " →</a>"
       : "";
 
     var alts = r.alts.map(function (k) {
       var s = SERVICES[k];
-      return '<div class="dx-alt"><span class="tag">Also worth a look</span><h3>' + esc(s.name) + "</h3><p>" + esc(s.desc) + "</p>" +
+      return '<div class="dx-alt"><span class="dx-tag">Also worth a look</span><h3>' + esc(s.name) + "</h3><p>" + esc(s.desc) + "</p>" +
         (s.demo ? '<a href="' + s.demo.href + '" target="_blank" rel="noopener">' + esc(s.demo.label) + " →</a>" : "") + "</div>";
     }).join("");
 
     render(
       '<div class="dx-progress"><div class="dx-bar"><span style="width:100%"></span></div><span class="dx-count">Done</span></div>' +
-      '<div class="dx-result-head"><span class="eyebrow">Your result</span><h1>Here\'s where we\'d start.</h1></div>' +
-      '<div class="dx-best"><span class="tag">' + (r.best === "audit" ? "Best first step" : "Best fit for you") + "</span>" +
+      '<div class="dx-result-head"><p class="eyebrow">Your result</p><h1>Here\'s where we\'d start.</h1></div>' +
+      '<div class="dx-best"><span class="dx-tag">' + (r.best === "audit" ? "Best first step" : "Best fit for you") + "</span>" +
         "<h2>" + esc(best.name) + "</h2><p>" + esc(best.desc) + "</p>" + why + demo + "</div>" +
       '<div class="dx-alts">' + alts + "</div>" +
       '<p class="dx-caveat">This is a starting point, not a diagnosis. A free AI Opportunity Audit is where we check it against how your business actually runs, and if a fix isn\'t worth it, we\'ll tell you.</p>' +
       '<div class="dx-capture">' +
         "<h2>Want us to look at it with you?</h2>" +
-        '<p class="lead">Book a free Audit. We\'ll bring your answers, so there\'s nothing to repeat.</p>' +
-        '<form class="lead-form" id="dxForm" novalidate>' +
+        '<p class="dx-lead">Book a free Audit. We\'ll bring your answers, so there\'s nothing to repeat.</p>' +
+        '<form class="dx-form" id="dxForm" novalidate>' +
           '<div class="form-row">' +
             '<div class="field"><label for="dxName">Your name</label><input id="dxName" name="name" autocomplete="name" required></div>' +
             '<div class="field"><label for="dxBiz">Business name</label><input id="dxBiz" name="business" autocomplete="organization" required></div>' +
           "</div>" +
           '<div class="form-row">' +
             '<div class="field"><label for="dxEmail">Email</label><input id="dxEmail" name="email" type="email" autocomplete="email" required></div>' +
-            '<div class="field"><label for="dxPhone">Phone <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label><input id="dxPhone" name="phone" type="tel" autocomplete="tel"></div>' +
+            '<div class="field"><label for="dxPhone">Phone <span class="optional">(optional)</span></label><input id="dxPhone" name="phone" type="tel" autocomplete="tel"></div>' +
           "</div>" +
           '<input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
-          '<button type="submit" class="btn btn-primary btn-lg">Book my free Audit</button>' +
+          '<button type="submit" class="btn btn-gold btn-lg btn-block">Book my free Audit</button>' +
           '<p class="form-error" id="dxError" role="alert" hidden>That didn\'t send. Please try again in a moment.</p>' +
         "</form>" +
         '<div class="form-success" id="dxDone" role="status">' +
@@ -329,7 +333,7 @@
 
       var forms = window.MeridianForms;
       var finish = function () { form.style.display = "none"; done.classList.add("show"); };
-      if (!forms || !forms.configured) { finish(); return; }
+      if (!forms || !forms.configured) { err.hidden = false; return; }
 
       submit.disabled = true;
       submit.textContent = "Sending…";

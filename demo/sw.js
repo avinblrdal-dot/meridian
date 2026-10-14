@@ -10,7 +10,9 @@
    a blank screen when you don't.
    ============================================================ */
 
-const CACHE = 'meridian-demo-v1';
+// Change this whenever index.html changes so returning visitors drop the old copy.
+// Date-stamped because an older build of this demo already used 'meridian-demo-v2'.
+const CACHE = 'meridian-demo-2026-10-12';
 const FILES = [
   './',
   './index.html',
