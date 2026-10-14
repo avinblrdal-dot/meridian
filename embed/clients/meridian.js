@@ -217,7 +217,7 @@ window.Meridian.config = {
 
   ai: {
     enabled: true,
-    proxyUrl: 'https://meridianaiservices.vercel.app/api/chat',
+    proxyUrl: 'https://www.meridianaiservices.com/api/chat',
     businessId: 'meridian',
     timeoutMs: 8000,
   },
